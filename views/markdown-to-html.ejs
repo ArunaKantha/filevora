@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Markdown to HTML Converter - FileVora</title>
+    <meta name="description" content="Convert Markdown text to clean HTML instantly with FileVora.">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+
+    <main class="converter-page">
+        <div class="container">
+
+            <div class="converter-card">
+
+                <div class="converter-header">
+
+                    <div class="tool-icon">
+                        MD
+                    </div>
+
+                    <h1>Markdown to HTML Converter</h1>
+
+                    <p>
+                        Convert Markdown text into clean HTML instantly.
+                    </p>
+
+                </div>
+
+                <textarea
+                    id="markdownInput"
+                    placeholder="# Hello World
+
+Write your **Markdown** here...
+
+- Item 1
+- Item 2
+- Item 3"
+                    style="
+                        width:100%;
+                        min-height:260px;
+                        padding:16px;
+                        border:1px solid #cbd5e1;
+                        border-radius:12px;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                ></textarea>
+
+                <button
+                    class="convert-btn"
+                    id="convertBtn"
+                >
+                    Convert to HTML
+                </button>
+
+                <div
+                    class="result"
+                    id="result"
+                    style="text-align:left;"
+                >
+
+                    <h2>HTML Generated</h2>
+
+                    <textarea
+                        id="htmlOutput"
+                        readonly
+                        style="
+                            width:100%;
+                            min-height:220px;
+                            margin-top:14px;
+                            padding:14px;
+                            border:1px solid #d1d5db;
+                            border-radius:10px;
+                            background:#ffffff;
+                            font-family:monospace;
+                            font-size:13px;
+                            line-height:1.5;
+                            box-sizing:border-box;
+                            resize:vertical;
+                        "
+                    ></textarea>
+
+                    <button
+                        class="download-btn"
+                        id="copyBtn"
+                        type="button"
+                    >
+                        📋 Copy HTML
+                    </button>
+
+                    <a
+                        href="#"
+                        class="download-btn"
+                        id="downloadBtn"
+                        style="margin-left:8px;"
+                    >
+                        ⬇ Download HTML
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+
+        const markdownInput =
+            document.getElementById("markdownInput");
+
+        const convertBtn =
+            document.getElementById("convertBtn");
+
+        const result =
+            document.getElementById("result");
+
+        const htmlOutput =
+            document.getElementById("htmlOutput");
+
+        const copyBtn =
+            document.getElementById("copyBtn");
+
+        const downloadBtn =
+            document.getElementById("downloadBtn");
+
+
+        convertBtn.addEventListener("click", function () {
+
+            const markdown = markdownInput.value.trim();
+
+            if (!markdown) {
+                alert("Please enter some Markdown text.");
+                return;
+            }
+
+            const html = marked.parse(markdown);
+
+            htmlOutput.value = html;
+
+            const blob = new Blob(
+                [html],
+                {
+                    type: "text/html;charset=utf-8"
+                }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            downloadBtn.href = url;
+            downloadBtn.download = "converted.html";
+
+            result.style.display = "block";
+
+        });
+
+
+        copyBtn.addEventListener("click", async function () {
+
+            if (!htmlOutput.value) {
+                return;
+            }
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    htmlOutput.value
+                );
+
+                copyBtn.textContent = "✓ Copied";
+
+                setTimeout(() => {
+                    copyBtn.textContent = "📋 Copy HTML";
+                }, 1500);
+
+            } catch (error) {
+
+                htmlOutput.select();
+                document.execCommand("copy");
+
+                copyBtn.textContent = "✓ Copied";
+
+                setTimeout(() => {
+                    copyBtn.textContent = "📋 Copy HTML";
+                }, 1500);
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Split PDF files into separate pages online for free with FileVora."
+    >
+
+    <title>PDF Splitter — FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="container nav">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span>File<span>Vora</span></span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/#tools">Tools</a>
+            <a href="/#categories">Categories</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    PDF
+                </div>
+
+                <h1>PDF Splitter</h1>
+
+                <p>
+                    Split your PDF into separate pages instantly.
+                </p>
+
+            </div>
+
+
+            <label class="upload-area" for="pdfInput">
+
+                <div class="upload-icon">📄</div>
+
+                <strong>Choose a PDF file</strong>
+
+                <span>PDF files only</span>
+
+            </label>
+
+
+            <input
+                id="pdfInput"
+                type="file"
+                accept="application/pdf,.pdf"
+            >
+
+
+            <div class="file-info" id="fileInfo">
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <div
+                id="pageOptions"
+                style="display:none; margin-top:20px; text-align:left;"
+            >
+
+                <label
+                    for="pageRange"
+                    style="display:block; font-weight:700; margin-bottom:8px;"
+                >
+                    Pages to extract
+                </label>
+
+                <input
+                    id="pageRange"
+                    type="text"
+                    placeholder="Example: 1,3,5 or 1-3"
+                    style="
+                        width:100%;
+                        box-sizing:border-box;
+                        padding:13px 14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:14px;
+                        outline:none;
+                    "
+                >
+
+                <small
+                    style="
+                        display:block;
+                        margin-top:7px;
+                        color:#64748b;
+                    "
+                >
+                    Leave empty to split every page separately.
+                </small>
+
+            </div>
+
+
+            <button
+                class="convert-btn"
+                id="splitBtn"
+                disabled
+            >
+                Split PDF
+            </button>
+
+
+            <div class="result" id="result">
+
+                <h2>PDF Ready</h2>
+
+                <p id="resultText">
+                    Your PDF pages have been split successfully.
+                </p>
+
+                <div id="downloadArea"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer>
+
+    <div class="container footer-inner">
+
+        <a class="brand" href="/">
+
+            <span class="brand-mark">F</span>
+
+            <span>File<span>Vora</span></span>
+
+        </a>
+
+        <p>
+            © <span id="year"></span> FILEVORA. All rights reserved.
+        </p>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+const pdfInput =
+    document.getElementById("pdfInput");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const pageOptions =
+    document.getElementById("pageOptions");
+
+const pageRange =
+    document.getElementById("pageRange");
+
+const splitBtn =
+    document.getElementById("splitBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+const downloadArea =
+    document.getElementById("downloadArea");
+
+
+let selectedFile = null;
+
+
+pdfInput.addEventListener("change", function () {
+
+    const file = pdfInput.files[0];
+
+
+    if (!file) {
+
+        selectedFile = null;
+
+        splitBtn.disabled = true;
+
+        fileInfo.style.display = "none";
+
+        pageOptions.style.display = "none";
+
+        result.style.display = "none";
+
+        return;
+    }
+
+
+    if (file.type !== "application/pdf") {
+
+        alert("Please choose a PDF file.");
+
+        pdfInput.value = "";
+
+        selectedFile = null;
+
+        splitBtn.disabled = true;
+
+        return;
+    }
+
+
+    selectedFile = file;
+
+
+    fileName.textContent =
+        file.name;
+
+
+    const sizeMB =
+        file.size / (1024 * 1024);
+
+
+    fileSize.textContent =
+        sizeMB >= 1
+            ? sizeMB.toFixed(2) + " MB"
+            : (file.size / 1024).toFixed(2) + " KB";
+
+
+    fileInfo.style.display =
+        "block";
+
+
+    pageOptions.style.display =
+        "block";
+
+
+    result.style.display =
+        "none";
+
+
+    downloadArea.innerHTML =
+        "";
+
+
+    splitBtn.disabled =
+        false;
+
+});
+
+
+function parsePageRange(range, totalPages) {
+
+    if (!range.trim()) {
+
+        return Array.from(
+            { length: totalPages },
+            (_, index) => index + 1
+        );
+
+    }
+
+
+    const pages = new Set();
+
+
+    const parts =
+        range.split(",");
+
+
+    for (const part of parts) {
+
+        const value =
+            part.trim();
+
+
+        if (value.includes("-")) {
+
+            const [startText, endText] =
+                value.split("-");
+
+
+            const start =
+                parseInt(startText, 10);
+
+
+            const end =
+                parseInt(endText, 10);
+
+
+            if (
+                !Number.isInteger(start) ||
+                !Number.isInteger(end) ||
+                start < 1 ||
+                end > totalPages ||
+                start > end
+            ) {
+
+                throw new Error(
+                    "Invalid page range."
+                );
+
+            }
+
+
+            for (
+                let i = start;
+                i <= end;
+                i++
+            ) {
+
+                pages.add(i);
+
+            }
+
+        } else {
+
+            const page =
+                parseInt(value, 10);
+
+
+            if (
+                !Number.isInteger(page) ||
+                page < 1 ||
+                page > totalPages
+            ) {
+
+                throw new Error(
+                    "Invalid page number."
+                );
+
+            }
+
+
+            pages.add(page);
+
+        }
+
+    }
+
+
+    return Array.from(pages).sort(
+        (a, b) => a - b
+    );
+
+}
+
+
+splitBtn.addEventListener("click", async function () {
+
+    if (!selectedFile) return;
+
+
+    splitBtn.disabled =
+        true;
+
+
+    splitBtn.textContent =
+        "Reading PDF...";
+
+
+    result.style.display =
+        "none";
+
+
+    downloadArea.innerHTML =
+        "";
+
+
+    try {
+
+        const fileBytes =
+            await selectedFile.arrayBuffer();
+
+
+        const sourcePdf =
+            await PDFLib.PDFDocument.load(
+                fileBytes
+            );
+
+
+        const totalPages =
+            sourcePdf.getPageCount();
+
+
+        const pages =
+            parsePageRange(
+                pageRange.value,
+                totalPages
+            );
+
+
+        for (
+            let i = 0;
+            i < pages.length;
+            i++
+        ) {
+
+            const pageNumber =
+                pages[i];
+
+
+            splitBtn.textContent =
+                `Creating page ${pageNumber} of ${pages.length}...`;
+
+
+            const newPdf =
+                await PDFLib.PDFDocument.create();
+
+
+            const [page] =
+                await newPdf.copyPages(
+                    sourcePdf,
+                    [pageNumber - 1]
+                );
+
+
+            newPdf.addPage(page);
+
+
+            const pdfBytes =
+                await newPdf.save();
+
+
+            const blob =
+                new Blob(
+                    [pdfBytes],
+                    { type: "application/pdf" }
+                );
+
+
+            const url =
+                URL.createObjectURL(blob);
+
+
+            const downloadButton =
+                document.createElement("a");
+
+
+            downloadButton.className =
+                "download-btn";
+
+
+            downloadButton.href =
+                url;
+
+
+            downloadButton.download =
+                `filevora-page-${pageNumber}.pdf`;
+
+
+            downloadButton.textContent =
+                `↓ Download Page ${pageNumber}`;
+
+
+            downloadArea.appendChild(
+                downloadButton
+            );
+
+        }
+
+
+        resultText.textContent =
+            `${pages.length} page${pages.length === 1 ? "" : "s"} extracted successfully.`;
+
+
+        result.style.display =
+            "block";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            error.message === "Invalid page range."
+                ? "Please enter a valid page range."
+                : "Something went wrong while splitting the PDF."
+        );
+
+    }
+
+
+    splitBtn.disabled =
+        false;
+
+
+    splitBtn.textContent =
+        "Split PDF";
+
+});
+
+
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+</script>
+
+</body>
+</html>

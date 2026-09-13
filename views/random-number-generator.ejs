@@ -1,0 +1,362 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Random Number Generator - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    #
+                </div>
+
+                <h1>Random Number Generator</h1>
+
+                <p>
+                    Generate random numbers within any range instantly.
+                </p>
+
+            </div>
+
+
+            <div style="text-align:left;">
+
+                <label
+                    for="minNumber"
+                    style="display:block; margin-bottom:8px; font-weight:700; color:#111827;"
+                >
+                    Minimum Number
+                </label>
+
+                <input
+                    type="number"
+                    id="minNumber"
+                    value="1"
+                    step="any"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                    "
+                >
+
+
+                <label
+                    for="maxNumber"
+                    style="
+                        display:block;
+                        margin-top:18px;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Maximum Number
+                </label>
+
+                <input
+                    type="number"
+                    id="maxNumber"
+                    value="100"
+                    step="any"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                    "
+                >
+
+
+                <label
+                    for="count"
+                    style="
+                        display:block;
+                        margin-top:18px;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    How Many Numbers?
+                </label>
+
+                <input
+                    type="number"
+                    id="count"
+                    value="1"
+                    min="1"
+                    max="100"
+                    step="1"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                    "
+                >
+
+
+                <label
+                    style="
+                        display:flex;
+                        align-items:center;
+                        gap:10px;
+                        margin-top:18px;
+                        color:#374151;
+                        font-size:14px;
+                        cursor:pointer;
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        id="uniqueNumbers"
+                        style="width:18px; height:18px;"
+                    >
+
+                    Generate unique numbers only
+
+                </label>
+
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="generateBtn"
+                >
+                    Generate Random Numbers
+                </button>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>Generated Numbers</h2>
+
+                <p
+                    id="numbers"
+                    style="
+                        margin-top:15px;
+                        font-size:22px;
+                        font-weight:700;
+                        color:#166534;
+                        word-break:break-word;
+                        line-height:1.7;
+                    "
+                ></p>
+
+                <button
+                    type="button"
+                    class="download-btn"
+                    id="copyBtn"
+                >
+                    Copy Numbers
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const minInput = document.getElementById("minNumber");
+const maxInput = document.getElementById("maxNumber");
+const countInput = document.getElementById("count");
+const uniqueCheckbox = document.getElementById("uniqueNumbers");
+
+const generateBtn = document.getElementById("generateBtn");
+
+const result = document.getElementById("result");
+const numbersOutput = document.getElementById("numbers");
+const copyBtn = document.getElementById("copyBtn");
+
+
+function generateRandomNumber(min, max) {
+
+    return Math.floor(
+        Math.random() * (max - min + 1)
+    ) + min;
+
+}
+
+
+generateBtn.addEventListener("click", () => {
+
+    const min = Number(minInput.value);
+    const max = Number(maxInput.value);
+    const count = Number(countInput.value);
+
+
+    if (
+        !Number.isFinite(min) ||
+        !Number.isFinite(max)
+    ) {
+
+        alert("Please enter valid minimum and maximum numbers.");
+
+        return;
+    }
+
+
+    if (min > max) {
+
+        alert("Minimum number cannot be greater than maximum number.");
+
+        return;
+    }
+
+
+    if (
+        !Number.isInteger(min) ||
+        !Number.isInteger(max)
+    ) {
+
+        alert(
+            "Please use whole numbers for the minimum and maximum values."
+        );
+
+        return;
+    }
+
+
+    if (
+        !Number.isInteger(count) ||
+        count < 1 ||
+        count > 100
+    ) {
+
+        alert("Number of results must be between 1 and 100.");
+
+        return;
+    }
+
+
+    const possibleNumbers = max - min + 1;
+
+
+    if (
+        uniqueCheckbox.checked &&
+        count > possibleNumbers
+    ) {
+
+        alert(
+            `Only ${possibleNumbers} unique numbers are available in this range.`
+        );
+
+        return;
+    }
+
+
+    const numbers = [];
+
+
+    if (uniqueCheckbox.checked) {
+
+        const used = new Set();
+
+
+        while (numbers.length < count) {
+
+            const randomNumber =
+                generateRandomNumber(min, max);
+
+            if (!used.has(randomNumber)) {
+
+                used.add(randomNumber);
+
+                numbers.push(randomNumber);
+
+            }
+
+        }
+
+    } else {
+
+        for (let i = 0; i < count; i++) {
+
+            numbers.push(
+                generateRandomNumber(min, max)
+            );
+
+        }
+
+    }
+
+
+    numbersOutput.textContent =
+        numbers.join(" , ");
+
+
+    result.style.display = "block";
+
+
+    copyBtn.textContent = "Copy Numbers";
+
+});
+
+
+copyBtn.addEventListener("click", async () => {
+
+    const text = numbersOutput.textContent;
+
+    if (!text) {
+        return;
+    }
+
+
+    try {
+
+        await navigator.clipboard.writeText(text);
+
+        copyBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+
+            copyBtn.textContent = "Copy Numbers";
+
+        }, 1500);
+
+    } catch (error) {
+
+        alert("Unable to copy the numbers.");
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
+```

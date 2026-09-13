@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Convert JPG images to PDF online for free with FileVora. Fast, simple and easy to use.">
+
+    <title>JPG to PDF — FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="container nav">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span>File<span>Vora</span></span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/#tools">Tools</a>
+            <a href="/#categories">Categories</a>
+        </nav>
+
+    </div>
+</header>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    JPG
+                </div>
+
+                <h1>JPG to PDF</h1>
+
+                <p>
+                    Convert your JPG image into a PDF document instantly.
+                </p>
+
+            </div>
+
+            <label class="upload-area" for="imageInput">
+
+                <div class="upload-icon">🖼️</div>
+
+                <strong>Choose a JPG image</strong>
+
+                <span>JPG or JPEG images only</span>
+
+            </label>
+
+            <input
+                id="imageInput"
+                type="file"
+                accept="image/jpeg,.jpg,.jpeg"
+            >
+
+            <div class="file-info" id="fileInfo">
+                <strong id="fileName"></strong>
+                <span id="fileSize"></span>
+            </div>
+
+            <button
+                class="convert-btn"
+                id="convertBtn"
+                disabled
+            >
+                Convert to PDF
+            </button>
+
+            <div class="result" id="result">
+
+                <h2>PDF Ready</h2>
+
+                <p>Your JPG image has been converted successfully.</p>
+
+                <a
+                    id="downloadBtn"
+                    class="download-btn"
+                    download="filevora-image.pdf"
+                >
+                    ↓ Download PDF
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<footer>
+    <div class="container footer-inner">
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span>File<span>Vora</span></span>
+        </a>
+
+        <p>
+            © <span id="year"></span> FILEVORA. All rights reserved.
+        </p>
+    </div>
+</footer>
+
+<script>
+    const imageInput = document.getElementById("imageInput");
+    const fileInfo = document.getElementById("fileInfo");
+    const fileName = document.getElementById("fileName");
+    const fileSize = document.getElementById("fileSize");
+    const convertBtn = document.getElementById("convertBtn");
+    const result = document.getElementById("result");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    imageInput.addEventListener("change", () => {
+
+        const file = imageInput.files[0];
+
+        if (!file) {
+            convertBtn.disabled = true;
+            fileInfo.style.display = "none";
+            result.style.display = "none";
+            return;
+        }
+
+        if (file.type !== "image/jpeg") {
+            alert("Please choose a JPG or JPEG image.");
+            imageInput.value = "";
+            return;
+        }
+
+        fileName.textContent = file.name;
+
+        const sizeMB = file.size / (1024 * 1024);
+
+        fileSize.textContent =
+            sizeMB >= 1
+                ? sizeMB.toFixed(2) + " MB"
+                : (file.size / 1024).toFixed(2) + " KB";
+
+        fileInfo.style.display = "block";
+        convertBtn.disabled = false;
+        result.style.display = "none";
+    });
+
+
+    convertBtn.addEventListener("click", () => {
+
+        const file = imageInput.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        convertBtn.disabled = true;
+        convertBtn.textContent = "Creating PDF...";
+
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+
+            const image = new Image();
+
+            image.onload = function() {
+
+                try {
+
+                    const { jsPDF } = window.jspdf;
+
+                    const pdf = new jsPDF({
+                        orientation: "portrait",
+                        unit: "mm",
+                        format: "a4"
+                    });
+
+                    const pageWidth = 210;
+                    const pageHeight = 297;
+
+                    const margin = 10;
+
+                    const maxWidth = pageWidth - (margin * 2);
+                    const maxHeight = pageHeight - (margin * 2);
+
+                    const imageRatio = image.width / image.height;
+
+                    let imageWidth = maxWidth;
+                    let imageHeight = imageWidth / imageRatio;
+
+                    if (imageHeight > maxHeight) {
+                        imageHeight = maxHeight;
+                        imageWidth = imageHeight * imageRatio;
+                    }
+
+                    const x = (pageWidth - imageWidth) / 2;
+                    const y = (pageHeight - imageHeight) / 2;
+
+                    pdf.addImage(
+                        event.target.result,
+                        "JPEG",
+                        x,
+                        y,
+                        imageWidth,
+                        imageHeight,
+                        undefined,
+                        "JPEG",
+                        0.92
+                    );
+
+                    const pdfBlob = pdf.output("blob");
+
+                    const url = URL.createObjectURL(pdfBlob);
+
+                    downloadBtn.href = url;
+                    downloadBtn.download = "filevora-image.pdf";
+
+                    result.style.display = "block";
+
+                    convertBtn.disabled = false;
+                    convertBtn.textContent = "Convert to PDF";
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    alert("Something went wrong while creating the PDF.");
+
+                    convertBtn.disabled = false;
+                    convertBtn.textContent = "Convert to PDF";
+                }
+            };
+
+            image.onerror = function() {
+
+                alert("Unable to read the JPG image.");
+
+                convertBtn.disabled = false;
+                convertBtn.textContent = "Convert to PDF";
+            };
+
+            image.src = event.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+
+    document.getElementById("year").textContent =
+        new Date().getFullYear();
+</script>
+
+</body>
+</html>

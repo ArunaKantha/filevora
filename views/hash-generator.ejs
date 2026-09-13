@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Generator - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<main class="converter-page">
+    <div class="container">
+        <div class="converter-card">
+
+            <div class="converter-header">
+                <div class="tool-icon">#H</div>
+                <h1>Hash Generator</h1>
+                <p>Generate secure cryptographic hashes from text using popular hashing algorithms.</p>
+            </div>
+
+            <textarea
+                id="textInput"
+                placeholder="Enter text to hash..."
+                style="
+                    width:100%;
+                    min-height:220px;
+                    padding:18px;
+                    border:2px solid #e5e7eb;
+                    border-radius:14px;
+                    resize:vertical;
+                    font-size:15px;
+                    line-height:1.6;
+                    outline:none;
+                    font-family:inherit;
+                    box-sizing:border-box;
+                "
+            ></textarea>
+
+            <div style="
+                text-align:left;
+                margin-top:18px;
+            ">
+
+                <label
+                    for="algorithm"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Hash Algorithm
+                </label>
+
+                <select
+                    id="algorithm"
+                    style="
+                        width:100%;
+                        padding:13px 15px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:15px;
+                        background:#ffffff;
+                        box-sizing:border-box;
+                    "
+                >
+                    <option value="SHA-256">SHA-256</option>
+                    <option value="SHA-384">SHA-384</option>
+                    <option value="SHA-512">SHA-512</option>
+                    <option value="SHA-1">SHA-1</option>
+                </select>
+
+            </div>
+
+            <button class="convert-btn" id="generateBtn">
+                Generate Hash
+            </button>
+
+            <div class="result" id="result">
+
+                <h2>Hash Generated</h2>
+
+                <p id="resultInfo"></p>
+
+                <textarea
+                    id="outputText"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:130px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #d1d5db;
+                        border-radius:10px;
+                        resize:vertical;
+                        font-size:14px;
+                        line-height:1.6;
+                        font-family:monospace;
+                        box-sizing:border-box;
+                        background:#ffffff;
+                        word-break:break-all;
+                    "
+                ></textarea>
+
+                <button class="download-btn" id="copyBtn">
+                    Copy Hash
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+const textInput = document.getElementById("textInput");
+const algorithm = document.getElementById("algorithm");
+const generateBtn = document.getElementById("generateBtn");
+
+const result = document.getElementById("result");
+const resultInfo = document.getElementById("resultInfo");
+const outputText = document.getElementById("outputText");
+const copyBtn = document.getElementById("copyBtn");
+
+async function generateHash(text, algorithmName) {
+
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+
+    const hashBuffer = await crypto.subtle.digest(
+        algorithmName,
+        data
+    );
+
+    const hashArray = Array.from(
+        new Uint8Array(hashBuffer)
+    );
+
+    return hashArray
+        .map(byte => byte.toString(16).padStart(2, "0"))
+        .join("");
+}
+
+generateBtn.addEventListener("click", async () => {
+
+    const text = textInput.value;
+
+    if (!text) {
+        alert("Please enter some text first.");
+        return;
+    }
+
+    generateBtn.disabled = true;
+    generateBtn.textContent = "Generating...";
+
+    try {
+
+        const selectedAlgorithm = algorithm.value;
+
+        const hash = await generateHash(
+            text,
+            selectedAlgorithm
+        );
+
+        outputText.value = hash;
+
+        resultInfo.textContent =
+            `${selectedAlgorithm} hash generated successfully.`;
+
+        result.style.display = "block";
+
+        result.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+        });
+
+    } catch (error) {
+
+        alert("Unable to generate hash.");
+
+    } finally {
+
+        generateBtn.disabled = false;
+        generateBtn.textContent = "Generate Hash";
+    }
+});
+
+copyBtn.addEventListener("click", async () => {
+
+    if (!outputText.value) return;
+
+    try {
+
+        await navigator.clipboard.writeText(
+            outputText.value
+        );
+
+        copyBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+            copyBtn.textContent = "Copy Hash";
+        }, 1500);
+
+    } catch (error) {
+
+        outputText.select();
+        document.execCommand("copy");
+
+        copyBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+            copyBtn.textContent = "Copy Hash";
+        }, 1500);
+    }
+});
+</script>
+
+</body>
+</html>

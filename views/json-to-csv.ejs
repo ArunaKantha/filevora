@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JSON to CSV Converter - FileVora</title>
+    <meta name="description" content="Convert JSON data to CSV format quickly and easily with FileVora.">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    JSON
+                </div>
+
+                <h1>JSON to CSV Converter</h1>
+
+                <p>
+                    Convert JSON data into CSV format quickly and easily.
+                </p>
+
+            </div>
+
+            <div style="text-align:left;">
+
+                <label for="jsonInput"
+                       style="display:block; margin-bottom:8px; font-weight:700; color:#111827;">
+                    JSON Data
+                </label>
+
+                <textarea
+                    id="jsonInput"
+                    placeholder='Example:
+[
+  {"name":"John","age":25},
+  {"name":"Sarah","age":30}
+]'
+                    style="
+                        width:100%;
+                        min-height:260px;
+                        padding:16px;
+                        border:1px solid #cbd5e1;
+                        border-radius:12px;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                ></textarea>
+
+            </div>
+
+            <button
+                class="convert-btn"
+                id="convertBtn"
+                onclick="convertJSONToCSV()"
+            >
+                Convert to CSV
+            </button>
+
+            <div id="errorMessage"
+                 style="
+                    display:none;
+                    margin-top:18px;
+                    padding:14px 18px;
+                    background:#fef2f2;
+                    border:1px solid #fecaca;
+                    border-radius:10px;
+                    color:#b91c1c;
+                    text-align:left;
+                 ">
+            </div>
+
+            <div class="result" id="result">
+
+                <h2>Conversion Complete</h2>
+
+                <p>
+                    Your JSON data has been successfully converted to CSV.
+                </p>
+
+                <a
+                    id="downloadBtn"
+                    class="download-btn"
+                    href="#"
+                    download="filevora-data.csv"
+                >
+                    ↓ Download CSV
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function convertJSONToCSV() {
+
+    const input = document.getElementById("jsonInput").value.trim();
+    const errorMessage = document.getElementById("errorMessage");
+    const result = document.getElementById("result");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    errorMessage.style.display = "none";
+    result.style.display = "none";
+
+    if (!input) {
+        showError("Please enter JSON data.");
+        return;
+    }
+
+    let data;
+
+    try {
+        data = JSON.parse(input);
+    } catch (error) {
+        showError("Invalid JSON. Please check your JSON format.");
+        return;
+    }
+
+    if (!Array.isArray(data)) {
+        data = [data];
+    }
+
+    if (data.length === 0) {
+        showError("The JSON array is empty.");
+        return;
+    }
+
+    if (typeof data[0] !== "object" || data[0] === null || Array.isArray(data[0])) {
+        showError("Please provide an array of JSON objects.");
+        return;
+    }
+
+    const headers = [];
+
+    data.forEach(item => {
+
+        Object.keys(item).forEach(key => {
+
+            if (!headers.includes(key)) {
+                headers.push(key);
+            }
+
+        });
+
+    });
+
+    if (headers.length === 0) {
+        showError("No data fields were found.");
+        return;
+    }
+
+    const csvRows = [];
+
+    csvRows.push(
+        headers.map(value => escapeCSV(value)).join(",")
+    );
+
+    data.forEach(item => {
+
+        const row = headers.map(header => {
+
+            let value = item[header];
+
+            if (value === null || value === undefined) {
+                value = "";
+            }
+
+            if (typeof value === "object") {
+                value = JSON.stringify(value);
+            }
+
+            return escapeCSV(String(value));
+
+        });
+
+        csvRows.push(row.join(","));
+
+    });
+
+    const csvContent = csvRows.join("\r\n");
+
+    const blob = new Blob(
+        ["\uFEFF" + csvContent],
+        {
+            type: "text/csv;charset=utf-8;"
+        }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    downloadBtn.href = url;
+
+    result.style.display = "block";
+}
+
+function escapeCSV(value) {
+
+    if (
+        value.includes(",") ||
+        value.includes('"') ||
+        value.includes("\n") ||
+        value.includes("\r")
+    ) {
+
+        return '"' + value.replace(/"/g, '""') + '"';
+
+    }
+
+    return value;
+}
+
+function showError(message) {
+
+    const errorMessage = document.getElementById("errorMessage");
+
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+}
+
+</script>
+
+</body>
+</html>

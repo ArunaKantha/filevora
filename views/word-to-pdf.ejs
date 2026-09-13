@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Word to PDF Converter - FileVora</title>
+    <meta name="description" content="Convert Word DOCX files to PDF quickly with FileVora.">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+
+    <main class="converter-page">
+        <div class="container">
+
+            <div class="converter-card">
+
+                <div class="converter-header">
+
+                    <div class="tool-icon">
+                        DOC
+                    </div>
+
+                    <h1>Word to PDF Converter</h1>
+
+                    <p>
+                        Convert DOCX Word documents into PDF format quickly and easily.
+                    </p>
+
+                </div>
+
+                <label class="upload-area" for="wordInput">
+
+                    <div class="upload-icon">📄</div>
+
+                    <strong>Click to upload Word file</strong>
+
+                    <span>
+                        Supports .docx files
+                    </span>
+
+                </label>
+
+                <input
+                    type="file"
+                    id="wordInput"
+                    accept=".docx"
+                >
+
+                <div class="file-info" id="fileInfo">
+
+                    <strong id="fileName"></strong>
+
+                    <span id="fileSize"></span>
+
+                </div>
+
+                <button
+                    class="convert-btn"
+                    id="previewBtn"
+                    disabled
+                >
+                    Preview Document
+                </button>
+
+                <div
+                    id="previewWrapper"
+                    style="
+                        display:none;
+                        margin-top:24px;
+                        padding:20px;
+                        border:1px solid #e2e8f0;
+                        border-radius:12px;
+                        background:#ffffff;
+                        text-align:left;
+                        overflow:auto;
+                    "
+                >
+
+                    <div
+                        id="preview"
+                        style="
+                            width:100%;
+                            min-height:200px;
+                            background:#ffffff;
+                            color:#111827;
+                            line-height:1.6;
+                            font-size:14px;
+                        "
+                    ></div>
+
+                </div>
+
+                <button
+                    class="convert-btn"
+                    id="convertBtn"
+                    disabled
+                >
+                    Convert to PDF
+                </button>
+
+                <div
+                    class="result"
+                    id="result"
+                >
+
+                    <h2>PDF Ready</h2>
+
+                    <p>
+                        Your Word document has been converted to PDF successfully.
+                    </p>
+
+                    <a
+                        href="#"
+                        class="download-btn"
+                        id="downloadBtn"
+                    >
+                        ⬇ Download PDF
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+
+        const wordInput =
+            document.getElementById("wordInput");
+
+        const fileInfo =
+            document.getElementById("fileInfo");
+
+        const fileName =
+            document.getElementById("fileName");
+
+        const fileSize =
+            document.getElementById("fileSize");
+
+        const previewBtn =
+            document.getElementById("previewBtn");
+
+        const previewWrapper =
+            document.getElementById("previewWrapper");
+
+        const preview =
+            document.getElementById("preview");
+
+        const convertBtn =
+            document.getElementById("convertBtn");
+
+        const result =
+            document.getElementById("result");
+
+        const downloadBtn =
+            document.getElementById("downloadBtn");
+
+
+        let selectedFile = null;
+
+
+        wordInput.addEventListener("change", function () {
+
+            selectedFile = this.files[0];
+
+            if (!selectedFile) {
+
+                fileInfo.style.display = "none";
+                previewBtn.disabled = true;
+                convertBtn.disabled = true;
+
+                return;
+            }
+
+            fileName.textContent =
+                selectedFile.name;
+
+            fileSize.textContent =
+                (selectedFile.size / 1024).toFixed(2) +
+                " KB";
+
+            fileInfo.style.display = "block";
+
+            previewBtn.disabled = false;
+
+            convertBtn.disabled = true;
+
+            previewWrapper.style.display = "none";
+
+            result.style.display = "none";
+
+        });
+
+
+        previewBtn.addEventListener("click", async function () {
+
+            if (!selectedFile) {
+                return;
+            }
+
+            previewBtn.disabled = true;
+            previewBtn.textContent = "Loading Document...";
+
+            try {
+
+                const arrayBuffer =
+                    await selectedFile.arrayBuffer();
+
+                const resultData =
+                    await mammoth.convertToHtml({
+                        arrayBuffer: arrayBuffer
+                    });
+
+                preview.innerHTML =
+                    resultData.value;
+
+                previewWrapper.style.display =
+                    "block";
+
+                convertBtn.disabled = false;
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to read this Word document."
+                );
+
+            } finally {
+
+                previewBtn.disabled = false;
+
+                previewBtn.textContent =
+                    "Preview Document";
+
+            }
+
+        });
+
+
+        convertBtn.addEventListener("click", async function () {
+
+            if (!selectedFile) {
+                return;
+            }
+
+            convertBtn.disabled = true;
+            convertBtn.textContent = "Creating PDF...";
+
+            result.style.display = "none";
+
+            try {
+
+                const canvas =
+                    await html2canvas(
+                        preview,
+                        {
+                            scale: 2,
+                            useCORS: true,
+                            backgroundColor: "#ffffff"
+                        }
+                    );
+
+                const {
+                    jsPDF
+                } = window.jspdf;
+
+                const pdf =
+                    new jsPDF({
+                        orientation: "portrait",
+                        unit: "mm",
+                        format: "a4"
+                    });
+
+                const pageWidth = 210;
+                const pageHeight = 297;
+
+                const margin = 10;
+
+                const usableWidth =
+                    pageWidth - margin * 2;
+
+                const usableHeight =
+                    pageHeight - margin * 2;
+
+                const imageHeight =
+                    canvas.height *
+                    usableWidth /
+                    canvas.width;
+
+                const imageData =
+                    canvas.toDataURL(
+                        "image/jpeg",
+                        0.95
+                    );
+
+                let heightLeft =
+                    imageHeight;
+
+                let position = margin;
+
+                pdf.addImage(
+                    imageData,
+                    "JPEG",
+                    margin,
+                    position,
+                    usableWidth,
+                    imageHeight
+                );
+
+                heightLeft -= usableHeight;
+
+                while (heightLeft > 0) {
+
+                    position =
+                        margin -
+                        (imageHeight - heightLeft);
+
+                    pdf.addPage();
+
+                    pdf.addImage(
+                        imageData,
+                        "JPEG",
+                        margin,
+                        position,
+                        usableWidth,
+                        imageHeight
+                    );
+
+                    heightLeft -= usableHeight;
+                }
+
+
+                const blob =
+                    pdf.output("blob");
+
+                const url =
+                    URL.createObjectURL(blob);
+
+                downloadBtn.href = url;
+
+                downloadBtn.download =
+                    selectedFile.name.replace(
+                        /\.docx$/i,
+                        ""
+                    ) + ".pdf";
+
+                result.style.display =
+                    "block";
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to convert this Word document to PDF."
+                );
+
+            } finally {
+
+                convertBtn.disabled = false;
+
+                convertBtn.textContent =
+                    "Convert to PDF";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

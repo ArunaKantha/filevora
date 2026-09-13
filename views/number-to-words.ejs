@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number to Words - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">🔤</div>
+
+                <h1>Number to Words</h1>
+
+                <p>
+                    Convert numbers into words quickly and easily.
+                </p>
+
+            </div>
+
+
+            <!-- Input -->
+
+            <div style="text-align:left;">
+
+                <label
+                    for="numberInput"
+                    style="font-weight:700; color:#111827;"
+                >
+                    Enter Number
+                </label>
+
+                <input
+                    type="text"
+                    id="numberInput"
+                    placeholder="Example: 1250"
+                    inputmode="decimal"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        margin-top:8px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:15px;
+                        box-sizing:border-box;
+                    "
+                >
+
+            </div>
+
+
+            <!-- Convert -->
+
+            <button
+                type="button"
+                id="convertBtn"
+                class="convert-btn"
+            >
+                Convert to Words
+            </button>
+
+
+            <!-- Result -->
+
+            <div
+                id="result"
+                class="result"
+                style="display:none;"
+            >
+
+                <h2>Result</h2>
+
+                <p
+                    id="resultText"
+                    style="
+                        line-height:1.7;
+                        font-size:16px;
+                    "
+                ></p>
+
+                <button
+                    type="button"
+                    id="copyBtn"
+                    class="download-btn"
+                >
+                    Copy Words
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const numberInput =
+    document.getElementById("numberInput");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+
+let currentResult = "";
+
+
+/* --------------------------------
+   NUMBER WORDS
+-------------------------------- */
+
+const ones = [
+
+    "",
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Eleven",
+    "Twelve",
+    "Thirteen",
+    "Fourteen",
+    "Fifteen",
+    "Sixteen",
+    "Seventeen",
+    "Eighteen",
+    "Nineteen"
+
+];
+
+
+const tens = [
+
+    "",
+    "",
+    "Twenty",
+    "Thirty",
+    "Forty",
+    "Fifty",
+    "Sixty",
+    "Seventy",
+    "Eighty",
+    "Ninety"
+
+];
+
+
+const scales = [
+
+    "",
+    "Thousand",
+    "Million",
+    "Billion",
+    "Trillion",
+    "Quadrillion"
+
+];
+
+
+/* --------------------------------
+   UNDER 1000
+-------------------------------- */
+
+function underThousand(number) {
+
+    let words = "";
+
+
+    if (number >= 100) {
+
+        words +=
+            ones[Math.floor(number / 100)] +
+            " Hundred";
+
+        number %= 100;
+
+
+        if (number > 0) {
+
+            words += " ";
+
+        }
+
+    }
+
+
+    if (number >= 20) {
+
+        words +=
+            tens[Math.floor(number / 10)];
+
+        number %= 10;
+
+
+        if (number > 0) {
+
+            words +=
+                " " + ones[number];
+
+        }
+
+    }
+
+    else if (number > 0) {
+
+        words +=
+            ones[number];
+
+    }
+
+
+    return words;
+
+}
+
+
+/* --------------------------------
+   NUMBER → WORDS
+-------------------------------- */
+
+function numberToWords(number) {
+
+    if (number === 0) {
+
+        return "Zero";
+
+    }
+
+
+    let result = "";
+
+    let scaleIndex = 0;
+
+
+    while (number > 0) {
+
+        const chunk =
+            number % 1000;
+
+
+        if (chunk !== 0) {
+
+            const chunkWords =
+                underThousand(chunk);
+
+
+            const scale =
+                scales[scaleIndex];
+
+
+            if (result) {
+
+                result =
+                    chunkWords +
+                    (scale ? " " + scale : "") +
+                    " " +
+                    result;
+
+            }
+
+            else {
+
+                result =
+                    chunkWords +
+                    (scale ? " " + scale : "");
+
+            }
+
+        }
+
+
+        number =
+            Math.floor(number / 1000);
+
+        scaleIndex++;
+
+    }
+
+
+    return result;
+
+}
+
+
+/* --------------------------------
+   CONVERT
+-------------------------------- */
+
+convertBtn.addEventListener(
+    "click",
+    function() {
+
+        let input =
+            numberInput.value.trim();
+
+
+        if (!input) {
+
+            result.style.display =
+                "block";
+
+            resultText.textContent =
+                "Please enter a number.";
+
+            currentResult = "";
+
+            return;
+
+        }
+
+
+        /* Remove commas */
+
+        input =
+            input.replace(/,/g, "");
+
+
+        /* Validate */
+
+        if (
+            !/^\d+$/.test(input)
+        ) {
+
+            result.style.display =
+                "block";
+
+            resultText.textContent =
+                "Please enter a valid whole number.";
+
+            currentResult = "";
+
+            return;
+
+        }
+
+
+        const number =
+            Number(input);
+
+
+        if (
+            !Number.isSafeInteger(number)
+        ) {
+
+            result.style.display =
+                "block";
+
+            resultText.textContent =
+                "Number is too large. Please enter a smaller number.";
+
+            currentResult = "";
+
+            return;
+
+        }
+
+
+        if (number > 999999999999999) {
+
+            result.style.display =
+                "block";
+
+            resultText.textContent =
+                "Please enter a number up to 999,999,999,999,999.";
+
+            currentResult = "";
+
+            return;
+
+        }
+
+
+        currentResult =
+            numberToWords(number);
+
+
+        result.style.display =
+            "block";
+
+
+        resultText.innerHTML =
+            `<strong>${number.toLocaleString("en-US")}</strong><br><br>${currentResult}`;
+
+    }
+);
+
+
+/* --------------------------------
+   COPY
+-------------------------------- */
+
+copyBtn.addEventListener(
+    "click",
+    async function() {
+
+        if (!currentResult) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                currentResult
+            );
+
+            copyBtn.textContent =
+                "Copied!";
+
+        }
+
+        catch (error) {
+
+            copyBtn.textContent =
+                "Copy failed";
+
+        }
+
+
+        setTimeout(
+            function() {
+
+                copyBtn.textContent =
+                    "Copy Words";
+
+            },
+            1500
+        );
+
+    }
+);
+
+</script>
+
+</body>
+</html>

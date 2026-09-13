@@ -1,0 +1,445 @@
+```ejs
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Image Metadata Remover - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    🛡️
+                </div>
+
+                <h1>Image Metadata Remover</h1>
+
+                <p>
+                    Remove hidden metadata from your image before sharing it online.
+                </p>
+
+            </div>
+
+
+            <label class="upload-area" for="imageInput">
+
+                <div class="upload-icon">
+                    🖼️
+                </div>
+
+                <strong>
+                    Click to upload an image
+                </strong>
+
+                <span>
+                    JPG, PNG, WEBP and other common image formats
+                </span>
+
+            </label>
+
+
+            <input
+                type="file"
+                id="imageInput"
+                accept="image/*"
+            >
+
+
+            <div class="file-info" id="fileInfo">
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <button
+                class="convert-btn"
+                id="removeBtn"
+                type="button"
+                disabled
+            >
+                Remove Metadata
+            </button>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>
+                    Metadata Removed
+                </h2>
+
+                <p>
+                    Your clean image is ready to download.
+                </p>
+
+                <button
+                    type="button"
+                    class="download-btn"
+                    id="downloadBtn"
+                >
+                    ⬇ Download Clean Image
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const imageInput =
+    document.getElementById("imageInput");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const removeBtn =
+    document.getElementById("removeBtn");
+
+const result =
+    document.getElementById("result");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let selectedFile = null;
+
+let cleanBlob = null;
+
+let outputExtension = "png";
+
+
+/* =========================
+   SELECT IMAGE
+========================= */
+
+imageInput.addEventListener("change", function () {
+
+    const file = this.files[0];
+
+    if (!file) {
+        return;
+    }
+
+
+    if (!file.type.startsWith("image/")) {
+
+        alert("Please select a valid image file.");
+
+        imageInput.value = "";
+
+        return;
+    }
+
+
+    selectedFile = file;
+
+
+    fileName.textContent =
+        file.name;
+
+
+    if (file.size >= 1024 * 1024) {
+
+        fileSize.textContent =
+            (file.size / (1024 * 1024)).toFixed(2)
+            + " MB";
+
+    } else {
+
+        fileSize.textContent =
+            (file.size / 1024).toFixed(1)
+            + " KB";
+    }
+
+
+    fileInfo.style.display = "block";
+
+    removeBtn.disabled = false;
+
+    result.style.display = "none";
+
+    cleanBlob = null;
+
+});
+
+
+/* =========================
+   REMOVE METADATA
+========================= */
+
+removeBtn.addEventListener("click", function () {
+
+    if (!selectedFile) {
+        return;
+    }
+
+
+    removeBtn.disabled = true;
+
+    removeBtn.textContent =
+        "Removing Metadata...";
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload = function (event) {
+
+        const img =
+            new Image();
+
+
+        img.onload = function () {
+
+            const canvas =
+                document.createElement("canvas");
+
+
+            canvas.width =
+                img.naturalWidth;
+
+            canvas.height =
+                img.naturalHeight;
+
+
+            const ctx =
+                canvas.getContext("2d");
+
+
+            ctx.drawImage(
+                img,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            let mimeType =
+                "image/png";
+
+
+            outputExtension =
+                "png";
+
+
+            /*
+             * JPEG → JPEG
+             */
+
+            if (
+                selectedFile.type === "image/jpeg" ||
+                selectedFile.type === "image/jpg"
+            ) {
+
+                mimeType =
+                    "image/jpeg";
+
+                outputExtension =
+                    "jpg";
+            }
+
+
+            /*
+             * Convert canvas to a new Blob.
+             * This creates a fresh image without
+             * the original EXIF metadata.
+             */
+
+            canvas.toBlob(
+                function (blob) {
+
+                    if (!blob) {
+
+                        alert(
+                            "Could not create the clean image."
+                        );
+
+                        removeBtn.disabled =
+                            false;
+
+                        removeBtn.textContent =
+                            "Remove Metadata";
+
+                        return;
+                    }
+
+
+                    cleanBlob = blob;
+
+
+                    result.style.display =
+                        "block";
+
+
+                    removeBtn.disabled =
+                        false;
+
+                    removeBtn.textContent =
+                        "Remove Metadata";
+
+
+                    result.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+
+                },
+                mimeType,
+                0.92
+            );
+
+        };
+
+
+        img.onerror = function () {
+
+            alert(
+                "Could not load this image."
+            );
+
+            removeBtn.disabled =
+                false;
+
+            removeBtn.textContent =
+                "Remove Metadata";
+        };
+
+
+        img.src =
+            event.target.result;
+    };
+
+
+    reader.onerror = function () {
+
+        alert(
+            "Could not read the selected image."
+        );
+
+        removeBtn.disabled =
+            false;
+
+        removeBtn.textContent =
+            "Remove Metadata";
+    };
+
+
+    reader.readAsDataURL(
+        selectedFile
+    );
+
+});
+
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+downloadBtn.addEventListener("click", function () {
+
+    if (!cleanBlob) {
+
+        alert(
+            "Please remove metadata first."
+        );
+
+        return;
+    }
+
+
+    const url =
+        URL.createObjectURL(cleanBlob);
+
+
+    const originalName =
+        selectedFile.name
+            .replace(/\.[^/.]+$/, "");
+
+
+    const downloadName =
+        originalName
+        + "-clean."
+        + outputExtension;
+
+
+    /*
+     * Create a temporary download link.
+     */
+
+    const link =
+        document.createElement("a");
+
+
+    link.href =
+        url;
+
+    link.download =
+        downloadName;
+
+    link.style.display =
+        "none";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    /*
+     * Force browser download.
+     */
+
+    link.click();
+
+
+    /*
+     * Cleanup after browser
+     * receives the download.
+     */
+
+    setTimeout(function () {
+
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+    }, 2000);
+
+});
+
+</script>
+
+</body>
+</html>
+```

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Compress PDF files online for free with FileVora."
+    >
+
+    <title>PDF Compressor — FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="container nav">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span>File<span>Vora</span></span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/#tools">Tools</a>
+            <a href="/#categories">Categories</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    PDF
+                </div>
+
+                <h1>PDF Compressor</h1>
+
+                <p>
+                    Reduce PDF file size quickly while keeping your document usable.
+                </p>
+
+            </div>
+
+
+            <label class="upload-area" for="pdfInput">
+
+                <div class="upload-icon">📄</div>
+
+                <strong>Choose a PDF file</strong>
+
+                <span>PDF files only</span>
+
+            </label>
+
+
+            <input
+                id="pdfInput"
+                type="file"
+                accept="application/pdf,.pdf"
+            >
+
+
+            <div class="file-info" id="fileInfo">
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <button
+                class="convert-btn"
+                id="compressBtn"
+                disabled
+            >
+                Compress PDF
+            </button>
+
+
+            <div class="result" id="result">
+
+                <h2>Compression Complete</h2>
+
+                <p id="resultText"></p>
+
+                <a
+                    id="downloadBtn"
+                    class="download-btn"
+                    download="filevora-compressed.pdf"
+                >
+                    ↓ Download Compressed PDF
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer>
+
+    <div class="container footer-inner">
+
+        <a class="brand" href="/">
+
+            <span class="brand-mark">F</span>
+
+            <span>File<span>Vora</span></span>
+
+        </a>
+
+        <p>
+            © <span id="year"></span> FILEVORA. All rights reserved.
+        </p>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+const pdfInput =
+    document.getElementById("pdfInput");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const compressBtn =
+    document.getElementById("compressBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let selectedFile = null;
+
+
+function formatSize(bytes) {
+
+    if (bytes < 1024) {
+        return bytes + " B";
+    }
+
+    if (bytes < 1024 * 1024) {
+        return (bytes / 1024).toFixed(2) + " KB";
+    }
+
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+
+}
+
+
+pdfInput.addEventListener("change", function () {
+
+    const file =
+        pdfInput.files[0];
+
+
+    if (!file) {
+
+        selectedFile = null;
+
+        compressBtn.disabled = true;
+
+        fileInfo.style.display = "none";
+
+        result.style.display = "none";
+
+        return;
+    }
+
+
+    if (file.type !== "application/pdf") {
+
+        alert("Please choose a PDF file.");
+
+        pdfInput.value = "";
+
+        selectedFile = null;
+
+        compressBtn.disabled = true;
+
+        return;
+    }
+
+
+    selectedFile = file;
+
+
+    fileName.textContent =
+        file.name;
+
+
+    fileSize.textContent =
+        formatSize(file.size);
+
+
+    fileInfo.style.display =
+        "block";
+
+
+    result.style.display =
+        "none";
+
+
+    compressBtn.disabled =
+        false;
+
+});
+
+
+compressBtn.addEventListener("click", async function () {
+
+    if (!selectedFile) return;
+
+
+    compressBtn.disabled =
+        true;
+
+
+    compressBtn.textContent =
+        "Compressing PDF...";
+
+
+    result.style.display =
+        "none";
+
+
+    try {
+
+        const originalBytes =
+            await selectedFile.arrayBuffer();
+
+
+        const pdf =
+            await PDFLib.PDFDocument.load(
+                originalBytes
+            );
+
+
+        /*
+         * Re-save the PDF using pdf-lib.
+         * This can remove some unnecessary document
+         * overhead and produce a cleaner PDF.
+         */
+
+        const compressedBytes =
+            await pdf.save({
+                useObjectStreams: true,
+                addDefaultPage: false
+            });
+
+
+        const originalSize =
+            selectedFile.size;
+
+
+        const compressedSize =
+            compressedBytes.length;
+
+
+        const reduction =
+            ((originalSize - compressedSize) /
+                originalSize) * 100;
+
+
+        const blob =
+            new Blob(
+                [compressedBytes],
+                { type: "application/pdf" }
+            );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        downloadBtn.href =
+            url;
+
+
+        downloadBtn.download =
+            "filevora-compressed.pdf";
+
+
+        if (compressedSize < originalSize) {
+
+            resultText.textContent =
+                `Original: ${formatSize(originalSize)} • Compressed: ${formatSize(compressedSize)} • Reduced by ${reduction.toFixed(1)}%.`;
+
+        } else {
+
+            resultText.textContent =
+                `Original: ${formatSize(originalSize)} • Optimized file: ${formatSize(compressedSize)}. This PDF was already highly optimized.`;
+
+        }
+
+
+        result.style.display =
+            "block";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Something went wrong while compressing the PDF."
+        );
+
+    }
+
+
+    compressBtn.disabled =
+        false;
+
+
+    compressBtn.textContent =
+        "Compress PDF";
+
+});
+
+
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+</script>
+
+</body>
+</html>

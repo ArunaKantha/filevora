@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PDF to Text Converter - FileVora</title>
+    <meta name="description" content="Extract text from PDF files quickly and download it as a text file with FileVora.">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+
+<body>
+
+    <main class="converter-page">
+        <div class="container">
+
+            <div class="converter-card">
+
+                <div class="converter-header">
+
+                    <div class="tool-icon">
+                        TXT
+                    </div>
+
+                    <h1>PDF to Text Converter</h1>
+
+                    <p>
+                        Extract text from PDF files and download it as a text file.
+                    </p>
+
+                </div>
+
+                <label class="upload-area" for="pdfInput">
+
+                    <div class="upload-icon">📄</div>
+
+                    <strong>Click to upload PDF</strong>
+
+                    <span>
+                        Select a PDF file to extract its text
+                    </span>
+
+                </label>
+
+                <input
+                    type="file"
+                    id="pdfInput"
+                    accept="application/pdf"
+                >
+
+                <div class="file-info" id="fileInfo">
+
+                    <strong id="fileName"></strong>
+
+                    <span id="fileSize"></span>
+
+                </div>
+
+                <button
+                    class="convert-btn"
+                    id="convertBtn"
+                    disabled
+                >
+                    Extract Text
+                </button>
+
+                <div
+                    class="result"
+                    id="result"
+                    style="text-align:left;"
+                >
+
+                    <h2>Text Extracted</h2>
+
+                    <p id="pageInfo">
+                        Text extracted successfully.
+                    </p>
+
+                    <textarea
+                        id="textOutput"
+                        readonly
+                        style="
+                            width:100%;
+                            min-height:280px;
+                            margin-top:16px;
+                            padding:14px;
+                            border:1px solid #d1d5db;
+                            border-radius:10px;
+                            background:#ffffff;
+                            font-family:monospace;
+                            font-size:13px;
+                            line-height:1.5;
+                            box-sizing:border-box;
+                            resize:vertical;
+                        "
+                    ></textarea>
+
+                    <button
+                        class="download-btn"
+                        id="copyBtn"
+                        type="button"
+                    >
+                        📋 Copy Text
+                    </button>
+
+                    <a
+                        href="#"
+                        class="download-btn"
+                        id="downloadBtn"
+                        style="margin-left:8px;"
+                    >
+                        ⬇ Download TXT
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+
+        const pdfInput =
+            document.getElementById("pdfInput");
+
+        const fileInfo =
+            document.getElementById("fileInfo");
+
+        const fileName =
+            document.getElementById("fileName");
+
+        const fileSize =
+            document.getElementById("fileSize");
+
+        const convertBtn =
+            document.getElementById("convertBtn");
+
+        const result =
+            document.getElementById("result");
+
+        const textOutput =
+            document.getElementById("textOutput");
+
+        const pageInfo =
+            document.getElementById("pageInfo");
+
+        const copyBtn =
+            document.getElementById("copyBtn");
+
+        const downloadBtn =
+            document.getElementById("downloadBtn");
+
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+        let selectedFile = null;
+
+
+        pdfInput.addEventListener("change", function () {
+
+            selectedFile = this.files[0];
+
+            if (!selectedFile) {
+
+                fileInfo.style.display = "none";
+                convertBtn.disabled = true;
+
+                return;
+            }
+
+            fileName.textContent =
+                selectedFile.name;
+
+            fileSize.textContent =
+                (selectedFile.size / 1024).toFixed(2) +
+                " KB";
+
+            fileInfo.style.display = "block";
+
+            convertBtn.disabled = false;
+
+            result.style.display = "none";
+
+        });
+
+
+        convertBtn.addEventListener("click", async function () {
+
+            if (!selectedFile) {
+                return;
+            }
+
+            convertBtn.disabled = true;
+            convertBtn.textContent = "Extracting Text...";
+
+            result.style.display = "none";
+
+            try {
+
+                const arrayBuffer =
+                    await selectedFile.arrayBuffer();
+
+                const pdf =
+                    await pdfjsLib.getDocument({
+                        data: arrayBuffer
+                    }).promise;
+
+                let allText = "";
+
+                for (
+                    let pageNumber = 1;
+                    pageNumber <= pdf.numPages;
+                    pageNumber++
+                ) {
+
+                    const page =
+                        await pdf.getPage(pageNumber);
+
+                    const content =
+                        await page.getTextContent();
+
+                    const pageText =
+                        content.items
+                            .map(item => item.str)
+                            .join(" ");
+
+                    allText +=
+                        "Page " +
+                        pageNumber +
+                        "\n\n";
+
+                    allText +=
+                        pageText.trim();
+
+                    allText +=
+                        "\n\n------------------------------\n\n";
+                }
+
+
+                if (!allText.trim()) {
+
+                    throw new Error(
+                        "No text found in this PDF."
+                    );
+
+                }
+
+
+                textOutput.value =
+                    allText.trim();
+
+                pageInfo.textContent =
+                    "Extracted text from " +
+                    pdf.numPages +
+                    " page(s).";
+
+                const blob =
+                    new Blob(
+                        [allText.trim()],
+                        {
+                            type: "text/plain;charset=utf-8"
+                        }
+                    );
+
+                const url =
+                    URL.createObjectURL(blob);
+
+                downloadBtn.href = url;
+
+                downloadBtn.download =
+                    selectedFile.name.replace(
+                        /\.pdf$/i,
+                        ""
+                    ) + ".txt";
+
+                result.style.display =
+                    "block";
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "No readable text could be extracted from this PDF. Scanned/image-only PDFs may require OCR."
+                );
+
+            } finally {
+
+                convertBtn.disabled = false;
+
+                convertBtn.textContent =
+                    "Extract Text";
+
+            }
+
+        });
+
+
+        copyBtn.addEventListener("click", async function () {
+
+            if (!textOutput.value) {
+                return;
+            }
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    textOutput.value
+                );
+
+                copyBtn.textContent =
+                    "✓ Copied";
+
+                setTimeout(() => {
+
+                    copyBtn.textContent =
+                        "📋 Copy Text";
+
+                }, 1500);
+
+            } catch (error) {
+
+                textOutput.select();
+
+                document.execCommand("copy");
+
+                copyBtn.textContent =
+                    "✓ Copied";
+
+                setTimeout(() => {
+
+                    copyBtn.textContent =
+                        "📋 Copy Text";
+
+                }, 1500);
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

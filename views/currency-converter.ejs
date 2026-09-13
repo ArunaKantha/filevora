@@ -1,0 +1,324 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Currency Converter - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    $
+                </div>
+
+                <h1>Currency Converter</h1>
+
+                <p>
+                    Convert currencies using the latest available exchange rates.
+                </p>
+
+            </div>
+
+
+            <div style="text-align:left;">
+
+                <label
+                    for="amount"
+                    style="display:block; margin-bottom:8px; font-weight:700; color:#111827;"
+                >
+                    Amount
+                </label>
+
+                <input
+                    type="number"
+                    id="amount"
+                    value="1"
+                    min="0"
+                    step="any"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                >
+
+
+                <div
+                    style="
+                        display:grid;
+                        grid-template-columns:1fr 1fr;
+                        gap:16px;
+                        margin-top:20px;
+                    "
+                >
+
+                    <div>
+
+                        <label
+                            for="fromCurrency"
+                            style="
+                                display:block;
+                                margin-bottom:8px;
+                                font-weight:700;
+                                color:#111827;
+                            "
+                        >
+                            From
+                        </label>
+
+                        <select
+                            id="fromCurrency"
+                            style="
+                                width:100%;
+                                padding:14px;
+                                border:1px solid #cbd5e1;
+                                border-radius:10px;
+                                font-size:16px;
+                                background:#fff;
+                                box-sizing:border-box;
+                            "
+                        >
+
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - British Pound</option>
+                            <option value="LKR">LKR - Sri Lankan Rupee</option>
+                            <option value="INR">INR - Indian Rupee</option>
+                            <option value="AUD">AUD - Australian Dollar</option>
+                            <option value="CAD">CAD - Canadian Dollar</option>
+                            <option value="SGD">SGD - Singapore Dollar</option>
+                            <option value="JPY">JPY - Japanese Yen</option>
+                            <option value="CNY">CNY - Chinese Yuan</option>
+                            <option value="AED">AED - UAE Dirham</option>
+                            <option value="SAR">SAR - Saudi Riyal</option>
+                            <option value="CHF">CHF - Swiss Franc</option>
+                            <option value="NZD">NZD - New Zealand Dollar</option>
+                            <option value="HKD">HKD - Hong Kong Dollar</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label
+                            for="toCurrency"
+                            style="
+                                display:block;
+                                margin-bottom:8px;
+                                font-weight:700;
+                                color:#111827;
+                            "
+                        >
+                            To
+                        </label>
+
+                        <select
+                            id="toCurrency"
+                            style="
+                                width:100%;
+                                padding:14px;
+                                border:1px solid #cbd5e1;
+                                border-radius:10px;
+                                font-size:16px;
+                                background:#fff;
+                                box-sizing:border-box;
+                            "
+                        >
+
+                            <option value="LKR">LKR - Sri Lankan Rupee</option>
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - British Pound</option>
+                            <option value="INR">INR - Indian Rupee</option>
+                            <option value="AUD">AUD - Australian Dollar</option>
+                            <option value="CAD">CAD - Canadian Dollar</option>
+                            <option value="SGD">SGD - Singapore Dollar</option>
+                            <option value="JPY">JPY - Japanese Yen</option>
+                            <option value="CNY">CNY - Chinese Yuan</option>
+                            <option value="AED">AED - UAE Dirham</option>
+                            <option value="SAR">SAR - Saudi Riyal</option>
+                            <option value="CHF">CHF - Swiss Franc</option>
+                            <option value="NZD">NZD - New Zealand Dollar</option>
+                            <option value="HKD">HKD - Hong Kong Dollar</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="convertBtn"
+                >
+                    Convert Currency
+                </button>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2 id="resultTitle">
+                    Conversion Result
+                </h2>
+
+                <p id="resultText"></p>
+
+                <p
+                    id="rateText"
+                    style="margin-top:10px;"
+                ></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const amountInput = document.getElementById("amount");
+const fromCurrency = document.getElementById("fromCurrency");
+const toCurrency = document.getElementById("toCurrency");
+const convertBtn = document.getElementById("convertBtn");
+
+const result = document.getElementById("result");
+const resultText = document.getElementById("resultText");
+const rateText = document.getElementById("rateText");
+
+
+convertBtn.addEventListener("click", async () => {
+
+    const amount = parseFloat(amountInput.value);
+
+    const from = fromCurrency.value;
+    const to = toCurrency.value;
+
+
+    if (!amount || amount <= 0) {
+
+        alert("Please enter a valid amount.");
+
+        return;
+    }
+
+
+    if (from === to) {
+
+        result.style.display = "block";
+
+        resultText.textContent =
+            `${amount} ${from} = ${amount} ${to}`;
+
+        rateText.textContent =
+            `Exchange rate: 1 ${from} = 1 ${to}`;
+
+        return;
+    }
+
+
+    convertBtn.disabled = true;
+    convertBtn.textContent = "Getting Exchange Rate...";
+
+
+    result.style.display = "none";
+
+
+    try {
+
+        const response = await fetch(
+            `https://api.frankfurter.dev/v2/rate/${from.toLowerCase()}/${to.toLowerCase()}`
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error("Exchange rate request failed.");
+
+        }
+
+
+        const data = await response.json();
+
+
+        if (!data.rate) {
+
+            throw new Error("Exchange rate not available.");
+
+        }
+
+
+        const rate = Number(data.rate);
+
+        const convertedAmount = amount * rate;
+
+
+        result.style.display = "block";
+
+
+        resultText.textContent =
+            `${amount} ${from} = ${convertedAmount.toFixed(2)} ${to}`;
+
+
+        rateText.textContent =
+            `Exchange rate: 1 ${from} = ${rate.toFixed(6)} ${to}`;
+
+
+    } catch (error) {
+
+        console.error("Currency conversion error:", error);
+
+
+        result.style.display = "block";
+
+        result.style.background = "#fef2f2";
+        result.style.borderColor = "#fecaca";
+
+
+        resultText.textContent =
+            "Unable to get the current exchange rate. Please try again.";
+
+
+        rateText.textContent = "";
+
+    }
+
+
+    convertBtn.disabled = false;
+    convertBtn.textContent = "Convert Currency";
+
+});
+
+</script>
+
+</body>
+</html>
+```

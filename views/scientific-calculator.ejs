@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .scientific-calculator {
+            max-width: 760px;
+        }
+
+        .calculator-display {
+            margin-bottom: 16px;
+        }
+
+        #calcDisplay {
+            width: 100%;
+            min-height: 76px;
+            padding: 18px 20px;
+            border: 1px solid #dbe3ee;
+            border-radius: 12px;
+            background: #f8fafc;
+            color: #111827;
+            font-size: 30px;
+            font-weight: 700;
+            text-align: right;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .mode-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .mode-btn {
+            padding: 8px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .mode-btn.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #ffffff;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .calc-btn {
+            min-height: 52px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #1e293b;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .calc-btn:hover {
+            background: #eff6ff;
+            border-color: #93c5fd;
+            transform: translateY(-1px);
+        }
+
+        .calc-btn.function {
+            background: #f1f5f9;
+            color: #2563eb;
+        }
+
+        .calc-btn.operator {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .calc-btn.danger {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .calc-btn.equal {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #ffffff;
+        }
+
+        .calc-btn.equal:hover {
+            background: #1d4ed8;
+        }
+
+        .calc-status {
+            min-height: 20px;
+            margin-top: 14px;
+            color: #64748b;
+            font-size: 13px;
+            text-align: right;
+        }
+
+        @media (max-width: 600px) {
+            .calculator-grid {
+                gap: 7px;
+            }
+
+            .calc-btn {
+                min-height: 46px;
+                font-size: 14px;
+            }
+
+            #calcDisplay {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="converter-page">
+    <div class="container">
+
+        <div class="converter-card scientific-calculator">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">ƒx</div>
+
+                <h1>Scientific Calculator</h1>
+
+                <p>
+                    Perform advanced mathematical calculations with scientific functions.
+                </p>
+
+            </div>
+
+            <div class="calculator-display">
+                <input
+                    type="text"
+                    id="calcDisplay"
+                    value=""
+                    placeholder="0"
+                    readonly
+                >
+            </div>
+
+            <div class="mode-row">
+
+                <button
+                    class="mode-btn active"
+                    id="degreeBtn"
+                    onclick="setMode('DEG')">
+                    DEG
+                </button>
+
+                <button
+                    class="mode-btn"
+                    id="radianBtn"
+                    onclick="setMode('RAD')">
+                    RAD
+                </button>
+
+            </div>
+
+            <div class="calculator-grid">
+
+                <!-- Row 1 -->
+                <button class="calc-btn danger" onclick="clearDisplay()">C</button>
+
+                <button class="calc-btn" onclick="backspace()">⌫</button>
+
+                <button class="calc-btn function" onclick="addValue('(')">
+                    (
+                </button>
+
+                <button class="calc-btn function" onclick="addValue(')')">
+                    )
+                </button>
+
+                <button class="calc-btn operator" onclick="addValue('/')">
+                    ÷
+                </button>
+
+
+                <!-- Row 2 -->
+                <button class="calc-btn function" onclick="addFunction('sin')">
+                    sin
+                </button>
+
+                <button class="calc-btn function" onclick="addFunction('cos')">
+                    cos
+                </button>
+
+                <button class="calc-btn function" onclick="addFunction('tan')">
+                    tan
+                </button>
+
+                <button class="calc-btn function" onclick="addFunction('sqrt')">
+                    √
+                </button>
+
+                <button class="calc-btn operator" onclick="addValue('*')">
+                    ×
+                </button>
+
+
+                <!-- Row 3 -->
+                <button class="calc-btn function" onclick="addFunction('log')">
+                    log
+                </button>
+
+                <button class="calc-btn function" onclick="addFunction('ln')">
+                    ln
+                </button>
+
+                <button class="calc-btn function" onclick="addValue('π')">
+                    π
+                </button>
+
+                <button class="calc-btn function" onclick="addValue('e')">
+                    e
+                </button>
+
+                <button class="calc-btn operator" onclick="addValue('-')">
+                    −
+                </button>
+
+
+                <!-- Row 4 -->
+                <button class="calc-btn" onclick="addValue('7')">
+                    7
+                </button>
+
+                <button class="calc-btn" onclick="addValue('8')">
+                    8
+                </button>
+
+                <button class="calc-btn" onclick="addValue('9')">
+                    9
+                </button>
+
+                <button class="calc-btn function" onclick="addValue('^')">
+                    xʸ
+                </button>
+
+                <button class="calc-btn operator" onclick="addValue('+')">
+                    +
+                </button>
+
+
+                <!-- Row 5 -->
+                <button class="calc-btn" onclick="addValue('4')">
+                    4
+                </button>
+
+                <button class="calc-btn" onclick="addValue('5')">
+                    5
+                </button>
+
+                <button class="calc-btn" onclick="addValue('6')">
+                    6
+                </button>
+
+                <button class="calc-btn function" onclick="addFunction('factorial')">
+                    n!
+                </button>
+
+                
+
+
+                <!-- Row 6 -->
+                <button class="calc-btn" onclick="addValue('1')">
+                    1
+                </button>
+
+                <button class="calc-btn" onclick="addValue('2')">
+                    2
+                </button>
+
+                <button class="calc-btn" onclick="addValue('3')">
+                    3
+                </button>
+
+                <button class="calc-btn function" onclick="addValue('%')">
+                    %
+                </button>
+
+                <button class="calc-btn function" onclick="addFunction('square')">
+                    x²
+                </button>
+
+
+                <!-- Row 7 -->
+                <button class="calc-btn" onclick="addValue('0')">
+                    0
+                </button>
+
+                <button class="calc-btn" onclick="addValue('.')">
+                    .
+                </button>
+
+                <button class="calc-btn function" onclick="addFunction('inverse')">
+                    1/x
+                </button>
+
+                <button class="calc-btn" onclick="addValue('00')">
+                    00
+                </button>
+
+                <button class="calc-btn equal" onclick="calculate()">
+                    =
+                </button>
+
+            </div>
+
+            <div class="calc-status" id="calcStatus">
+                Mode: DEG
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+
+    const display = document.getElementById("calcDisplay");
+    const status = document.getElementById("calcStatus");
+
+    let mode = "DEG";
+
+
+    // Add normal value
+    function addValue(value) {
+
+        if (display.value === "Error") {
+            display.value = "";
+        }
+
+        display.value += value;
+    }
+
+
+    // Add scientific function to display
+    function addFunction(type) {
+
+        if (display.value === "Error") {
+            display.value = "";
+        }
+
+        const names = {
+            sin: "sin(",
+            cos: "cos(",
+            tan: "tan(",
+            sqrt: "√(",
+            log: "log(",
+            ln: "ln(",
+            factorial: "fact(",
+            square: "square(",
+            inverse: "inverse("
+        };
+
+        display.value += names[type];
+    }
+
+
+    // Clear
+    function clearDisplay() {
+
+        display.value = "";
+
+        status.textContent = "Mode: " + mode;
+    }
+
+
+    // Backspace
+    function backspace() {
+
+        if (display.value === "Error") {
+
+            clearDisplay();
+
+            return;
+        }
+
+        display.value = display.value.slice(0, -1);
+    }
+
+
+    // DEG / RAD
+    function setMode(newMode) {
+
+        mode = newMode;
+
+        document
+            .getElementById("degreeBtn")
+            .classList.remove("active");
+
+        document
+            .getElementById("radianBtn")
+            .classList.remove("active");
+
+
+        if (mode === "DEG") {
+
+            document
+                .getElementById("degreeBtn")
+                .classList.add("active");
+
+        } else {
+
+            document
+                .getElementById("radianBtn")
+                .classList.add("active");
+        }
+
+
+        status.textContent = "Mode: " + mode;
+    }
+
+
+    // Degree -> Radian
+    function toRadians(value) {
+
+        if (mode === "DEG") {
+
+            return value * Math.PI / 180;
+        }
+
+        return value;
+    }
+
+
+    // Factorial
+    function factorial(n) {
+
+        if (
+            !Number.isInteger(n) ||
+            n < 0 ||
+            n > 170
+        ) {
+
+            throw new Error("Invalid factorial");
+        }
+
+        let result = 1;
+
+        for (let i = 2; i <= n; i++) {
+
+            result *= i;
+        }
+
+        return result;
+    }
+
+
+    // Find matching closing bracket
+    function findClosingBracket(expression, start) {
+
+        let depth = 0;
+
+        for (let i = start; i < expression.length; i++) {
+
+            if (expression[i] === "(") {
+                depth++;
+            }
+
+            if (expression[i] === ")") {
+                depth--;
+
+                if (depth === 0) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+
+    // Evaluate scientific functions
+    function evaluateScientific(expression) {
+
+        expression = expression
+            .replace(/π/g, "Math.PI")
+            .replace(/\be\b/g, "Math.E")
+            .replace(/×/g, "*")
+            .replace(/÷/g, "/")
+            .replace(/\^/g, "**");
+
+
+        // √
+        while (expression.includes("√(")) {
+
+            const start = expression.indexOf("√(");
+            const end = findClosingBracket(expression, start + 1);
+
+            if (end === -1) {
+                throw new Error("Bracket error");
+            }
+
+            const inside = expression.substring(
+                start + 2,
+                end
+            );
+
+            const value = evaluateScientific(inside);
+
+            expression =
+                expression.substring(0, start) +
+                "Math.sqrt(" + value + ")" +
+                expression.substring(end + 1);
+        }
+
+
+        // sin
+        while (expression.includes("sin(")) {
+
+            const start = expression.indexOf("sin(");
+            const end = findClosingBracket(expression, start + 2);
+
+            if (end === -1) {
+                throw new Error("Bracket error");
+            }
+
+            const inside = expression.substring(
+                start + 4,
+                end
+            );
+
+            const value = evaluateScientific(inside);
+
+            const result = Math.sin(toRadians(value));
+
+            expression =
+                expression.substring(0, start) +
+                result +
+                expression.substring(end + 1);
+        }
+
+
+        // cos
+        while (expression.includes("cos(")) {
+
+            const start = expression.indexOf("cos(");
+            const end = findClosingBracket(expression, start + 2);
+
+            if (end === -1) {
+                throw new Error("Bracket error");
+            }
+
+            const inside = expression.substring(
+                start + 4,
+                end
+            );
+
+            const value = evaluateScientific(inside);
+
+            const result = Math.cos(toRadians(value));
+
+            expression =
+                expression.substring(0, start) +
+                result +
+                expression.substring(end + 1);
+        }
+
+
+        // tan
+        while (expression.includes("tan(")) {
+
+            const start = expression.indexOf("tan(");
+            const end = findClosingBracket(expression, start + 2);
+
+            if (end === -1) {
+                throw new Error("Bracket error");
+            }
+
+            const inside = expression.substring(
+                start + 4,
+                end
+            );
+
+            const value = evaluateScientific(inside);
+
+            const result = Math.tan(toRadians(value));
+
+            expression =
+                expression.substring(0, start) +
+                result +
+                expression.substring(end + 1);
+        }
+
+
+        // log
+        while (expression.includes("log(")) {
+
+            const start = expression.indexOf("log(");
+            const end = findClosingBracket(expression, start + 2);
+
+            if (end === -1) {
+                throw new Error("Bracket error");
+            }
+
+            const inside = expression.substring(
+                start + 4,
+                end
+            );
+
+            const value = evaluateScientific(inside);
+
+            const result = Math.log10(value);
+
+            expression =
+                expression.substring(0, start) +
+                result +
+                expression.substring(end + 1);
+        }
+
+
+        // ln
+        while (expression.includes("ln(")) {
+
+            const start = expression.indexOf("ln(");
+            const end = findClosingBracket(expression, start + 1);
+
+            if (end === -1) {
+                throw new Error("Bracket error");
+            }
+
+            const inside = expression.substring(
+                start + 3,
+                end
+            );
+
+            const value = evaluateScientific(inside);
+
+            const result = Math.log(value);
+
+            expression =
+                expression.substring(0, start) +
+                result +
+                expression.substring(end + 1);
+        }
+
+
+        // factorial
+        while (expression.includes("fact(")) {
+
+            const start = expression.indexOf("fact(");
+            const end = findClosingBracket(expression, start + 3);
+
+            if (end === -1) {
+                throw new Error("Bracket error");
+            }
+
+            const inside = expression.substring(
+                start + 5,
+                end
+            );
+
+            const value = evaluateScientific(inside);
+
+            const result = factorial(value);
+
+            expression =
+                expression.substring(0, start) +
+                result +
+                expression.substring(end + 1);
+        }
+
+
+        // square
+        while (expression.includes("square(")) {
+
+            const start = expression.indexOf("square(");
+            const end = findClosingBracket(expression, start + 6);
+
+            if (end === -1) {
+                throw new Error("Bracket error");
+            }
+
+            const inside = expression.substring(
+                start + 7,
+                end
+            );
+
+            const value = evaluateScientific(inside);
+
+            const result = value * value;
+
+            expression =
+                expression.substring(0, start) +
+                result +
+                expression.substring(end + 1);
+        }
+
+
+        // inverse
+        while (expression.includes("inverse(")) {
+
+            const start = expression.indexOf("inverse(");
+            const end = findClosingBracket(expression, start + 7);
+
+            if (end === -1) {
+                throw new Error("Bracket error");
+            }
+
+            const inside = expression.substring(
+                start + 8,
+                end
+            );
+
+            const value = evaluateScientific(inside);
+
+            const result = 1 / value;
+
+            expression =
+                expression.substring(0, start) +
+                result +
+                expression.substring(end + 1);
+        }
+
+
+        // Percentage
+        expression = expression.replace(
+            /([0-9.]+)%/g,
+            "($1/100)"
+        );
+
+
+        // Security check
+        if (
+            !/^[0-9+\-*/().\sA-Za-z_*]+$/.test(expression)
+        ) {
+
+            throw new Error("Invalid expression");
+        }
+
+
+        return Function(
+            '"use strict"; return (' + expression + ')'
+        )();
+    }
+
+
+    // Calculate
+    function calculate() {
+
+        if (
+            !display.value ||
+            display.value === "Error"
+        ) {
+            return;
+        }
+
+        try {
+
+            let expression = display.value;
+
+            // Automatically close missing brackets
+            const open =
+                (expression.match(/\(/g) || []).length;
+
+            const close =
+                (expression.match(/\)/g) || []).length;
+
+            if (open > close) {
+
+                expression += ")".repeat(
+                    open - close
+                );
+            }
+
+
+            const result =
+                evaluateScientific(expression);
+
+
+            if (!Number.isFinite(result)) {
+
+                throw new Error("Math error");
+            }
+
+
+            display.value =
+                formatResult(result);
+
+            status.textContent =
+                "Mode: " + mode;
+
+        } catch (error) {
+
+            display.value = "Error";
+
+            status.textContent =
+                "Invalid calculation";
+        }
+    }
+
+
+    // Format result
+    function formatResult(value) {
+
+        if (Math.abs(value) < 1e-12) {
+
+            value = 0;
+        }
+
+        return Number.parseFloat(
+            Number(value).toPrecision(12)
+        ).toString();
+    }
+
+
+    // Keyboard support
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            const key = event.key;
+
+
+            if (
+                /^[0-9.]$/.test(key) ||
+                ["+", "-", "*", "/", "(", ")", "%", "^"]
+                    .includes(key)
+            ) {
+
+                addValue(key);
+
+                event.preventDefault();
+
+                return;
+            }
+
+
+            if (
+                key === "Enter" ||
+                key === "="
+            ) {
+
+                calculate();
+
+                event.preventDefault();
+
+                return;
+            }
+
+
+            if (key === "Backspace") {
+
+                backspace();
+
+                event.preventDefault();
+
+                return;
+            }
+
+
+            if (
+                key === "Escape" ||
+                key.toLowerCase() === "c"
+            ) {
+
+                clearDisplay();
+
+                event.preventDefault();
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+</html>

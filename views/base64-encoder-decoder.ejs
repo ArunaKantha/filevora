@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Encoder / Decoder - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<main class="converter-page">
+    <div class="container">
+        <div class="converter-card">
+
+            <div class="converter-header">
+                <div class="tool-icon">B64</div>
+                <h1>Base64 Encoder / Decoder</h1>
+                <p>Encode text to Base64 or decode Base64 back to readable text.</p>
+            </div>
+
+            <textarea
+                id="textInput"
+                placeholder="Enter text or Base64 data here..."
+                style="
+                    width:100%;
+                    min-height:250px;
+                    padding:18px;
+                    border:2px solid #e5e7eb;
+                    border-radius:14px;
+                    resize:vertical;
+                    font-size:15px;
+                    line-height:1.6;
+                    outline:none;
+                    font-family:monospace;
+                    box-sizing:border-box;
+                "
+            ></textarea>
+
+            <div style="
+                display:flex;
+                gap:12px;
+                margin-top:18px;
+            ">
+                <button
+                    class="convert-btn"
+                    id="encodeBtn"
+                    style="margin-top:0;"
+                >
+                    Encode Base64
+                </button>
+
+                <button
+                    class="convert-btn"
+                    id="decodeBtn"
+                    style="
+                        margin-top:0;
+                        background:#475569;
+                    "
+                >
+                    Decode Base64
+                </button>
+            </div>
+
+            <div class="result" id="result">
+
+                <h2 id="resultTitle">Result</h2>
+
+                <p id="resultInfo"></p>
+
+                <textarea
+                    id="outputText"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:220px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #d1d5db;
+                        border-radius:10px;
+                        resize:vertical;
+                        font-size:14px;
+                        line-height:1.6;
+                        font-family:monospace;
+                        box-sizing:border-box;
+                        background:#ffffff;
+                    "
+                ></textarea>
+
+                <button class="download-btn" id="copyBtn">
+                    Copy Result
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+const textInput = document.getElementById("textInput");
+const encodeBtn = document.getElementById("encodeBtn");
+const decodeBtn = document.getElementById("decodeBtn");
+
+const result = document.getElementById("result");
+const resultTitle = document.getElementById("resultTitle");
+const resultInfo = document.getElementById("resultInfo");
+const outputText = document.getElementById("outputText");
+const copyBtn = document.getElementById("copyBtn");
+
+function showResult(title, info, value) {
+
+    resultTitle.textContent = title;
+    resultInfo.textContent = info;
+    outputText.value = value;
+
+    result.style.display = "block";
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+    });
+}
+
+/* UTF-8 safe Base64 Encode */
+function encodeBase64(text) {
+
+    const bytes = new TextEncoder().encode(text);
+
+    let binary = "";
+
+    bytes.forEach(byte => {
+        binary += String.fromCharCode(byte);
+    });
+
+    return btoa(binary);
+}
+
+/* UTF-8 safe Base64 Decode */
+function decodeBase64(base64) {
+
+    const binary = atob(base64);
+
+    const bytes = new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+
+    return new TextDecoder().decode(bytes);
+}
+
+encodeBtn.addEventListener("click", () => {
+
+    const input = textInput.value;
+
+    if (!input) {
+        alert("Please enter some text first.");
+        return;
+    }
+
+    try {
+
+        const encoded = encodeBase64(input);
+
+        showResult(
+            "Base64 Encoded Successfully",
+            "Your text has been converted to Base64.",
+            encoded
+        );
+
+    } catch (error) {
+
+        showResult(
+            "Encoding Failed",
+            "Unable to encode the provided text.",
+            ""
+        );
+    }
+});
+
+decodeBtn.addEventListener("click", () => {
+
+    const input = textInput.value.trim();
+
+    if (!input) {
+        alert("Please enter Base64 data first.");
+        return;
+    }
+
+    try {
+
+        const decoded = decodeBase64(input);
+
+        showResult(
+            "Base64 Decoded Successfully",
+            "The Base64 data has been converted back to text.",
+            decoded
+        );
+
+    } catch (error) {
+
+        showResult(
+            "Invalid Base64",
+            "The provided data is not valid Base64.",
+            ""
+        );
+    }
+});
+
+copyBtn.addEventListener("click", async () => {
+
+    if (!outputText.value) return;
+
+    try {
+
+        await navigator.clipboard.writeText(outputText.value);
+
+        copyBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+            copyBtn.textContent = "Copy Result";
+        }, 1500);
+
+    } catch (error) {
+
+        outputText.select();
+        document.execCommand("copy");
+
+        copyBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+            copyBtn.textContent = "Copy Result";
+        }, 1500);
+    }
+});
+</script>
+
+</body>
+</html>

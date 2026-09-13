@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Image Compressor - FILEVORA</title>
+
+    <meta
+        name="description"
+        content="Compress JPG, PNG and WebP images online for free with FILEVORA."
+    >
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="container nav">
+        <a href="/" class="logo">FILEVORA</a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/#tools">Tools</a>
+            <a href="/#categories">Categories</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+
+    <section class="tool-page">
+        <div class="container">
+
+            <h1>Image Compressor</h1>
+
+            <p class="tool-intro">
+                Compress JPG, PNG and WebP images online for free.
+            </p>
+
+            <div class="compressor-box">
+
+                <label for="imageInput" class="upload-area">
+                    <span class="upload-icon">🖼️</span>
+
+                    <strong>Choose an image</strong>
+
+                    <small>
+                        JPG, PNG or WebP
+                    </small>
+
+                    <input
+                        type="file"
+                        id="imageInput"
+                        accept="image/jpeg,image/png,image/webp"
+                    >
+                </label>
+
+                <div id="previewArea" class="preview-area" hidden>
+
+                    <img id="previewImage" alt="Image preview">
+
+                    <div class="image-info">
+
+                        <p>
+                            Original size:
+                            <strong id="originalSize">-</strong>
+                        </p>
+
+                        <label for="quality">
+                            Compression Quality:
+                            <strong id="qualityValue">80%</strong>
+                        </label>
+
+                        <input
+                            type="range"
+                            id="quality"
+                            min="10"
+                            max="100"
+                            value="80"
+                        >
+
+                        <button id="compressBtn" class="compress-btn">
+                            Compress Image
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div id="resultArea" class="result-area" hidden>
+
+                    <h2>Compressed Image</h2>
+
+                    <p>
+                        New size:
+                        <strong id="compressedSize">-</strong>
+                    </p>
+
+                    <p>
+                        Size reduced:
+                        <strong id="reduction">-</strong>
+                    </p>
+
+                    <a
+                        id="downloadBtn"
+                        class="download-btn"
+                        download="filevora-compressed-image.jpg"
+                    >
+                        Download Image
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>© 2026 FILEVORA. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="/js/image-compressor.js"></script>
+
+</body>
+</html>

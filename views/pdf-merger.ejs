@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Merge multiple PDF files into one PDF online for free with FileVora."
+    >
+
+    <title>PDF Merger — FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="container nav">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span>File<span>Vora</span></span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/#tools">Tools</a>
+            <a href="/#categories">Categories</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    PDF
+                </div>
+
+                <h1>PDF Merger</h1>
+
+                <p>
+                    Combine multiple PDF files into one PDF document instantly.
+                </p>
+
+            </div>
+
+
+            <label class="upload-area" for="pdfInput">
+
+                <div class="upload-icon">📄</div>
+
+                <strong>Choose PDF files</strong>
+
+                <span>Select two or more PDF files</span>
+
+            </label>
+
+
+            <input
+                id="pdfInput"
+                type="file"
+                accept="application/pdf,.pdf"
+                multiple
+            >
+
+
+            <div class="file-info" id="fileInfo">
+
+                <strong id="fileCount"></strong>
+
+                <span id="fileNames"></span>
+
+            </div>
+
+
+            <button
+                class="convert-btn"
+                id="mergeBtn"
+                disabled
+            >
+                Merge PDFs
+            </button>
+
+
+            <div class="result" id="result">
+
+                <h2>PDF Ready</h2>
+
+                <p>
+                    Your PDF files have been merged successfully.
+                </p>
+
+                <a
+                    id="downloadBtn"
+                    class="download-btn"
+                    download="filevora-merged.pdf"
+                >
+                    ↓ Download Merged PDF
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer>
+
+    <div class="container footer-inner">
+
+        <a class="brand" href="/">
+
+            <span class="brand-mark">F</span>
+
+            <span>File<span>Vora</span></span>
+
+        </a>
+
+        <p>
+            © <span id="year"></span> FILEVORA. All rights reserved.
+        </p>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+const pdfInput =
+    document.getElementById("pdfInput");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileCount =
+    document.getElementById("fileCount");
+
+const fileNames =
+    document.getElementById("fileNames");
+
+const mergeBtn =
+    document.getElementById("mergeBtn");
+
+const result =
+    document.getElementById("result");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let selectedFiles = [];
+
+
+pdfInput.addEventListener("change", function () {
+
+    selectedFiles =
+        Array.from(pdfInput.files);
+
+
+    if (selectedFiles.length < 2) {
+
+        if (selectedFiles.length === 1) {
+            alert("Please choose at least 2 PDF files.");
+        }
+
+        selectedFiles = [];
+
+        pdfInput.value = "";
+
+        mergeBtn.disabled = true;
+
+        fileInfo.style.display = "none";
+
+        result.style.display = "none";
+
+        return;
+    }
+
+
+    const invalidFile =
+        selectedFiles.find(
+            file => file.type !== "application/pdf"
+        );
+
+
+    if (invalidFile) {
+
+        alert("Please choose PDF files only.");
+
+        selectedFiles = [];
+
+        pdfInput.value = "";
+
+        mergeBtn.disabled = true;
+
+        fileInfo.style.display = "none";
+
+        result.style.display = "none";
+
+        return;
+    }
+
+
+    fileCount.textContent =
+        `${selectedFiles.length} PDF files selected`;
+
+
+    fileNames.textContent =
+        selectedFiles
+            .map(file => file.name)
+            .join(" • ");
+
+
+    fileInfo.style.display = "block";
+
+    result.style.display = "none";
+
+    mergeBtn.disabled = false;
+
+});
+
+
+mergeBtn.addEventListener("click", async function () {
+
+    if (selectedFiles.length < 2) return;
+
+
+    mergeBtn.disabled = true;
+
+    mergeBtn.textContent =
+        "Merging PDFs...";
+
+    result.style.display = "none";
+
+
+    try {
+
+        const mergedPdf =
+            await PDFLib.PDFDocument.create();
+
+
+        for (
+            let i = 0;
+            i < selectedFiles.length;
+            i++
+        ) {
+
+            mergeBtn.textContent =
+                `Merging file ${i + 1} of ${selectedFiles.length}...`;
+
+
+            const fileBytes =
+                await selectedFiles[i].arrayBuffer();
+
+
+            const sourcePdf =
+                await PDFLib.PDFDocument.load(
+                    fileBytes
+                );
+
+
+            const pages =
+                await mergedPdf.copyPages(
+                    sourcePdf,
+                    sourcePdf.getPageIndices()
+                );
+
+
+            pages.forEach(page => {
+                mergedPdf.addPage(page);
+            });
+
+        }
+
+
+        const mergedBytes =
+            await mergedPdf.save();
+
+
+        const blob =
+            new Blob(
+                [mergedBytes],
+                { type: "application/pdf" }
+            );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        downloadBtn.href = url;
+
+        downloadBtn.download =
+            "filevora-merged.pdf";
+
+
+        result.style.display = "block";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Something went wrong while merging the PDF files."
+        );
+
+    }
+
+
+    mergeBtn.disabled = false;
+
+    mergeBtn.textContent =
+        "Merge PDFs";
+
+});
+
+
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+</script>
+
+</body>
+</html>

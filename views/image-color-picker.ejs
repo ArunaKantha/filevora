@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Color Picker - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <main class="converter-page">
+        <div class="container">
+
+            <div class="converter-card">
+
+                <div class="converter-header">
+                    <div class="tool-icon">🎨</div>
+
+                    <h1>Image Color Picker</h1>
+
+                    <p>
+                        Upload an image and click anywhere to pick the exact color.
+                    </p>
+                </div>
+
+                <label class="upload-area" for="imageInput">
+                    <div class="upload-icon">🖼️</div>
+
+                    <strong>Click to upload an image</strong>
+
+                    <span>JPG, PNG, WEBP and other common image formats</span>
+                </label>
+
+                <input
+                    type="file"
+                    id="imageInput"
+                    accept="image/*"
+                >
+
+                <div class="file-info" id="fileInfo">
+                    <strong id="fileName"></strong>
+                    <span id="fileSize"></span>
+                </div>
+
+                <div
+                    id="pickerArea"
+                    style="display:none; margin-top:22px;"
+                >
+
+                    <p style="
+                        margin:0 0 12px;
+                        color:#64748b;
+                        font-size:14px;
+                    ">
+                        Click anywhere on the image to pick a color.
+                    </p>
+
+                    <div style="
+                        overflow:auto;
+                        border:1px solid #e5e7eb;
+                        border-radius:14px;
+                        background:#f8fafc;
+                        padding:10px;
+                    ">
+                        <canvas
+                            id="imageCanvas"
+                            style="
+                                display:block;
+                                max-width:100%;
+                                height:auto;
+                                margin:0 auto;
+                                cursor:crosshair;
+                            "
+                        ></canvas>
+                    </div>
+
+                </div>
+
+                <div
+                    id="colorResult"
+                    style="
+                        display:none;
+                        margin-top:24px;
+                        padding:22px;
+                        border-radius:14px;
+                        background:#f8fafc;
+                        border:1px solid #e5e7eb;
+                    "
+                >
+
+                    <div style="
+                        width:90px;
+                        height:90px;
+                        margin:0 auto 18px;
+                        border-radius:14px;
+                        border:1px solid #d1d5db;
+                        background:#000000;
+                    "
+                    id="colorPreview"></div>
+
+                    <div style="
+                        display:grid;
+                        gap:12px;
+                        text-align:left;
+                    ">
+
+                        <div>
+                            <strong style="
+                                display:block;
+                                color:#111827;
+                                font-size:13px;
+                                margin-bottom:5px;
+                            ">
+                                HEX
+                            </strong>
+
+                            <div style="
+                                display:flex;
+                                gap:8px;
+                            ">
+                                <input
+                                    type="text"
+                                    id="hexValue"
+                                    readonly
+                                    style="
+                                        flex:1;
+                                        min-width:0;
+                                        padding:11px 12px;
+                                        border:1px solid #d1d5db;
+                                        border-radius:9px;
+                                        font-size:14px;
+                                        color:#111827;
+                                        background:#ffffff;
+                                    "
+                                >
+
+                                <button
+                                    type="button"
+                                    class="download-btn"
+                                    id="copyHex"
+                                    style="margin-top:0;"
+                                >
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <strong style="
+                                display:block;
+                                color:#111827;
+                                font-size:13px;
+                                margin-bottom:5px;
+                            ">
+                                RGB
+                            </strong>
+
+                            <div style="
+                                display:flex;
+                                gap:8px;
+                            ">
+                                <input
+                                    type="text"
+                                    id="rgbValue"
+                                    readonly
+                                    style="
+                                        flex:1;
+                                        min-width:0;
+                                        padding:11px 12px;
+                                        border:1px solid #d1d5db;
+                                        border-radius:9px;
+                                        font-size:14px;
+                                        color:#111827;
+                                        background:#ffffff;
+                                    "
+                                >
+
+                                <button
+                                    type="button"
+                                    class="download-btn"
+                                    id="copyRgb"
+                                    style="margin-top:0;"
+                                >
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+<script>
+const imageInput = document.getElementById("imageInput");
+const fileInfo = document.getElementById("fileInfo");
+const fileName = document.getElementById("fileName");
+const fileSize = document.getElementById("fileSize");
+
+const pickerArea = document.getElementById("pickerArea");
+const canvas = document.getElementById("imageCanvas");
+const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+const colorResult = document.getElementById("colorResult");
+const colorPreview = document.getElementById("colorPreview");
+const hexValue = document.getElementById("hexValue");
+const rgbValue = document.getElementById("rgbValue");
+
+const copyHex = document.getElementById("copyHex");
+const copyRgb = document.getElementById("copyRgb");
+
+let currentImage = null;
+
+imageInput.addEventListener("change", function () {
+
+    const file = this.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+        alert("Please select a valid image file.");
+        this.value = "";
+        return;
+    }
+
+    fileName.textContent = file.name;
+
+    const sizeMB = file.size / (1024 * 1024);
+
+    fileSize.textContent =
+        sizeMB >= 1
+            ? sizeMB.toFixed(2) + " MB"
+            : (file.size / 1024).toFixed(1) + " KB";
+
+    fileInfo.style.display = "block";
+
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+
+        const img = new Image();
+
+        img.onload = function () {
+
+            currentImage = img;
+
+            /*
+             * Keep the original image resolution.
+             * Large images are limited to 1400px for smoother
+             * color picking in the browser.
+             */
+
+            let width = img.naturalWidth;
+            let height = img.naturalHeight;
+
+            const maxSize = 1400;
+
+            if (width > maxSize || height > maxSize) {
+
+                const scale = Math.min(
+                    maxSize / width,
+                    maxSize / height
+                );
+
+                width = Math.round(width * scale);
+                height = Math.round(height * scale);
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            ctx.clearRect(0, 0, width, height);
+
+            ctx.drawImage(
+                img,
+                0,
+                0,
+                width,
+                height
+            );
+
+            pickerArea.style.display = "block";
+
+            colorResult.style.display = "none";
+
+            pickerArea.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        };
+
+        img.onerror = function () {
+            alert("Could not load this image.");
+        };
+
+        img.src = event.target.result;
+    };
+
+    reader.readAsDataURL(file);
+});
+
+
+canvas.addEventListener("click", function (event) {
+
+    if (!currentImage) {
+        return;
+    }
+
+    const rect = canvas.getBoundingClientRect();
+
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    const x = Math.floor(
+        (event.clientX - rect.left) * scaleX
+    );
+
+    const y = Math.floor(
+        (event.clientY - rect.top) * scaleY
+    );
+
+    if (
+        x < 0 ||
+        y < 0 ||
+        x >= canvas.width ||
+        y >= canvas.height
+    ) {
+        return;
+    }
+
+    const pixel = ctx.getImageData(
+        x,
+        y,
+        1,
+        1
+    ).data;
+
+    const r = pixel[0];
+    const g = pixel[1];
+    const b = pixel[2];
+
+    const hex =
+        "#" +
+        componentToHex(r) +
+        componentToHex(g) +
+        componentToHex(b);
+
+    const rgb =
+        `rgb(${r}, ${g}, ${b})`;
+
+    colorPreview.style.backgroundColor = hex;
+
+    hexValue.value = hex.toUpperCase();
+
+    rgbValue.value = rgb;
+
+    colorResult.style.display = "block";
+
+    colorResult.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+});
+
+
+function componentToHex(component) {
+
+    return component
+        .toString(16)
+        .padStart(2, "0");
+}
+
+
+copyHex.addEventListener("click", async function () {
+
+    if (!hexValue.value) {
+        return;
+    }
+
+    await copyText(hexValue.value);
+
+    const oldText = this.textContent;
+
+    this.textContent = "Copied!";
+
+    setTimeout(() => {
+        this.textContent = oldText;
+    }, 1200);
+});
+
+
+copyRgb.addEventListener("click", async function () {
+
+    if (!rgbValue.value) {
+        return;
+    }
+
+    await copyText(rgbValue.value);
+
+    const oldText = this.textContent;
+
+    this.textContent = "Copied!";
+
+    setTimeout(() => {
+        this.textContent = oldText;
+    }, 1200);
+});
+
+
+async function copyText(text) {
+
+    try {
+
+        await navigator.clipboard.writeText(text);
+
+    } catch (error) {
+
+        const textarea = document.createElement("textarea");
+
+        textarea.value = text;
+
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+
+        document.body.appendChild(textarea);
+
+        textarea.select();
+
+        document.execCommand("copy");
+
+        textarea.remove();
+    }
+}
+</script>
+
+</body>
+</html>

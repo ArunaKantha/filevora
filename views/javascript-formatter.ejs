@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JavaScript Formatter - FileVora</title>
+    <meta name="description" content="Format and beautify JavaScript code online with FileVora.">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    JS
+                </div>
+
+                <h1>JavaScript Formatter</h1>
+
+                <p>
+                    Beautify and format JavaScript code with clean indentation.
+                </p>
+
+            </div>
+
+            <div style="text-align:left;">
+
+                <label for="jsInput"
+                       style="display:block; margin-bottom:8px; font-weight:700; color:#111827;">
+                    JavaScript Code
+                </label>
+
+                <textarea
+                    id="jsInput"
+                    placeholder="Paste your JavaScript code here..."
+                    style="
+                        width:100%;
+                        min-height:320px;
+                        padding:16px;
+                        border:1px solid #cbd5e1;
+                        border-radius:12px;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                ></textarea>
+
+            </div>
+
+            <button
+                class="convert-btn"
+                onclick="formatJavaScript()"
+            >
+                Format JavaScript
+            </button>
+
+            <div id="errorMessage"
+                 style="
+                    display:none;
+                    margin-top:18px;
+                    padding:14px 18px;
+                    background:#fef2f2;
+                    border:1px solid #fecaca;
+                    border-radius:10px;
+                    color:#b91c1c;
+                    text-align:left;
+                 ">
+            </div>
+
+            <div class="result" id="result">
+
+                <h2>JavaScript Formatted</h2>
+
+                <p>
+                    Your JavaScript code has been successfully formatted.
+                </p>
+
+                <textarea
+                    id="output"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:320px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #bbf7d0;
+                        border-radius:10px;
+                        background:#ffffff;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                ></textarea>
+
+                <button
+                    class="download-btn"
+                    onclick="copyFormattedJS()"
+                    type="button"
+                >
+                    Copy JavaScript
+                </button>
+
+                <a
+                    id="downloadBtn"
+                    class="download-btn"
+                    href="#"
+                    download="formatted.js"
+                >
+                    ↓ Download JS
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function formatJavaScript() {
+
+    const input = document.getElementById("jsInput").value.trim();
+    const result = document.getElementById("result");
+    const output = document.getElementById("output");
+    const errorMessage = document.getElementById("errorMessage");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    result.style.display = "none";
+    errorMessage.style.display = "none";
+
+    if (!input) {
+        showError("Please enter JavaScript code.");
+        return;
+    }
+
+    try {
+
+        const formatted = beautifyJavaScript(input);
+
+        output.value = formatted;
+
+        const blob = new Blob(
+            [formatted],
+            {
+                type: "text/javascript;charset=utf-8;"
+            }
+        );
+
+        const url = URL.createObjectURL(blob);
+
+        downloadBtn.href = url;
+
+        result.style.display = "block";
+
+    } catch (error) {
+
+        showError("Unable to format the JavaScript code.");
+
+    }
+
+}
+
+
+function beautifyJavaScript(code) {
+
+    // Normalize line endings
+    code = code
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .trim();
+
+    let result = "";
+    let indent = 0;
+
+    let inString = false;
+    let stringChar = "";
+    let inTemplate = false;
+    let inLineComment = false;
+    let inBlockComment = false;
+
+    let current = "";
+
+    function addIndent() {
+
+        result += "    ".repeat(indent);
+
+    }
+
+    function flushLine() {
+
+        const line = current.trim();
+
+        if (line) {
+            addIndent();
+            result += line;
+            result += "\n";
+        }
+
+        current = "";
+
+    }
+
+    for (let i = 0; i < code.length; i++) {
+
+        const char = code[i];
+        const next = code[i + 1];
+
+        // Line comment
+        if (inLineComment) {
+
+            current += char;
+
+            if (char === "\n") {
+                inLineComment = false;
+                flushLine();
+            }
+
+            continue;
+
+        }
+
+        // Block comment
+        if (inBlockComment) {
+
+            current += char;
+
+            if (char === "*" && next === "/") {
+
+                current += "/";
+                i++;
+
+                inBlockComment = false;
+
+                flushLine();
+
+            }
+
+            continue;
+
+        }
+
+        // Strings
+        if (inString) {
+
+            current += char;
+
+            if (char === "\\" && next) {
+
+                current += next;
+                i++;
+
+            } else if (char === stringChar) {
+
+                inString = false;
+
+            }
+
+            continue;
+
+        }
+
+        // Template literal
+        if (inTemplate) {
+
+            current += char;
+
+            if (char === "\\" && next) {
+
+                current += next;
+                i++;
+
+            } else if (char === "`") {
+
+                inTemplate = false;
+
+            }
+
+            continue;
+
+        }
+
+        // Start line comment
+        if (char === "/" && next === "/") {
+
+            current += "//";
+            i++;
+
+            inLineComment = true;
+
+            continue;
+
+        }
+
+        // Start block comment
+        if (char === "/" && next === "*") {
+
+            current += "/*";
+            i++;
+
+            inBlockComment = true;
+
+            continue;
+
+        }
+
+        // Start string
+        if (
+            char === '"' ||
+            char === "'"
+        ) {
+
+            current += char;
+
+            inString = true;
+            stringChar = char;
+
+            continue;
+
+        }
+
+        // Start template
+        if (char === "`") {
+
+            current += char;
+
+            inTemplate = true;
+
+            continue;
+
+        }
+
+        // Opening brace
+        if (char === "{") {
+
+            current = current.trim();
+
+            if (current) {
+                result += "    ".repeat(indent) + current + " {\n";
+            } else {
+                result += "    ".repeat(indent) + "{\n";
+            }
+
+            current = "";
+
+            indent++;
+
+            continue;
+
+        }
+
+        // Closing brace
+        if (char === "}") {
+
+            if (current.trim()) {
+                flushLine();
+            }
+
+            indent = Math.max(0, indent - 1);
+
+            addIndent();
+
+            result += "}";
+
+            // Add newline unless followed by ; , ) ] else/catch/finally
+            if (
+                next !== ";" &&
+                next !== "," &&
+                next !== ")" &&
+                next !== "]"
+            ) {
+                result += "\n";
+            }
+
+            continue;
+
+        }
+
+        // Semicolon
+        if (char === ";") {
+
+            current = current.trim();
+
+            if (current) {
+
+                current += ";";
+
+                flushLine();
+
+            }
+
+            continue;
+
+        }
+
+        // Newline
+        if (char === "\n") {
+
+            if (current.trim()) {
+                flushLine();
+            }
+
+            continue;
+
+        }
+
+        // Space
+        if (/\s/.test(char)) {
+
+            if (
+                current.length > 0 &&
+                !current.endsWith(" ")
+            ) {
+                current += " ";
+            }
+
+            continue;
+
+        }
+
+        current += char;
+
+    }
+
+    if (current.trim()) {
+        flushLine();
+    }
+
+    let formatted = result.trim();
+
+    // Improve common control structures
+    formatted = formatted
+        .replace(/\}\s*else\s*\{/g, "} else {")
+        .replace(/\}\s*catch\s*\(/g, "} catch (")
+        .replace(/\}\s*finally\s*\{/g, "} finally {");
+
+    return formatted;
+
+}
+
+
+async function copyFormattedJS() {
+
+    const output = document.getElementById("output");
+
+    if (!output.value) {
+        return;
+    }
+
+    try {
+
+        await navigator.clipboard.writeText(output.value);
+
+        alert("JavaScript copied to clipboard!");
+
+    } catch (error) {
+
+        output.select();
+        document.execCommand("copy");
+
+        alert("JavaScript copied to clipboard!");
+
+    }
+
+}
+
+
+function showError(message) {
+
+    const errorMessage = document.getElementById("errorMessage");
+
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+
+}
+
+</script>
+
+</body>
+</html>

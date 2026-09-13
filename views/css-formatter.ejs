@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CSS Formatter - FileVora</title>
+    <meta name="description" content="Format and beautify CSS code online with FileVora.">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    CSS
+                </div>
+
+                <h1>CSS Formatter</h1>
+
+                <p>
+                    Beautify and format CSS code with clean indentation.
+                </p>
+
+            </div>
+
+            <div style="text-align:left;">
+
+                <label for="cssInput"
+                       style="display:block; margin-bottom:8px; font-weight:700; color:#111827;">
+                    CSS Code
+                </label>
+
+                <textarea
+                    id="cssInput"
+                    placeholder="Paste your CSS code here..."
+                    style="
+                        width:100%;
+                        min-height:320px;
+                        padding:16px;
+                        border:1px solid #cbd5e1;
+                        border-radius:12px;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                ></textarea>
+
+            </div>
+
+            <button
+                class="convert-btn"
+                onclick="formatCSS()"
+            >
+                Format CSS
+            </button>
+
+            <div id="errorMessage"
+                 style="
+                    display:none;
+                    margin-top:18px;
+                    padding:14px 18px;
+                    background:#fef2f2;
+                    border:1px solid #fecaca;
+                    border-radius:10px;
+                    color:#b91c1c;
+                    text-align:left;
+                 ">
+            </div>
+
+            <div class="result" id="result">
+
+                <h2>CSS Formatted</h2>
+
+                <p>
+                    Your CSS code has been successfully formatted.
+                </p>
+
+                <textarea
+                    id="output"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:320px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #bbf7d0;
+                        border-radius:10px;
+                        background:#ffffff;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                ></textarea>
+
+                <button
+                    class="download-btn"
+                    onclick="copyFormattedCSS()"
+                    type="button"
+                >
+                    Copy CSS
+                </button>
+
+                <a
+                    id="downloadBtn"
+                    class="download-btn"
+                    href="#"
+                    download="formatted.css"
+                >
+                    ↓ Download CSS
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function formatCSS() {
+
+    const input = document.getElementById("cssInput").value.trim();
+    const result = document.getElementById("result");
+    const output = document.getElementById("output");
+    const errorMessage = document.getElementById("errorMessage");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    result.style.display = "none";
+    errorMessage.style.display = "none";
+
+    if (!input) {
+        showError("Please enter CSS code.");
+        return;
+    }
+
+    try {
+
+        const formatted = beautifyCSS(input);
+
+        output.value = formatted;
+
+        const blob = new Blob(
+            [formatted],
+            {
+                type: "text/css;charset=utf-8;"
+            }
+        );
+
+        const url = URL.createObjectURL(blob);
+
+        downloadBtn.href = url;
+
+        result.style.display = "block";
+
+    } catch (error) {
+
+        showError("Unable to format the CSS code.");
+
+    }
+
+}
+
+
+function beautifyCSS(css) {
+
+    // Normalize whitespace
+    css = css
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .trim();
+
+    // Add line breaks around braces
+    css = css
+        .replace(/\{/g, "{\n")
+        .replace(/\}/g, "\n}\n")
+        .replace(/;/g, ";\n");
+
+    // Remove unnecessary blank lines
+    css = css
+        .replace(/\n\s*\n+/g, "\n")
+        .trim();
+
+    const lines = css.split("\n");
+
+    let formatted = "";
+    let indent = 0;
+
+    lines.forEach(line => {
+
+        line = line.trim();
+
+        if (!line) {
+            return;
+        }
+
+        // Closing brace
+        if (line.startsWith("}")) {
+
+            indent = Math.max(0, indent - 1);
+
+            formatted += getIndent(indent) + "}\n";
+
+            // Handle content after closing brace
+            const remaining = line.substring(1).trim();
+
+            if (remaining) {
+                formatted += getIndent(indent) + remaining + "\n";
+            }
+
+            return;
+        }
+
+        // Opening brace
+        if (line.endsWith("{")) {
+
+            formatted += getIndent(indent) + line + "\n";
+
+            indent++;
+
+            return;
+        }
+
+        // Normal CSS property / selector
+        formatted += getIndent(indent) + line + "\n";
+
+    });
+
+    return formatted.trim();
+
+}
+
+
+function getIndent(level) {
+
+    return "    ".repeat(level);
+
+}
+
+
+async function copyFormattedCSS() {
+
+    const output = document.getElementById("output");
+
+    if (!output.value) {
+        return;
+    }
+
+    try {
+
+        await navigator.clipboard.writeText(output.value);
+
+        alert("CSS copied to clipboard!");
+
+    } catch (error) {
+
+        output.select();
+        document.execCommand("copy");
+
+        alert("CSS copied to clipboard!");
+
+    }
+
+}
+
+
+function showError(message) {
+
+    const errorMessage = document.getElementById("errorMessage");
+
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+
+}
+
+</script>
+
+</body>
+</html>

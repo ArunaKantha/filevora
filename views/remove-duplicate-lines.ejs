@@ -1,0 +1,344 @@
+```ejs id="m4r7kp"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Remove Duplicate Lines - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    ✨
+                </div>
+
+                <h1>Remove Duplicate Lines</h1>
+
+                <p>
+                    Remove repeated lines from your text while keeping the original order.
+                </p>
+
+            </div>
+
+
+            <textarea
+                id="textInput"
+                placeholder="Paste your text here..."
+                style="
+                    width:100%;
+                    min-height:280px;
+                    padding:18px;
+                    border:2px solid #e2e8f0;
+                    border-radius:14px;
+                    resize:vertical;
+                    outline:none;
+                    font-family:inherit;
+                    font-size:15px;
+                    line-height:1.6;
+                    color:#111827;
+                    background:#ffffff;
+                    box-sizing:border-box;
+                "
+            ></textarea>
+
+
+            <div
+                style="
+                    display:grid;
+                    grid-template-columns:repeat(2, 1fr);
+                    gap:12px;
+                    margin-top:20px;
+                "
+            >
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="removeBtn"
+                    style="margin-top:0;"
+                >
+                    Remove Duplicates
+                </button>
+
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="clearBtn"
+                    style="margin-top:0;"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+
+            <div
+                id="result"
+                style="
+                    display:none;
+                    margin-top:22px;
+                    padding:20px;
+                    border-radius:14px;
+                    background:#f0fdf4;
+                    border:1px solid #bbf7d0;
+                    text-align:left;
+                "
+            >
+
+                <strong
+                    id="resultInfo"
+                    style="
+                        display:block;
+                        color:#166534;
+                        font-size:14px;
+                    "
+                ></strong>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="download-btn"
+                id="copyBtn"
+                style="
+                    width:100%;
+                    border:none;
+                    margin-top:18px;
+                "
+            >
+                Copy Result
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const textInput =
+    document.getElementById("textInput");
+
+const removeBtn =
+    document.getElementById("removeBtn");
+
+const clearBtn =
+    document.getElementById("clearBtn");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultInfo =
+    document.getElementById("resultInfo");
+
+
+let resultText = "";
+
+
+/* =========================
+   REMOVE DUPLICATES
+========================= */
+
+removeBtn.addEventListener("click", function () {
+
+    const text =
+        textInput.value;
+
+
+    if (!text.trim()) {
+
+        alert("Please enter some text first.");
+
+        return;
+    }
+
+
+    const lines =
+        text.split(/\r?\n/);
+
+
+    const seen =
+        new Set();
+
+    const uniqueLines =
+        [];
+
+
+    let duplicateCount = 0;
+
+
+    lines.forEach(function (line) {
+
+        /*
+         * Compare trimmed versions,
+         * but keep the original line.
+         */
+
+        const key =
+            line.trim();
+
+
+        /*
+         * Keep empty lines only once.
+         */
+
+        if (seen.has(key)) {
+
+            duplicateCount++;
+
+            return;
+        }
+
+
+        seen.add(key);
+
+        uniqueLines.push(line);
+
+    });
+
+
+    resultText =
+        uniqueLines.join("\n");
+
+
+    textInput.value =
+        resultText;
+
+
+    resultInfo.textContent =
+        "Removed " +
+        duplicateCount +
+        " duplicate line" +
+        (duplicateCount === 1 ? "" : "s") +
+        ". " +
+        uniqueLines.length +
+        " unique line" +
+        (uniqueLines.length === 1 ? "" : "s") +
+        " remaining.";
+
+
+    result.style.display =
+        "block";
+
+
+    textInput.focus();
+
+});
+
+
+/* =========================
+   COPY RESULT
+========================= */
+
+copyBtn.addEventListener("click", async function () {
+
+    if (!resultText) {
+
+        /*
+         * If user hasn't clicked Remove Duplicates,
+         * copy the current textarea content.
+         */
+
+        resultText =
+            textInput.value;
+    }
+
+
+    if (!resultText) {
+        return;
+    }
+
+
+    try {
+
+        await navigator.clipboard.writeText(
+            resultText
+        );
+
+    } catch (error) {
+
+        const textarea =
+            document.createElement("textarea");
+
+        textarea.value =
+            resultText;
+
+        textarea.style.position =
+            "fixed";
+
+        textarea.style.opacity =
+            "0";
+
+        document.body.appendChild(
+            textarea
+        );
+
+        textarea.select();
+
+        document.execCommand(
+            "copy"
+        );
+
+        textarea.remove();
+
+    }
+
+
+    const oldText =
+        copyBtn.textContent;
+
+    copyBtn.textContent =
+        "Copied!";
+
+
+    setTimeout(function () {
+
+        copyBtn.textContent =
+            oldText;
+
+    }, 1200);
+
+});
+
+
+/* =========================
+   CLEAR
+========================= */
+
+clearBtn.addEventListener("click", function () {
+
+    textInput.value = "";
+
+    resultText = "";
+
+    result.style.display =
+        "none";
+
+    textInput.focus();
+
+});
+
+</script>
+
+</body>
+</html>
+```

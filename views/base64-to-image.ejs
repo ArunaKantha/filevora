@@ -1,0 +1,485 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Base64 to Image - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    B64
+                </div>
+
+                <h1>Base64 to Image</h1>
+
+                <p>
+                    Convert Base64 encoded image data back into an image.
+                </p>
+
+            </div>
+
+            <div style="margin-top:10px; text-align:left;">
+
+                <label
+                    for="base64Input"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Paste Base64 Code
+                </label>
+
+                <textarea
+                    id="base64Input"
+                    rows="10"
+                    placeholder="Paste your Base64 image data here..."
+                    style="
+                        width:100%;
+                        box-sizing:border-box;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        background:#f8fafc;
+                        color:#334155;
+                        font-family:monospace;
+                        font-size:12px;
+                        line-height:1.5;
+                        resize:vertical;
+                    "
+                ></textarea>
+
+            </div>
+
+            <button
+                type="button"
+                class="convert-btn"
+                id="convertBtn"
+            >
+                🖼️ Convert to Image
+            </button>
+
+            <div
+                id="previewArea"
+                style="
+                    display:none;
+                    margin-top:25px;
+                "
+            >
+
+                <img
+                    id="imagePreview"
+                    alt="Converted Image"
+                    style="
+                        display:block;
+                        max-width:100%;
+                        max-height:350px;
+                        width:auto;
+                        height:auto;
+                        margin:0 auto;
+                        border-radius:12px;
+                    "
+                >
+
+            </div>
+
+            <div
+                class="file-info"
+                id="fileInfo"
+                style="display:none;"
+            >
+
+                <strong id="imageType"></strong>
+
+                <span id="imageInfo"></span>
+
+            </div>
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>Image Ready</h2>
+
+                <p>
+                    Your Base64 data has been converted into an image.
+                </p>
+
+                <button
+                    type="button"
+                    class="download-btn"
+                    id="downloadBtn"
+                >
+                    ⬇️ Download Image
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const base64Input =
+    document.getElementById("base64Input");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const previewArea =
+    document.getElementById("previewArea");
+
+const imagePreview =
+    document.getElementById("imagePreview");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const imageType =
+    document.getElementById("imageType");
+
+const imageInfo =
+    document.getElementById("imageInfo");
+
+const result =
+    document.getElementById("result");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+let imageBlob = null;
+let imageMimeType = "image/png";
+let imageExtension = "png";
+
+
+convertBtn.addEventListener("click", function () {
+
+    let input =
+        base64Input.value.trim();
+
+    if (!input) {
+
+        alert("Please paste Base64 image data.");
+
+        return;
+    }
+
+    /*
+        Remove spaces and line breaks.
+    */
+
+    input =
+        input.replace(/\s/g, "");
+
+    let base64Data = input;
+
+    imageMimeType = "image/png";
+
+    /*
+        Detect:
+
+        data:image/png;base64,XXXX
+    */
+
+    const match =
+        input.match(
+            /^data:(image\/[^;]+);base64,(.+)$/i
+        );
+
+    if (match) {
+
+        imageMimeType =
+            match[1].toLowerCase();
+
+        base64Data =
+            match[2];
+
+    }
+
+    try {
+
+        /*
+            Decode Base64
+        */
+
+        const binaryString =
+            atob(base64Data);
+
+        if (!binaryString.length) {
+
+            throw new Error(
+                "Empty Base64 data"
+            );
+
+        }
+
+        /*
+            Convert binary data to bytes
+        */
+
+        const bytes =
+            new Uint8Array(
+                binaryString.length
+            );
+
+        for (
+            let i = 0;
+            i < binaryString.length;
+            i++
+        ) {
+
+            bytes[i] =
+                binaryString.charCodeAt(i);
+
+        }
+
+        /*
+            Create actual image Blob
+        */
+
+        imageBlob =
+            new Blob(
+                [bytes],
+                {
+                    type: imageMimeType
+                }
+            );
+
+        imageExtension =
+            getExtension(imageMimeType);
+
+        /*
+            Create preview URL
+        */
+
+        const previewURL =
+            URL.createObjectURL(
+                imageBlob
+            );
+
+        imagePreview.onload =
+            function () {
+
+                previewArea.style.display =
+                    "block";
+
+                fileInfo.style.display =
+                    "block";
+
+                result.style.display =
+                    "block";
+
+                imageType.textContent =
+                    "Image Type: " +
+                    imageMimeType;
+
+                imageInfo.textContent =
+                    "Image Size: " +
+                    formatFileSize(
+                        imageBlob.size
+                    );
+
+                /*
+                    Store the Blob URL
+                    temporarily on button.
+                */
+
+                downloadBtn.dataset.url =
+                    previewURL;
+
+                downloadBtn.dataset.filename =
+                    "filevora-image." +
+                    imageExtension;
+
+                result.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+            };
+
+        imagePreview.onerror =
+            function () {
+
+                URL.revokeObjectURL(
+                    previewURL
+                );
+
+                imageBlob = null;
+
+                alert(
+                    "The Base64 data is not a valid image."
+                );
+
+            };
+
+        imagePreview.src =
+            previewURL;
+
+    } catch (error) {
+
+        imageBlob = null;
+
+        alert(
+            "Invalid Base64 image data."
+        );
+
+    }
+
+});
+
+
+downloadBtn.addEventListener(
+    "click",
+    function () {
+
+        if (!imageBlob) {
+
+            alert(
+                "Please convert the Base64 data first."
+            );
+
+            return;
+        }
+
+        /*
+            Create a fresh Blob URL
+            specifically for downloading.
+        */
+
+        const downloadURL =
+            URL.createObjectURL(
+                imageBlob
+            );
+
+        const filename =
+            "filevora-image." +
+            imageExtension;
+
+        /*
+            Create temporary download link.
+        */
+
+        const link =
+            document.createElement("a");
+
+        link.href =
+            downloadURL;
+
+        link.download =
+            filename;
+
+        link.style.display =
+            "none";
+
+        document.body.appendChild(link);
+
+        /*
+            Trigger download.
+        */
+
+        link.click();
+
+        /*
+            Remove temporary element.
+        */
+
+        document.body.removeChild(link);
+
+        /*
+            Give browser time to start
+            download before releasing URL.
+        */
+
+        setTimeout(function () {
+
+            URL.revokeObjectURL(
+                downloadURL
+            );
+
+        }, 3000);
+
+    }
+);
+
+
+function getExtension(mimeType) {
+
+    switch (mimeType) {
+
+        case "image/jpeg":
+            return "jpg";
+
+        case "image/png":
+            return "png";
+
+        case "image/webp":
+            return "webp";
+
+        case "image/gif":
+            return "gif";
+
+        case "image/bmp":
+            return "bmp";
+
+        case "image/svg+xml":
+            return "svg";
+
+        case "image/x-icon":
+            return "ico";
+
+        default:
+            return "png";
+
+    }
+
+}
+
+
+function formatFileSize(bytes) {
+
+    if (bytes < 1024) {
+
+        return bytes + " B";
+
+    }
+
+    if (bytes < 1024 * 1024) {
+
+        return (
+            bytes / 1024
+        ).toFixed(1) + " KB";
+
+    }
+
+    return (
+        bytes / (1024 * 1024)
+    ).toFixed(2) + " MB";
+
+}
+
+</script>
+
+</body>
+</html>
+```

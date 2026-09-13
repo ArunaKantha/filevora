@@ -1,0 +1,849 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PDF Resize - FileVora</title>
+    <meta
+        name="description"
+        content="Resize PDF pages to A3, A4, A5, Letter and other standard paper sizes without cutting content."
+    >
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .resize-options {
+            margin-top: 22px;
+            text-align: left;
+        }
+
+        .resize-options label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .resize-options select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #111827;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .resize-options select:focus {
+            border-color: #2563eb;
+        }
+
+        .resize-note {
+            margin-top: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .custom-size {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .custom-size label {
+            margin-bottom: 6px;
+        }
+
+        .custom-size input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .custom-size input:focus {
+            border-color: #2563eb;
+        }
+
+        .custom-size small {
+            display: block;
+            margin-top: 5px;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 400;
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 18px;
+            padding: 13px 15px;
+            border-radius: 10px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .progress-message {
+            display: none;
+            margin-top: 18px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .custom-size {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">↔</div>
+
+                <h1>PDF Resize</h1>
+
+                <p>
+                    Change PDF page size without cutting or removing your content.
+                </p>
+
+            </div>
+
+
+            <label class="upload-area" for="pdfInput">
+
+                <div class="upload-icon">📄</div>
+
+                <strong>Click to upload PDF</strong>
+
+                <span>Choose one PDF file</span>
+
+            </label>
+
+
+            <input
+                type="file"
+                id="pdfInput"
+                accept="application/pdf,.pdf"
+                style="display:none;"
+            >
+
+
+            <div class="file-info" id="fileInfo">
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <div class="resize-options">
+
+                <label for="pageSize">
+                    New Page Size
+                </label>
+
+                <select id="pageSize">
+
+                    <option value="a4" selected>
+                        A4 — 210 × 297 mm
+                    </option>
+
+                    <option value="a3">
+                        A3 — 297 × 420 mm
+                    </option>
+
+                    <option value="a5">
+                        A5 — 148 × 210 mm
+                    </option>
+
+                    <option value="a6">
+                        A6 — 105 × 148 mm
+                    </option>
+
+                    <option value="letter">
+                        Letter — 8.5 × 11 in
+                    </option>
+
+                    <option value="legal">
+                        Legal — 8.5 × 14 in
+                    </option>
+
+                    <option value="tabloid">
+                        Tabloid — 11 × 17 in
+                    </option>
+
+                    <option value="custom">
+                        Custom Size
+                    </option>
+
+                </select>
+
+
+                <div
+                    class="custom-size"
+                    id="customSize"
+                >
+
+                    <div>
+
+                        <label for="customWidth">
+                            Width
+                        </label>
+
+                        <input
+                            type="number"
+                            id="customWidth"
+                            min="10"
+                            max="1000"
+                            step="0.1"
+                            value="210"
+                        >
+
+                        <small>
+                            millimeters
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="customHeight">
+                            Height
+                        </label>
+
+                        <input
+                            type="number"
+                            id="customHeight"
+                            min="10"
+                            max="1000"
+                            step="0.1"
+                            value="297"
+                        >
+
+                        <small>
+                            millimeters
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="resize-note">
+
+                    The entire original page content is scaled proportionally
+                    to fit the new page size. Content will not be intentionally
+                    cropped.
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="convert-btn"
+                id="resizeBtn"
+                disabled
+            >
+                Resize PDF
+            </button>
+
+
+            <div
+                class="progress-message"
+                id="progressMessage"
+            >
+                Resizing PDF...
+            </div>
+
+
+            <div
+                class="error-message"
+                id="errorMessage"
+            ></div>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>
+                    PDF Resized Successfully
+                </h2>
+
+                <p id="resultText">
+                    Your resized PDF is ready.
+                </p>
+
+                <a
+                    class="download-btn"
+                    id="downloadBtn"
+                    href="#"
+                    download="filevora-resized.pdf"
+                >
+                    ⬇ Download Resized PDF
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+
+<script>
+
+    const pdfInput =
+        document.getElementById("pdfInput");
+
+    const fileInfo =
+        document.getElementById("fileInfo");
+
+    const fileName =
+        document.getElementById("fileName");
+
+    const fileSize =
+        document.getElementById("fileSize");
+
+    const pageSize =
+        document.getElementById("pageSize");
+
+    const customSize =
+        document.getElementById("customSize");
+
+    const customWidth =
+        document.getElementById("customWidth");
+
+    const customHeight =
+        document.getElementById("customHeight");
+
+    const resizeBtn =
+        document.getElementById("resizeBtn");
+
+    const result =
+        document.getElementById("result");
+
+    const resultText =
+        document.getElementById("resultText");
+
+    const downloadBtn =
+        document.getElementById("downloadBtn");
+
+    const errorMessage =
+        document.getElementById("errorMessage");
+
+    const progressMessage =
+        document.getElementById("progressMessage");
+
+
+    let selectedFile = null;
+
+    let downloadUrl = null;
+
+
+    function formatBytes(bytes) {
+
+        if (bytes === 0) {
+            return "0 Bytes";
+        }
+
+        const units = [
+            "Bytes",
+            "KB",
+            "MB",
+            "GB"
+        ];
+
+        const index =
+            Math.floor(
+                Math.log(bytes) / Math.log(1024)
+            );
+
+        return (
+            parseFloat(
+                (
+                    bytes /
+                    Math.pow(1024, index)
+                ).toFixed(2)
+            ) +
+            " " +
+            units[index]
+        );
+    }
+
+
+    function showError(message) {
+
+        errorMessage.textContent =
+            message;
+
+        errorMessage.style.display =
+            "block";
+    }
+
+
+    function hideError() {
+
+        errorMessage.textContent = "";
+
+        errorMessage.style.display =
+            "none";
+    }
+
+
+    /*
+     * PDF points:
+     *
+     * 1 inch = 72 points
+     * 1 inch = 25.4 mm
+     *
+     * Therefore:
+     *
+     * points = mm × 72 / 25.4
+     */
+
+    function mmToPoints(mm) {
+
+        return mm * 72 / 25.4;
+    }
+
+
+    function getSelectedSize() {
+
+        if (pageSize.value === "a4") {
+
+            return {
+                width: mmToPoints(210),
+                height: mmToPoints(297),
+                name: "A4"
+            };
+        }
+
+
+        if (pageSize.value === "a3") {
+
+            return {
+                width: mmToPoints(297),
+                height: mmToPoints(420),
+                name: "A3"
+            };
+        }
+
+
+        if (pageSize.value === "a5") {
+
+            return {
+                width: mmToPoints(148),
+                height: mmToPoints(210),
+                name: "A5"
+            };
+        }
+
+
+        if (pageSize.value === "a6") {
+
+            return {
+                width: mmToPoints(105),
+                height: mmToPoints(148),
+                name: "A6"
+            };
+        }
+
+
+        if (pageSize.value === "letter") {
+
+            return {
+                width: 612,
+                height: 792,
+                name: "Letter"
+            };
+        }
+
+
+        if (pageSize.value === "legal") {
+
+            return {
+                width: 612,
+                height: 1008,
+                name: "Legal"
+            };
+        }
+
+
+        if (pageSize.value === "tabloid") {
+
+            return {
+                width: 792,
+                height: 1224,
+                name: "Tabloid"
+            };
+        }
+
+
+        if (pageSize.value === "custom") {
+
+            const width =
+                Number(customWidth.value);
+
+            const height =
+                Number(customHeight.value);
+
+
+            if (
+                !Number.isFinite(width) ||
+                !Number.isFinite(height) ||
+                width <= 0 ||
+                height <= 0
+            ) {
+
+                throw new Error(
+                    "Please enter valid custom dimensions."
+                );
+            }
+
+
+            return {
+                width: mmToPoints(width),
+                height: mmToPoints(height),
+                name: `${width} × ${height} mm`
+            };
+        }
+
+    }
+
+
+    pageSize.addEventListener(
+        "change",
+        () => {
+
+            if (
+                pageSize.value === "custom"
+            ) {
+
+                customSize.style.display =
+                    "grid";
+
+            } else {
+
+                customSize.style.display =
+                    "none";
+            }
+
+        }
+    );
+
+
+    pdfInput.addEventListener(
+        "change",
+        () => {
+
+            hideError();
+
+            result.style.display =
+                "none";
+
+            selectedFile =
+                pdfInput.files[0];
+
+
+            if (!selectedFile) {
+
+                resizeBtn.disabled =
+                    true;
+
+                fileInfo.style.display =
+                    "none";
+
+                return;
+            }
+
+
+            if (
+                selectedFile.type !==
+                    "application/pdf" &&
+                !selectedFile.name
+                    .toLowerCase()
+                    .endsWith(".pdf")
+            ) {
+
+                showError(
+                    "Please select a valid PDF file."
+                );
+
+                resizeBtn.disabled =
+                    true;
+
+                fileInfo.style.display =
+                    "none";
+
+                return;
+            }
+
+
+            fileName.textContent =
+                selectedFile.name;
+
+            fileSize.textContent =
+                formatBytes(
+                    selectedFile.size
+                );
+
+            fileInfo.style.display =
+                "block";
+
+            resizeBtn.disabled =
+                false;
+
+        }
+    );
+
+
+    resizeBtn.addEventListener(
+        "click",
+        async () => {
+
+            if (!selectedFile) {
+
+                showError(
+                    "Please select a PDF file first."
+                );
+
+                return;
+            }
+
+
+            hideError();
+
+            result.style.display =
+                "none";
+
+            resizeBtn.disabled =
+                true;
+
+            progressMessage.style.display =
+                "block";
+
+
+            try {
+
+                if (
+                    typeof PDFLib ===
+                        "undefined" ||
+                    !PDFLib.PDFDocument
+                ) {
+
+                    throw new Error(
+                        "PDF library failed to load. Please refresh the page and try again."
+                    );
+                }
+
+
+                const target =
+                    getSelectedSize();
+
+
+                const inputBytes =
+                    await selectedFile.arrayBuffer();
+
+
+                const sourcePdf =
+                    await PDFLib.PDFDocument.load(
+                        inputBytes
+                    );
+
+
+                const outputPdf =
+                    await PDFLib.PDFDocument.create();
+
+
+                const sourcePages =
+                    sourcePdf.getPages();
+
+
+                /*
+                 * Process every original page.
+                 *
+                 * The page is embedded into a new page.
+                 * This means the complete original content
+                 * is preserved and scaled to fit.
+                 */
+
+                for (
+                    let i = 0;
+                    i < sourcePages.length;
+                    i++
+                ) {
+
+                    const sourcePage =
+                        sourcePages[i];
+
+
+                    const sourceWidth =
+                        sourcePage.getWidth();
+
+                    const sourceHeight =
+                        sourcePage.getHeight();
+
+
+                    const embeddedPage =
+                        await outputPdf.embedPage(
+                            sourcePage
+                        );
+
+
+                    /*
+                     * Preserve the original
+                     * aspect ratio.
+                     */
+
+                    const scale =
+                        Math.min(
+                            target.width /
+                                sourceWidth,
+                            target.height /
+                                sourceHeight
+                        );
+
+
+                    const scaledWidth =
+                        sourceWidth * scale;
+
+                    const scaledHeight =
+                        sourceHeight * scale;
+
+
+                    /*
+                     * Center the scaled
+                     * content on the new page.
+                     */
+
+                    const x =
+                        (target.width -
+                            scaledWidth) / 2;
+
+                    const y =
+                        (target.height -
+                            scaledHeight) / 2;
+
+
+                    const newPage =
+                        outputPdf.addPage([
+                            target.width,
+                            target.height
+                        ]);
+
+
+                    newPage.drawPage(
+                        embeddedPage,
+                        {
+                            x: x,
+                            y: y,
+                            width: scaledWidth,
+                            height: scaledHeight
+                        }
+                    );
+
+
+                    progressMessage.textContent =
+                        `Resizing page ${i + 1} of ${sourcePages.length}...`;
+
+                }
+
+
+                const outputBytes =
+                    await outputPdf.save();
+
+
+                const blob =
+                    new Blob(
+                        [outputBytes],
+                        {
+                            type:
+                                "application/pdf"
+                        }
+                    );
+
+
+                if (downloadUrl) {
+
+                    URL.revokeObjectURL(
+                        downloadUrl
+                    );
+                }
+
+
+                downloadUrl =
+                    URL.createObjectURL(blob);
+
+
+                downloadBtn.href =
+                    downloadUrl;
+
+
+                resultText.textContent =
+                    `${sourcePages.length} page${sourcePages.length === 1 ? "" : "s"} resized to ${target.name}. Original content was scaled to fit without intentional cropping.`;
+
+
+                result.style.display =
+                    "block";
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                showError(
+                    error.message ||
+                    "PDF resizing failed. Please try again."
+                );
+
+            } finally {
+
+                resizeBtn.disabled =
+                    false;
+
+                progressMessage.style.display =
+                    "none";
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+</html>
+```

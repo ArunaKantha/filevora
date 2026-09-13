@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Convert PDF files to Excel spreadsheets online for free with FileVora.">
+
+    <title>PDF to Excel — FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="container nav">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span>File<span>Vora</span></span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/#tools">Tools</a>
+            <a href="/#categories">Categories</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">PDF</div>
+
+                <h1>PDF to Excel</h1>
+
+                <p>
+                    Convert text and table data from PDF files into an Excel spreadsheet.
+                </p>
+
+            </div>
+
+
+            <label class="upload-area" for="pdfInput">
+
+                <div class="upload-icon">📊</div>
+
+                <strong>Choose a PDF file</strong>
+
+                <span>PDF files only</span>
+
+            </label>
+
+            <input
+                id="pdfInput"
+                type="file"
+                accept="application/pdf,.pdf"
+            >
+
+
+            <div class="file-info" id="fileInfo">
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <button
+                class="convert-btn"
+                id="convertBtn"
+                disabled
+            >
+                Convert to Excel
+            </button>
+
+
+            <div class="result" id="result">
+
+                <h2>Excel File Ready</h2>
+
+                <p>
+                    Your PDF data has been converted successfully.
+                </p>
+
+                <a
+                    id="downloadBtn"
+                    class="download-btn"
+                    download="filevora-data.xlsx"
+                >
+                    ↓ Download Excel
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer>
+
+    <div class="container footer-inner">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span>File<span>Vora</span></span>
+        </a>
+
+        <p>
+            © <span id="year"></span> FILEVORA. All rights reserved.
+        </p>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+const pdfInput = document.getElementById("pdfInput");
+const fileInfo = document.getElementById("fileInfo");
+const fileName = document.getElementById("fileName");
+const fileSize = document.getElementById("fileSize");
+const convertBtn = document.getElementById("convertBtn");
+const result = document.getElementById("result");
+const downloadBtn = document.getElementById("downloadBtn");
+
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+pdfInput.addEventListener("change", () => {
+
+    const file = pdfInput.files[0];
+
+    if (!file) {
+
+        convertBtn.disabled = true;
+        fileInfo.style.display = "none";
+        result.style.display = "none";
+
+        return;
+    }
+
+
+    if (file.type !== "application/pdf") {
+
+        alert("Please choose a PDF file.");
+
+        pdfInput.value = "";
+
+        return;
+    }
+
+
+    fileName.textContent = file.name;
+
+
+    const sizeMB = file.size / (1024 * 1024);
+
+    fileSize.textContent =
+        sizeMB >= 1
+            ? sizeMB.toFixed(2) + " MB"
+            : (file.size / 1024).toFixed(2) + " KB";
+
+
+    fileInfo.style.display = "block";
+
+    convertBtn.disabled = false;
+
+    result.style.display = "none";
+
+});
+
+
+convertBtn.addEventListener("click", async () => {
+
+    const file = pdfInput.files[0];
+
+    if (!file) return;
+
+
+    convertBtn.disabled = true;
+
+    convertBtn.textContent = "Reading PDF...";
+
+
+    try {
+
+        if (typeof pdfjsLib === "undefined") {
+            throw new Error("PDF.js library failed to load.");
+        }
+
+
+        if (typeof XLSX === "undefined") {
+            throw new Error("Excel library failed to load.");
+        }
+
+
+        const arrayBuffer = await file.arrayBuffer();
+
+
+        const pdf = await pdfjsLib.getDocument({
+            data: arrayBuffer
+        }).promise;
+
+
+        const workbook = XLSX.utils.book_new();
+
+
+        for (
+            let pageNumber = 1;
+            pageNumber <= pdf.numPages;
+            pageNumber++
+        ) {
+
+            convertBtn.textContent =
+                `Reading page ${pageNumber} of ${pdf.numPages}...`;
+
+
+            const page = await pdf.getPage(pageNumber);
+
+            const textContent =
+                await page.getTextContent();
+
+
+            const rows = [];
+
+
+            let currentRow = [];
+            let lastY = null;
+
+
+            textContent.items.forEach(item => {
+
+                const text = item.str.trim();
+
+                if (!text) return;
+
+
+                const y =
+                    Math.round(item.transform[5]);
+
+
+                if (
+                    lastY !== null &&
+                    Math.abs(y - lastY) > 5
+                ) {
+
+                    if (currentRow.length > 0) {
+                        rows.push(currentRow);
+                    }
+
+                    currentRow = [];
+                }
+
+
+                currentRow.push(text);
+
+                lastY = y;
+
+            });
+
+
+            if (currentRow.length > 0) {
+                rows.push(currentRow);
+            }
+
+
+            if (rows.length === 0) {
+
+                rows.push([
+                    ["No readable text found on this page."]
+                ]);
+
+            }
+
+
+            const worksheet =
+                XLSX.utils.aoa_to_sheet(rows);
+
+
+            worksheet["!cols"] =
+                rows.length > 0
+                    ? rows[0].map(() => ({ wch: 22 }))
+                    : [];
+
+
+            XLSX.utils.book_append_sheet(
+                workbook,
+                worksheet,
+                `Page ${pageNumber}`
+            );
+
+        }
+
+
+        convertBtn.textContent =
+            "Creating Excel file...";
+
+
+        const excelBuffer =
+            XLSX.write(workbook, {
+                bookType: "xlsx",
+                type: "array"
+            });
+
+
+        const blob = new Blob(
+            [excelBuffer],
+            {
+                type:
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            }
+        );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        downloadBtn.href = url;
+
+        downloadBtn.download =
+            "filevora-data.xlsx";
+
+
+        result.style.display = "block";
+
+
+        convertBtn.disabled = false;
+
+        convertBtn.textContent =
+            "Convert to Excel";
+
+
+    } catch (error) {
+
+        console.error(
+            "PDF TO EXCEL ERROR:",
+            error
+        );
+
+
+        alert(
+            "Something went wrong while converting the PDF.\n\n" +
+            error.message
+        );
+
+
+        convertBtn.disabled = false;
+
+        convertBtn.textContent =
+            "Convert to Excel";
+
+    }
+
+});
+
+
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+</script>
+
+</body>
+</html>

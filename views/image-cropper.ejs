@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Cropper - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .fv-cropper-page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .fv-cropper-upload {
+            margin-top: 20px;
+        }
+
+        .fv-cropper-editor {
+            display: none;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .fv-cropper-canvas-box {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+            line-height: 0;
+            overflow: hidden;
+        }
+
+        #fvCropCanvas {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            cursor: crosshair;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #fvCropSelection {
+            position: absolute;
+            display: none;
+            border: 2px solid #ffffff;
+            box-sizing: border-box;
+            pointer-events: none;
+            box-shadow: 0 0 0 99999px rgba(0, 0, 0, 0.45);
+        }
+
+        .fv-cropper-controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .fv-cropper-format {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fv-cropper-format select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .fv-cropper-result {
+            display: none;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .fv-cropper-result img {
+            display: block;
+            max-width: 100%;
+            max-height: 500px;
+            margin: 15px auto;
+        }
+
+        .fv-cropper-help {
+            margin-top: 15px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="fv-cropper-page">
+
+    <div class="tool-header">
+        <h1>🖼️ Image Cropper</h1>
+        <p>Crop your image and download the selected area.</p>
+    </div>
+
+    <div class="upload-box fv-cropper-upload" id="fvCropUploadBox">
+        <input type="file" id="fvCropInput" accept="image/*">
+
+        <div class="upload-icon">🖼️</div>
+
+        <strong>Click to upload an image</strong>
+
+        <p>JPG, PNG, WEBP and other common image formats</p>
+    </div>
+
+
+    <div class="fv-cropper-editor" id="fvCropEditor">
+
+        <div class="fv-cropper-canvas-box" id="fvCropCanvasBox">
+
+            <canvas id="fvCropCanvas"></canvas>
+
+            <div id="fvCropSelection"></div>
+
+        </div>
+
+
+        <div class="fv-cropper-help">
+            Click and drag on the image to select the area you want to crop.
+        </div>
+
+
+        <div class="fv-cropper-controls">
+
+            <div class="fv-cropper-format">
+                <label for="fvCropFormat">Format:</label>
+
+                <select id="fvCropFormat">
+                    <option value="image/jpeg">JPG</option>
+                    <option value="image/png">PNG</option>
+                    <option value="image/webp">WEBP</option>
+                </select>
+            </div>
+
+            <button type="button" id="fvCropButton">
+                ✂️ Crop Image
+            </button>
+
+            <button type="button" id="fvCropReset">
+                Reset
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="fv-cropper-result" id="fvCropResult">
+
+        <h2>Cropped Image</h2>
+
+        <img id="fvCropResultImage" alt="Cropped image">
+
+        <a
+            id="fvCropDownload"
+            class="download-btn"
+            href="#"
+            download
+        >
+            ⬇️ Download Cropped Image
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+    const cropInput = document.getElementById("fvCropInput");
+    const uploadBox = document.getElementById("fvCropUploadBox");
+    const editor = document.getElementById("fvCropEditor");
+
+    const canvas = document.getElementById("fvCropCanvas");
+    const canvasBox = document.getElementById("fvCropCanvasBox");
+    const selection = document.getElementById("fvCropSelection");
+
+    const cropButton = document.getElementById("fvCropButton");
+    const resetButton = document.getElementById("fvCropReset");
+
+    const formatSelect = document.getElementById("fvCropFormat");
+
+    const result = document.getElementById("fvCropResult");
+    const resultImage = document.getElementById("fvCropResultImage");
+    const downloadButton = document.getElementById("fvCropDownload");
+
+    const ctx = canvas.getContext("2d");
+
+    let image = null;
+
+    let selecting = false;
+
+    let startX = 0;
+    let startY = 0;
+
+    let endX = 0;
+    let endY = 0;
+
+    let selectionReady = false;
+
+
+    /*
+     * Upload image
+     */
+
+    cropInput.addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+
+            const img = new Image();
+
+            img.onload = function () {
+
+                image = img;
+
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+
+                ctx.clearRect(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                ctx.drawImage(
+                    img,
+                    0,
+                    0
+                );
+
+                uploadBox.style.display = "none";
+                editor.style.display = "block";
+
+                result.style.display = "none";
+
+                selection.style.display = "none";
+
+                selectionReady = false;
+
+                startX = 0;
+                startY = 0;
+                endX = 0;
+                endY = 0;
+            };
+
+            img.src = event.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+
+    /*
+     * Get coordinates correctly even when
+     * the image is displayed smaller than
+     * its original size.
+     */
+
+    function getPosition(event) {
+
+        const rect = canvas.getBoundingClientRect();
+
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        let x = (event.clientX - rect.left) * scaleX;
+        let y = (event.clientY - rect.top) * scaleY;
+
+        x = Math.max(0, Math.min(x, canvas.width));
+        y = Math.max(0, Math.min(y, canvas.height));
+
+        return {
+            x: x,
+            y: y
+        };
+    }
+
+
+    /*
+     * Start selection
+     */
+
+    canvas.addEventListener("mousedown", function (event) {
+
+        if (!image) {
+            return;
+        }
+
+        const pos = getPosition(event);
+
+        startX = pos.x;
+        startY = pos.y;
+
+        endX = pos.x;
+        endY = pos.y;
+
+        selecting = true;
+        selectionReady = false;
+
+        selection.style.display = "block";
+
+        updateSelection();
+    });
+
+
+    /*
+     * Move selection
+     */
+
+    canvas.addEventListener("mousemove", function (event) {
+
+        if (!selecting) {
+            return;
+        }
+
+        const pos = getPosition(event);
+
+        endX = pos.x;
+        endY = pos.y;
+
+        updateSelection();
+    });
+
+
+    /*
+     * Finish selection
+     */
+
+    window.addEventListener("mouseup", function () {
+
+        if (!selecting) {
+            return;
+        }
+
+        selecting = false;
+
+        const width = Math.abs(endX - startX);
+        const height = Math.abs(endY - startY);
+
+        if (width >= 5 && height >= 5) {
+            selectionReady = true;
+        } else {
+            selectionReady = false;
+            selection.style.display = "none";
+        }
+    });
+
+
+    /*
+     * Update visual selection box
+     */
+
+    function updateSelection() {
+
+        const rect = canvas.getBoundingClientRect();
+
+        const displayScaleX = rect.width / canvas.width;
+        const displayScaleY = rect.height / canvas.height;
+
+        const x = Math.min(startX, endX);
+        const y = Math.min(startY, endY);
+
+        const width = Math.abs(endX - startX);
+        const height = Math.abs(endY - startY);
+
+        selection.style.left =
+            (x * displayScaleX) + "px";
+
+        selection.style.top =
+            (y * displayScaleY) + "px";
+
+        selection.style.width =
+            (width * displayScaleX) + "px";
+
+        selection.style.height =
+            (height * displayScaleY) + "px";
+    }
+
+
+    /*
+     * Crop
+     */
+
+    cropButton.addEventListener("click", function () {
+
+        if (!image) {
+            alert("Please upload an image first.");
+            return;
+        }
+
+        if (!selectionReady) {
+            alert("Please select an area to crop.");
+            return;
+        }
+
+        const x = Math.min(startX, endX);
+        const y = Math.min(startY, endY);
+
+        const width = Math.abs(endX - startX);
+        const height = Math.abs(endY - startY);
+
+        if (width < 5 || height < 5) {
+            alert("Please select a larger area.");
+            return;
+        }
+
+
+        const outputCanvas =
+            document.createElement("canvas");
+
+        outputCanvas.width = Math.round(width);
+        outputCanvas.height = Math.round(height);
+
+        const outputCtx =
+            outputCanvas.getContext("2d");
+
+
+        /*
+         * PNG transparency support
+         */
+
+        if (formatSelect.value === "image/jpeg") {
+
+            outputCtx.fillStyle = "#ffffff";
+
+            outputCtx.fillRect(
+                0,
+                0,
+                outputCanvas.width,
+                outputCanvas.height
+            );
+        }
+
+
+        outputCtx.drawImage(
+            canvas,
+            x,
+            y,
+            width,
+            height,
+            0,
+            0,
+            outputCanvas.width,
+            outputCanvas.height
+        );
+
+
+        const format = formatSelect.value;
+
+        const quality =
+            format === "image/png" ? 1 : 0.92;
+
+
+        outputCanvas.toBlob(
+            function (blob) {
+
+                if (!blob) {
+                    alert("Could not create the cropped image.");
+                    return;
+                }
+
+                const url =
+                    URL.createObjectURL(blob);
+
+                resultImage.src = url;
+
+                let extension = "jpg";
+
+                if (format === "image/png") {
+                    extension = "png";
+                }
+
+                if (format === "image/webp") {
+                    extension = "webp";
+                }
+
+
+                downloadButton.href = url;
+
+                downloadButton.download =
+                    "filevora-cropped-image." + extension;
+
+                downloadButton.style.display =
+                    "inline-block";
+
+                result.style.display = "block";
+
+                result.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+            },
+            format,
+            quality
+        );
+    });
+
+
+    /*
+     * Reset
+     */
+
+    resetButton.addEventListener("click", function () {
+
+        cropInput.value = "";
+
+        image = null;
+
+        selecting = false;
+        selectionReady = false;
+
+        ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+        selection.style.display = "none";
+
+        editor.style.display = "none";
+
+        result.style.display = "none";
+
+        uploadBox.style.display = "block";
+    });
+</script>
+
+</body>
+</html>

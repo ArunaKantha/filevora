@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Cleaner - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<main class="converter-page">
+    <div class="container">
+        <div class="converter-card">
+
+            <div class="converter-header">
+                <div class="tool-icon">TC</div>
+                <h1>Text Cleaner</h1>
+                <p>Clean unwanted spaces, empty lines, and duplicate spaces from your text.</p>
+            </div>
+
+            <textarea
+                id="textInput"
+                placeholder="Paste your text here..."
+                style="
+                    width:100%;
+                    min-height:260px;
+                    padding:18px;
+                    border:2px solid #e5e7eb;
+                    border-radius:14px;
+                    resize:vertical;
+                    font-size:15px;
+                    line-height:1.6;
+                    outline:none;
+                    font-family:inherit;
+                    box-sizing:border-box;
+                "
+            ></textarea>
+
+            <button class="convert-btn" id="cleanBtn">
+                Clean Text
+            </button>
+
+            <div class="result" id="result">
+                <h2>Text Cleaned Successfully</h2>
+                <p id="resultInfo">Your cleaned text is ready.</p>
+
+                <textarea
+                    id="outputText"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:220px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #d1d5db;
+                        border-radius:10px;
+                        resize:vertical;
+                        font-size:15px;
+                        line-height:1.6;
+                        font-family:inherit;
+                        box-sizing:border-box;
+                        background:#ffffff;
+                    "
+                ></textarea>
+
+                <button class="download-btn" id="copyBtn">
+                    Copy Cleaned Text
+                </button>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+const textInput = document.getElementById("textInput");
+const cleanBtn = document.getElementById("cleanBtn");
+const result = document.getElementById("result");
+const outputText = document.getElementById("outputText");
+const resultInfo = document.getElementById("resultInfo");
+const copyBtn = document.getElementById("copyBtn");
+
+cleanBtn.addEventListener("click", () => {
+
+    const text = textInput.value;
+
+    if (!text.trim()) {
+        alert("Please enter some text first.");
+        return;
+    }
+
+    const originalLines = text.split(/\r?\n/);
+
+    const cleaned = originalLines
+        .map(line => line.replace(/\s+/g, " ").trim())
+        .filter(line => line.length > 0)
+        .join("\n");
+
+    outputText.value = cleaned;
+
+    const originalChars = text.length;
+    const cleanedChars = cleaned.length;
+
+    resultInfo.textContent =
+        `Cleaned successfully. Characters: ${originalChars} → ${cleanedChars}`;
+
+    result.style.display = "block";
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+    });
+});
+
+copyBtn.addEventListener("click", async () => {
+
+    if (!outputText.value) return;
+
+    try {
+        await navigator.clipboard.writeText(outputText.value);
+
+        const oldText = copyBtn.textContent;
+        copyBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+            copyBtn.textContent = oldText;
+        }, 1500);
+
+    } catch (error) {
+        outputText.select();
+        document.execCommand("copy");
+
+        copyBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+            copyBtn.textContent = "Copy Cleaned Text";
+        }, 1500);
+    }
+});
+</script>
+
+</body>
+</html>

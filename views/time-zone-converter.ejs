@@ -1,0 +1,352 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Time Zone Converter - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    ⏰
+                </div>
+
+                <h1>Time Zone Converter</h1>
+
+                <p>
+                    Convert date and time between different time zones instantly.
+                </p>
+
+            </div>
+
+
+            <div style="text-align:left;">
+
+                <label
+                    for="dateTime"
+                    style="display:block; margin-bottom:8px; font-weight:700; color:#111827;"
+                >
+                    Date & Time
+                </label>
+
+                <input
+                    type="datetime-local"
+                    id="dateTime"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                >
+
+
+                <div
+                    style="
+                        display:grid;
+                        grid-template-columns:1fr 1fr;
+                        gap:16px;
+                        margin-top:20px;
+                    "
+                >
+
+                    <div>
+
+                        <label
+                            for="fromZone"
+                            style="display:block; margin-bottom:8px; font-weight:700; color:#111827;"
+                        >
+                            From Time Zone
+                        </label>
+
+                        <select
+                            id="fromZone"
+                            style="
+                                width:100%;
+                                padding:14px;
+                                border:1px solid #cbd5e1;
+                                border-radius:10px;
+                                font-size:16px;
+                                background:#fff;
+                                box-sizing:border-box;
+                            "
+                        >
+                            <option value="Asia/Colombo">Sri Lanka - Colombo</option>
+                            <option value="Asia/Kolkata">India - Kolkata</option>
+                            <option value="Asia/Dubai">UAE - Dubai</option>
+                            <option value="Asia/Singapore">Singapore</option>
+                            <option value="Asia/Tokyo">Japan - Tokyo</option>
+                            <option value="Asia/Shanghai">China - Shanghai</option>
+                            <option value="Europe/London">UK - London</option>
+                            <option value="Europe/Paris">France - Paris</option>
+                            <option value="Europe/Berlin">Germany - Berlin</option>
+                            <option value="America/New_York">USA - New York</option>
+                            <option value="America/Chicago">USA - Chicago</option>
+                            <option value="America/Denver">USA - Denver</option>
+                            <option value="America/Los_Angeles">USA - Los Angeles</option>
+                            <option value="Australia/Sydney">Australia - Sydney</option>
+                            <option value="Pacific/Auckland">New Zealand - Auckland</option>
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label
+                            for="toZone"
+                            style="display:block; margin-bottom:8px; font-weight:700; color:#111827;"
+                        >
+                            To Time Zone
+                        </label>
+
+                        <select
+                            id="toZone"
+                            style="
+                                width:100%;
+                                padding:14px;
+                                border:1px solid #cbd5e1;
+                                border-radius:10px;
+                                font-size:16px;
+                                background:#fff;
+                                box-sizing:border-box;
+                            "
+                        >
+                            <option value="America/New_York">USA - New York</option>
+                            <option value="America/Los_Angeles">USA - Los Angeles</option>
+                            <option value="America/Chicago">USA - Chicago</option>
+                            <option value="Europe/London">UK - London</option>
+                            <option value="Europe/Paris">France - Paris</option>
+                            <option value="Europe/Berlin">Germany - Berlin</option>
+                            <option value="Asia/Colombo">Sri Lanka - Colombo</option>
+                            <option value="Asia/Kolkata">India - Kolkata</option>
+                            <option value="Asia/Dubai">UAE - Dubai</option>
+                            <option value="Asia/Singapore">Singapore</option>
+                            <option value="Asia/Tokyo">Japan - Tokyo</option>
+                            <option value="Asia/Shanghai">China - Shanghai</option>
+                            <option value="Australia/Sydney">Australia - Sydney</option>
+                            <option value="Pacific/Auckland">New Zealand - Auckland</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="convertBtn"
+                >
+                    Convert Time
+                </button>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>Converted Time</h2>
+
+                <p id="resultText"></p>
+
+                <p
+                    id="zoneText"
+                    style="margin-top:10px;"
+                ></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const dateTimeInput = document.getElementById("dateTime");
+const fromZone = document.getElementById("fromZone");
+const toZone = document.getElementById("toZone");
+const convertBtn = document.getElementById("convertBtn");
+
+const result = document.getElementById("result");
+const resultText = document.getElementById("resultText");
+const zoneText = document.getElementById("zoneText");
+
+
+function setCurrentDateTime() {
+
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+
+    dateTimeInput.value =
+        `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+
+function getOffsetMinutes(timeZone, date) {
+
+    const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone,
+        timeZoneName: "longOffset"
+    }).formatToParts(date);
+
+    const offsetPart = parts.find(
+        part => part.type === "timeZoneName"
+    );
+
+    if (!offsetPart) {
+        return 0;
+    }
+
+    const value = offsetPart.value;
+
+    if (value === "GMT" || value === "UTC") {
+        return 0;
+    }
+
+    const match = value.match(
+        /GMT([+-])(\d{1,2})(?::(\d{2}))?/
+    );
+
+    if (!match) {
+        return 0;
+    }
+
+    const sign = match[1] === "+" ? 1 : -1;
+    const hours = Number(match[2]);
+    const minutes = Number(match[3] || 0);
+
+    return sign * (hours * 60 + minutes);
+}
+
+
+function convertTime() {
+
+    if (!dateTimeInput.value) {
+
+        alert("Please select a date and time.");
+
+        return;
+    }
+
+
+    const localValue = dateTimeInput.value;
+
+    const [datePart, timePart] = localValue.split("T");
+
+    const [year, month, day] = datePart.split("-").map(Number);
+    const [hours, minutes] = timePart.split(":").map(Number);
+
+
+    // Treat the entered date/time as being in the selected source zone.
+    const assumedUTC = Date.UTC(
+        year,
+        month - 1,
+        day,
+        hours,
+        minutes
+    );
+
+
+    const firstDate = new Date(assumedUTC);
+
+    const sourceOffset1 =
+        getOffsetMinutes(fromZone.value, firstDate);
+
+
+    let utcTime =
+        assumedUTC - (sourceOffset1 * 60 * 1000);
+
+
+    // Recalculate once for DST transitions.
+    const sourceOffset2 =
+        getOffsetMinutes(fromZone.value, new Date(utcTime));
+
+
+    utcTime =
+        assumedUTC - (sourceOffset2 * 60 * 1000);
+
+
+    const finalDate = new Date(utcTime);
+
+
+    const formatted = new Intl.DateTimeFormat("en-US", {
+
+        timeZone: toZone.value,
+
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+
+        hour: "numeric",
+        minute: "2-digit",
+
+        hour12: true
+
+    }).format(finalDate);
+
+
+    const targetZoneName = new Intl.DateTimeFormat("en-US", {
+
+        timeZone: toZone.value,
+        timeZoneName: "long"
+
+    }).formatToParts(finalDate)
+        .find(part => part.type === "timeZoneName");
+
+
+    result.style.display = "block";
+
+    result.style.background = "#f0fdf4";
+    result.style.borderColor = "#bbf7d0";
+
+
+    resultText.textContent = formatted;
+
+
+    zoneText.textContent =
+        `From ${fromZone.value} → ${toZone.value}` +
+        (targetZoneName
+            ? ` (${targetZoneName.value})`
+            : "");
+}
+
+
+setCurrentDateTime();
+
+
+convertBtn.addEventListener("click", convertTime);
+
+</script>
+
+</body>
+</html>
+```

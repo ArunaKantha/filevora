@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Validator - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<main class="converter-page">
+    <div class="container">
+        <div class="converter-card">
+
+            <div class="converter-header">
+                <div class="tool-icon">JV</div>
+                <h1>JSON Validator</h1>
+                <p>Check whether your JSON is valid and find syntax errors instantly.</p>
+            </div>
+
+            <textarea
+                id="jsonInput"
+                placeholder='Paste your JSON here...&#10;&#10;Example: {"name":"FileVora","tools":29}'
+                style="
+                    width:100%;
+                    min-height:280px;
+                    padding:18px;
+                    border:2px solid #e5e7eb;
+                    border-radius:14px;
+                    resize:vertical;
+                    font-size:15px;
+                    line-height:1.6;
+                    outline:none;
+                    font-family:monospace;
+                    box-sizing:border-box;
+                "
+            ></textarea>
+
+            <button class="convert-btn" id="validateBtn">
+                Validate JSON
+            </button>
+
+            <div class="result" id="result">
+
+                <h2 id="resultTitle"></h2>
+
+                <p id="resultInfo"></p>
+
+                <div
+                    id="errorBox"
+                    style="
+                        display:none;
+                        margin-top:18px;
+                        padding:16px;
+                        background:#fff1f2;
+                        border:1px solid #fecdd3;
+                        border-radius:10px;
+                        text-align:left;
+                        color:#9f1239;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        word-break:break-word;
+                    "
+                ></div>
+
+                <button
+                    class="download-btn"
+                    id="copyBtn"
+                    style="display:none;"
+                >
+                    Copy JSON
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+const jsonInput = document.getElementById("jsonInput");
+const validateBtn = document.getElementById("validateBtn");
+
+const result = document.getElementById("result");
+const resultTitle = document.getElementById("resultTitle");
+const resultInfo = document.getElementById("resultInfo");
+const errorBox = document.getElementById("errorBox");
+const copyBtn = document.getElementById("copyBtn");
+
+let validJson = "";
+
+validateBtn.addEventListener("click", () => {
+
+    const input = jsonInput.value.trim();
+
+    if (!input) {
+        alert("Please paste some JSON first.");
+        return;
+    }
+
+    result.style.display = "block";
+    errorBox.style.display = "none";
+    copyBtn.style.display = "none";
+
+    try {
+
+        const parsed = JSON.parse(input);
+
+        validJson = JSON.stringify(parsed, null, 2);
+
+        resultTitle.textContent = "✓ Valid JSON";
+        resultInfo.textContent =
+            "Your JSON syntax is correct and can be parsed successfully.";
+
+        copyBtn.style.display = "inline-flex";
+
+    } catch (error) {
+
+        validJson = "";
+
+        resultTitle.textContent = "✕ Invalid JSON";
+        resultInfo.textContent =
+            "Your JSON contains a syntax error.";
+
+        errorBox.style.display = "block";
+        errorBox.textContent =
+            "Error: " + error.message;
+    }
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+    });
+});
+
+copyBtn.addEventListener("click", async () => {
+
+    if (!validJson) return;
+
+    try {
+
+        await navigator.clipboard.writeText(validJson);
+
+        copyBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+            copyBtn.textContent = "Copy JSON";
+        }, 1500);
+
+    } catch (error) {
+
+        const temp = document.createElement("textarea");
+        temp.value = validJson;
+        document.body.appendChild(temp);
+
+        temp.select();
+        document.execCommand("copy");
+
+        temp.remove();
+
+        copyBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+            copyBtn.textContent = "Copy JSON";
+        }, 1500);
+    }
+});
+</script>
+
+</body>
+</html>

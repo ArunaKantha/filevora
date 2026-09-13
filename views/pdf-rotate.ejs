@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotate PDF - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .rotate-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .rotate-option {
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: #ffffff;
+            cursor: pointer;
+            font-weight: 600;
+            color: #334155;
+            transition: 0.2s;
+        }
+
+        .rotate-option:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .rotate-option.active {
+            border-color: #2563eb;
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .status-message {
+            margin-top: 16px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 10px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .rotate-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="converter-page">
+        <div class="container">
+
+            <div class="converter-card">
+
+                <div class="converter-header">
+                    <div class="tool-icon">↻</div>
+
+                    <h1>Rotate PDF</h1>
+
+                    <p>
+                        Rotate all pages of your PDF and download the rotated document.
+                    </p>
+                </div>
+
+                <label class="upload-area" for="pdfInput">
+                    <div class="upload-icon">📄</div>
+
+                    <strong>Choose a PDF file</strong>
+
+                    <span>Click here to select your PDF</span>
+
+                    <input
+                        type="file"
+                        id="pdfInput"
+                        accept="application/pdf"
+                    >
+                </label>
+
+                <div class="file-info" id="fileInfo">
+                    <strong id="fileName"></strong>
+                    <span id="fileSize"></span>
+                </div>
+
+                <div class="rotate-options">
+
+                    <button
+                        type="button"
+                        class="rotate-option active"
+                        data-angle="90"
+                    >
+                        ↻ Rotate 90°
+                    </button>
+
+                    <button
+                        type="button"
+                        class="rotate-option"
+                        data-angle="180"
+                    >
+                        ↻ Rotate 180°
+                    </button>
+
+                    <button
+                        type="button"
+                        class="rotate-option"
+                        data-angle="270"
+                    >
+                        ↺ Rotate 270°
+                    </button>
+
+                    <button
+                        type="button"
+                        class="rotate-option"
+                        data-angle="0"
+                    >
+                        No Rotation
+                    </button>
+
+                </div>
+
+                <button
+                    class="convert-btn"
+                    id="rotateBtn"
+                    disabled
+                >
+                    Rotate PDF
+                </button>
+
+                <div class="status-message" id="statusMessage"></div>
+
+                <div class="error-message" id="errorMessage"></div>
+
+                <div class="result" id="result">
+
+                    <h2>PDF Rotated Successfully</h2>
+
+                    <p>
+                        Your rotated PDF is ready to download.
+                    </p>
+
+                    <a
+                        href="#"
+                        id="downloadBtn"
+                        class="download-btn"
+                        download="filevora-rotated.pdf"
+                    >
+                        ↓ Download Rotated PDF
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+    <script>
+        const pdfInput = document.getElementById("pdfInput");
+        const fileInfo = document.getElementById("fileInfo");
+        const fileName = document.getElementById("fileName");
+        const fileSize = document.getElementById("fileSize");
+
+        const rotateBtn = document.getElementById("rotateBtn");
+        const downloadBtn = document.getElementById("downloadBtn");
+
+        const result = document.getElementById("result");
+        const errorMessage = document.getElementById("errorMessage");
+        const statusMessage = document.getElementById("statusMessage");
+
+        const rotateOptions =
+            document.querySelectorAll(".rotate-option");
+
+        let selectedAngle = 90;
+        let selectedFile = null;
+        let downloadUrl = null;
+
+        rotateOptions.forEach(option => {
+
+            option.addEventListener("click", () => {
+
+                rotateOptions.forEach(item => {
+                    item.classList.remove("active");
+                });
+
+                option.classList.add("active");
+
+                selectedAngle =
+                    Number(option.dataset.angle);
+            });
+
+        });
+
+        pdfInput.addEventListener("change", () => {
+
+            selectedFile = pdfInput.files[0];
+
+            result.style.display = "none";
+            errorMessage.style.display = "none";
+            statusMessage.textContent = "";
+
+            if (!selectedFile) {
+                rotateBtn.disabled = true;
+                fileInfo.style.display = "none";
+                return;
+            }
+
+            if (selectedFile.type !== "application/pdf") {
+
+                errorMessage.textContent =
+                    "Please select a valid PDF file.";
+
+                errorMessage.style.display = "block";
+
+                rotateBtn.disabled = true;
+                fileInfo.style.display = "none";
+
+                return;
+            }
+
+            fileName.textContent = selectedFile.name;
+
+            fileSize.textContent =
+                formatFileSize(selectedFile.size);
+
+            fileInfo.style.display = "block";
+
+            rotateBtn.disabled = false;
+        });
+
+        rotateBtn.addEventListener("click", async () => {
+
+            if (!selectedFile) {
+                return;
+            }
+
+            try {
+
+                rotateBtn.disabled = true;
+
+                result.style.display = "none";
+                errorMessage.style.display = "none";
+
+                statusMessage.textContent =
+                    "Rotating PDF... Please wait.";
+
+                const arrayBuffer =
+                    await selectedFile.arrayBuffer();
+
+                const pdfDoc =
+                    await PDFLib.PDFDocument.load(arrayBuffer);
+
+                const pages = pdfDoc.getPages();
+
+                pages.forEach(page => {
+
+                    if (selectedAngle !== 0) {
+
+                        const currentRotation =
+                            page.getRotation().angle;
+
+                        const newRotation =
+                            (currentRotation + selectedAngle) % 360;
+
+                        page.setRotation(
+                            PDFLib.degrees(newRotation)
+                        );
+                    }
+
+                });
+
+                const pdfBytes =
+                    await pdfDoc.save();
+
+                const blob =
+                    new Blob(
+                        [pdfBytes],
+                        { type: "application/pdf" }
+                    );
+
+                if (downloadUrl) {
+                    URL.revokeObjectURL(downloadUrl);
+                }
+
+                downloadUrl =
+                    URL.createObjectURL(blob);
+
+                downloadBtn.href = downloadUrl;
+
+                result.style.display = "block";
+
+                statusMessage.textContent = "";
+
+            } catch (error) {
+
+                console.error(error);
+
+                errorMessage.textContent =
+                    "PDF rotation could not be completed. Please make sure the PDF is valid and not password protected.";
+
+                errorMessage.style.display = "block";
+
+                statusMessage.textContent = "";
+
+            } finally {
+
+                rotateBtn.disabled = false;
+            }
+
+        });
+
+        function formatFileSize(bytes) {
+
+            if (bytes < 1024) {
+                return bytes + " Bytes";
+            }
+
+            if (bytes < 1024 * 1024) {
+                return (bytes / 1024).toFixed(1) + " KB";
+            }
+
+            return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+        }
+    </script>
+
+</body>
+</html>

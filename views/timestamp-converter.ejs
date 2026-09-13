@@ -1,0 +1,537 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Timestamp Converter - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    #
+                </div>
+
+                <h1>Timestamp Converter</h1>
+
+                <p>
+                    Convert Unix timestamps to dates and dates to Unix timestamps.
+                </p>
+
+            </div>
+
+
+            <!-- TIMESTAMP TO DATE -->
+
+            <div style="text-align:left;">
+
+                <h2
+                    style="
+                        margin:0 0 15px;
+                        font-size:20px;
+                        color:#111827;
+                    "
+                >
+                    Timestamp → Date
+                </h2>
+
+                <label
+                    for="timestampInput"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Unix Timestamp
+                </label>
+
+                <input
+                    type="number"
+                    id="timestampInput"
+                    placeholder="Example: 1757840400"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                    "
+                >
+
+
+                <div
+                    style="
+                        display:flex;
+                        gap:10px;
+                        margin-top:12px;
+                        flex-wrap:wrap;
+                    "
+                >
+
+                    <button
+                        type="button"
+                        id="secondsBtn"
+                        class="convert-btn"
+                        style="
+                            width:auto;
+                            margin-top:0;
+                        "
+                    >
+                        Seconds
+                    </button>
+
+                    <button
+                        type="button"
+                        id="millisecondsBtn"
+                        class="convert-btn"
+                        style="
+                            width:auto;
+                            margin-top:0;
+                            background:#64748b;
+                        "
+                    >
+                        Milliseconds
+                    </button>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="timestampToDateBtn"
+                    class="convert-btn"
+                >
+                    Convert Timestamp
+                </button>
+
+            </div>
+
+
+            <div
+                id="timestampResult"
+                class="result"
+            >
+
+                <h2>Converted Date & Time</h2>
+
+                <p id="timestampResultText"></p>
+
+                <p
+                    id="timestampLocalText"
+                    style="margin-top:10px;"
+                ></p>
+
+                <p
+                    id="timestampUtcText"
+                    style="margin-top:10px;"
+                ></p>
+
+            </div>
+
+
+            <!-- DIVIDER -->
+
+            <div
+                style="
+                    height:1px;
+                    background:#e5e7eb;
+                    margin:35px 0;
+                "
+            ></div>
+
+
+            <!-- DATE TO TIMESTAMP -->
+
+            <div style="text-align:left;">
+
+                <h2
+                    style="
+                        margin:0 0 15px;
+                        font-size:20px;
+                        color:#111827;
+                    "
+                >
+                    Date → Timestamp
+                </h2>
+
+
+                <label
+                    for="dateInput"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Date & Time
+                </label>
+
+                <input
+                    type="datetime-local"
+                    id="dateInput"
+                    step="1"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                    "
+                >
+
+
+                <button
+                    type="button"
+                    id="dateToTimestampBtn"
+                    class="convert-btn"
+                >
+                    Convert Date
+                </button>
+
+            </div>
+
+
+            <div
+                id="dateResult"
+                class="result"
+            >
+
+                <h2>Unix Timestamp</h2>
+
+                <p id="secondsResultText"></p>
+
+                <p
+                    id="millisecondsResultText"
+                    style="margin-top:10px;"
+                ></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const timestampInput =
+    document.getElementById("timestampInput");
+
+const secondsBtn =
+    document.getElementById("secondsBtn");
+
+const millisecondsBtn =
+    document.getElementById("millisecondsBtn");
+
+const timestampToDateBtn =
+    document.getElementById("timestampToDateBtn");
+
+const timestampResult =
+    document.getElementById("timestampResult");
+
+const timestampResultText =
+    document.getElementById("timestampResultText");
+
+const timestampLocalText =
+    document.getElementById("timestampLocalText");
+
+const timestampUtcText =
+    document.getElementById("timestampUtcText");
+
+const dateInput =
+    document.getElementById("dateInput");
+
+const dateToTimestampBtn =
+    document.getElementById("dateToTimestampBtn");
+
+const dateResult =
+    document.getElementById("dateResult");
+
+const secondsResultText =
+    document.getElementById("secondsResultText");
+
+const millisecondsResultText =
+    document.getElementById("millisecondsResultText");
+
+
+let timestampUnit = "seconds";
+
+
+/* =========================
+   CURRENT DATE & TIME
+========================= */
+
+function setCurrentDateTime() {
+
+    const now = new Date();
+
+    const year =
+        now.getFullYear();
+
+    const month =
+        String(now.getMonth() + 1).padStart(2, "0");
+
+    const day =
+        String(now.getDate()).padStart(2, "0");
+
+    const hours =
+        String(now.getHours()).padStart(2, "0");
+
+    const minutes =
+        String(now.getMinutes()).padStart(2, "0");
+
+    const seconds =
+        String(now.getSeconds()).padStart(2, "0");
+
+
+    dateInput.value =
+        `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+
+}
+
+
+/* =========================
+   UNIT BUTTONS
+========================= */
+
+secondsBtn.addEventListener("click", () => {
+
+    timestampUnit = "seconds";
+
+    secondsBtn.style.background =
+        "#2563eb";
+
+    millisecondsBtn.style.background =
+        "#64748b";
+
+});
+
+
+millisecondsBtn.addEventListener("click", () => {
+
+    timestampUnit = "milliseconds";
+
+    millisecondsBtn.style.background =
+        "#2563eb";
+
+    secondsBtn.style.background =
+        "#64748b";
+
+});
+
+
+/* =========================
+   FORMAT DATE
+========================= */
+
+function formatDate(date) {
+
+    return new Intl.DateTimeFormat(
+        "en-US",
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true
+        }
+    ).format(date);
+
+}
+
+
+/* =========================
+   TIMESTAMP → DATE
+========================= */
+
+timestampToDateBtn.addEventListener(
+    "click",
+    () => {
+
+        const value =
+            timestampInput.value.trim();
+
+
+        if (!value) {
+
+            alert(
+                "Please enter a Unix timestamp."
+            );
+
+            return;
+        }
+
+
+        const timestamp =
+            Number(value);
+
+
+        if (!Number.isFinite(timestamp)) {
+
+            alert(
+                "Please enter a valid timestamp."
+            );
+
+            return;
+        }
+
+
+        let milliseconds;
+
+
+        if (timestampUnit === "seconds") {
+
+            milliseconds =
+                timestamp * 1000;
+
+        } else {
+
+            milliseconds =
+                timestamp;
+
+        }
+
+
+        const date =
+            new Date(milliseconds);
+
+
+        if (Number.isNaN(date.getTime())) {
+
+            alert(
+                "Invalid timestamp."
+            );
+
+            return;
+        }
+
+
+        timestampResult.style.display =
+            "block";
+
+
+        timestampResult.style.background =
+            "#f0fdf4";
+
+        timestampResult.style.borderColor =
+            "#bbf7d0";
+
+
+        timestampResultText.textContent =
+            formatDate(date);
+
+
+        timestampLocalText.textContent =
+            `Your local time: ${date.toLocaleString()}`;
+
+
+        timestampUtcText.textContent =
+            `UTC: ${date.toISOString()}`;
+
+    }
+);
+
+
+/* =========================
+   DATE → TIMESTAMP
+========================= */
+
+dateToTimestampBtn.addEventListener(
+    "click",
+    () => {
+
+        const value =
+            dateInput.value;
+
+
+        if (!value) {
+
+            alert(
+                "Please select a date and time."
+            );
+
+            return;
+        }
+
+
+        const date =
+            new Date(value);
+
+
+        if (Number.isNaN(date.getTime())) {
+
+            alert(
+                "Invalid date and time."
+            );
+
+            return;
+        }
+
+
+        const milliseconds =
+            date.getTime();
+
+        const seconds =
+            Math.floor(
+                milliseconds / 1000
+            );
+
+
+        dateResult.style.display =
+            "block";
+
+
+        dateResult.style.background =
+            "#f0fdf4";
+
+        dateResult.style.borderColor =
+            "#bbf7d0";
+
+
+        secondsResultText.textContent =
+            `Seconds: ${seconds}`;
+
+
+        millisecondsResultText.textContent =
+            `Milliseconds: ${milliseconds}`;
+
+    }
+);
+
+
+/* =========================
+   INITIAL VALUE
+========================= */
+
+setCurrentDateTime();
+
+</script>
+
+</body>
+</html>
+```

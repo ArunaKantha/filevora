@@ -1,0 +1,365 @@
+```ejs
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Character Counter - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    🔤
+                </div>
+
+                <h1>Character Counter</h1>
+
+                <p>
+                    Count characters, spaces, words and lines in your text instantly.
+                </p>
+
+            </div>
+
+
+            <textarea
+                id="textInput"
+                placeholder="Type or paste your text here..."
+                style="
+                    width:100%;
+                    min-height:260px;
+                    padding:18px;
+                    border:2px solid #e2e8f0;
+                    border-radius:14px;
+                    resize:vertical;
+                    outline:none;
+                    font-family:inherit;
+                    font-size:15px;
+                    line-height:1.6;
+                    color:#111827;
+                    background:#ffffff;
+                    box-sizing:border-box;
+                "
+            ></textarea>
+
+
+            <div
+                style="
+                    display:grid;
+                    grid-template-columns:repeat(2, 1fr);
+                    gap:12px;
+                    margin-top:20px;
+                "
+            >
+
+                <div style="
+                    padding:18px;
+                    background:#f8fafc;
+                    border:1px solid #e5e7eb;
+                    border-radius:12px;
+                ">
+
+                    <strong
+                        id="totalCharacters"
+                        style="
+                            display:block;
+                            font-size:25px;
+                            color:#2563eb;
+                        "
+                    >0</strong>
+
+                    <span style="
+                        color:#64748b;
+                        font-size:13px;
+                    ">
+                        Characters
+                    </span>
+
+                </div>
+
+
+                <div style="
+                    padding:18px;
+                    background:#f8fafc;
+                    border:1px solid #e5e7eb;
+                    border-radius:12px;
+                ">
+
+                    <strong
+                        id="noSpaceCharacters"
+                        style="
+                            display:block;
+                            font-size:25px;
+                            color:#2563eb;
+                        "
+                    >0</strong>
+
+                    <span style="
+                        color:#64748b;
+                        font-size:13px;
+                    ">
+                        Without Spaces
+                    </span>
+
+                </div>
+
+
+                <div style="
+                    padding:18px;
+                    background:#f8fafc;
+                    border:1px solid #e5e7eb;
+                    border-radius:12px;
+                ">
+
+                    <strong
+                        id="spaceCount"
+                        style="
+                            display:block;
+                            font-size:25px;
+                            color:#2563eb;
+                        "
+                    >0</strong>
+
+                    <span style="
+                        color:#64748b;
+                        font-size:13px;
+                    ">
+                        Spaces
+                    </span>
+
+                </div>
+
+
+                <div style="
+                    padding:18px;
+                    background:#f8fafc;
+                    border:1px solid #e5e7eb;
+                    border-radius:12px;
+                ">
+
+                    <strong
+                        id="wordCount"
+                        style="
+                            display:block;
+                            font-size:25px;
+                            color:#2563eb;
+                        "
+                    >0</strong>
+
+                    <span style="
+                        color:#64748b;
+                        font-size:13px;
+                    ">
+                        Words
+                    </span>
+
+                </div>
+
+
+                <div style="
+                    padding:18px;
+                    background:#f8fafc;
+                    border:1px solid #e5e7eb;
+                    border-radius:12px;
+                ">
+
+                    <strong
+                        id="lineCount"
+                        style="
+                            display:block;
+                            font-size:25px;
+                            color:#2563eb;
+                        "
+                    >0</strong>
+
+                    <span style="
+                        color:#64748b;
+                        font-size:13px;
+                    ">
+                        Lines
+                    </span>
+
+                </div>
+
+
+                <div style="
+                    padding:18px;
+                    background:#f8fafc;
+                    border:1px solid #e5e7eb;
+                    border-radius:12px;
+                ">
+
+                    <strong
+                        id="letterCount"
+                        style="
+                            display:block;
+                            font-size:25px;
+                            color:#2563eb;
+                        "
+                    >0</strong>
+
+                    <span style="
+                        color:#64748b;
+                        font-size:13px;
+                    ">
+                        Letters
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="download-btn"
+                id="clearBtn"
+                style="
+                    border:none;
+                    margin-top:22px;
+                "
+            >
+                Clear Text
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const textInput =
+    document.getElementById("textInput");
+
+const totalCharacters =
+    document.getElementById("totalCharacters");
+
+const noSpaceCharacters =
+    document.getElementById("noSpaceCharacters");
+
+const spaceCount =
+    document.getElementById("spaceCount");
+
+const wordCount =
+    document.getElementById("wordCount");
+
+const lineCount =
+    document.getElementById("lineCount");
+
+const letterCount =
+    document.getElementById("letterCount");
+
+const clearBtn =
+    document.getElementById("clearBtn");
+
+
+function updateCounter() {
+
+    const text =
+        textInput.value;
+
+
+    /*
+     * Total characters
+     */
+
+    totalCharacters.textContent =
+        text.length;
+
+
+    /*
+     * Characters without spaces
+     */
+
+    noSpaceCharacters.textContent =
+        text.replace(/\s/g, "").length;
+
+
+    /*
+     * Spaces
+     */
+
+    spaceCount.textContent =
+        (text.match(/ /g) || []).length;
+
+
+    /*
+     * Words
+     */
+
+    const trimmed =
+        text.trim();
+
+    const words =
+        trimmed
+            ? trimmed.split(/\s+/)
+            : [];
+
+    wordCount.textContent =
+        words.length;
+
+
+    /*
+     * Lines
+     */
+
+    lineCount.textContent =
+        text.length
+            ? text.split("\n").length
+            : 0;
+
+
+    /*
+     * Letters
+     */
+
+    const letters =
+        text.match(/\p{L}/gu) || [];
+
+    letterCount.textContent =
+        letters.length;
+
+}
+
+
+textInput.addEventListener(
+    "input",
+    updateCounter
+);
+
+
+clearBtn.addEventListener(
+    "click",
+    function () {
+
+        textInput.value = "";
+
+        updateCounter();
+
+        textInput.focus();
+
+    }
+);
+
+
+updateCounter();
+
+</script>
+
+</body>
+</html>
+```

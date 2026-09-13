@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HTML Formatter - FileVora</title>
+    <meta name="description" content="Format and beautify HTML code online with FileVora.">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    HTML
+                </div>
+
+                <h1>HTML Formatter</h1>
+
+                <p>
+                    Beautify and format HTML code with proper indentation.
+                </p>
+
+            </div>
+
+            <div style="text-align:left;">
+
+                <label for="htmlInput"
+                       style="display:block; margin-bottom:8px; font-weight:700; color:#111827;">
+                    HTML Code
+                </label>
+
+                <textarea
+                    id="htmlInput"
+                    placeholder="Paste your HTML code here..."
+                    style="
+                        width:100%;
+                        min-height:320px;
+                        padding:16px;
+                        border:1px solid #cbd5e1;
+                        border-radius:12px;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                ></textarea>
+
+            </div>
+
+            <button
+                class="convert-btn"
+                onclick="formatHTML()"
+            >
+                Format HTML
+            </button>
+
+            <div id="errorMessage"
+                 style="
+                    display:none;
+                    margin-top:18px;
+                    padding:14px 18px;
+                    background:#fef2f2;
+                    border:1px solid #fecaca;
+                    border-radius:10px;
+                    color:#b91c1c;
+                    text-align:left;
+                 ">
+            </div>
+
+            <div class="result" id="result">
+
+                <h2>HTML Formatted</h2>
+
+                <p>
+                    Your HTML code has been successfully formatted.
+                </p>
+
+                <textarea
+                    id="output"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:320px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #bbf7d0;
+                        border-radius:10px;
+                        background:#ffffff;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                ></textarea>
+
+                <button
+                    class="download-btn"
+                    onclick="copyFormattedHTML()"
+                    type="button"
+                >
+                    Copy HTML
+                </button>
+
+                <a
+                    id="downloadBtn"
+                    class="download-btn"
+                    href="#"
+                    download="formatted.html"
+                >
+                    ↓ Download HTML
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function formatHTML() {
+
+    const input = document.getElementById("htmlInput").value.trim();
+    const result = document.getElementById("result");
+    const output = document.getElementById("output");
+    const errorMessage = document.getElementById("errorMessage");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    result.style.display = "none";
+    errorMessage.style.display = "none";
+
+    if (!input) {
+        showError("Please enter HTML code.");
+        return;
+    }
+
+    try {
+
+        const formatted = beautifyHTML(input);
+
+        output.value = formatted;
+
+        const blob = new Blob(
+            [formatted],
+            {
+                type: "text/html;charset=utf-8;"
+            }
+        );
+
+        const url = URL.createObjectURL(blob);
+
+        downloadBtn.href = url;
+
+        result.style.display = "block";
+
+    } catch (error) {
+
+        showError("Unable to format the HTML code.");
+
+    }
+}
+
+
+function beautifyHTML(html) {
+
+    html = html
+        .replace(/>\s*</g, "><")
+        .trim();
+
+    const tokens = html.split(/(<[^>]+>)/g);
+
+    let formatted = "";
+    let indent = 0;
+
+    const voidTags = [
+        "area",
+        "base",
+        "br",
+        "col",
+        "embed",
+        "hr",
+        "img",
+        "input",
+        "link",
+        "meta",
+        "param",
+        "source",
+        "track",
+        "wbr"
+    ];
+
+    const inlineTags = [
+        "a",
+        "abbr",
+        "b",
+        "bdi",
+        "bdo",
+        "button",
+        "cite",
+        "code",
+        "em",
+        "i",
+        "label",
+        "small",
+        "span",
+        "strong",
+        "sub",
+        "sup"
+    ];
+
+    tokens.forEach(token => {
+
+        token = token.trim();
+
+        if (!token) {
+            return;
+        }
+
+        if (token.startsWith("<!--")) {
+
+            formatted += getIndent(indent) + token + "\n";
+            return;
+        }
+
+        if (token.startsWith("</")) {
+
+            indent = Math.max(0, indent - 1);
+
+            formatted += getIndent(indent) + token + "\n";
+            return;
+        }
+
+        if (token.startsWith("<")) {
+
+            const tagMatch = token.match(/^<\s*([a-zA-Z0-9-]+)/);
+
+            if (!tagMatch) {
+                formatted += getIndent(indent) + token + "\n";
+                return;
+            }
+
+            const tagName = tagMatch[1].toLowerCase();
+
+            formatted += getIndent(indent) + token + "\n";
+
+            if (
+                !voidTags.includes(tagName) &&
+                !token.startsWith("<!")
+                &&
+                !token.startsWith("<?")
+            ) {
+
+                if (!inlineTags.includes(tagName)) {
+                    indent++;
+                }
+
+            }
+
+        } else {
+
+            formatted += getIndent(indent) + token + "\n";
+
+        }
+
+    });
+
+    return formatted.trim();
+
+}
+
+
+function getIndent(level) {
+
+    return "    ".repeat(level);
+
+}
+
+
+async function copyFormattedHTML() {
+
+    const output = document.getElementById("output");
+
+    if (!output.value) {
+        return;
+    }
+
+    try {
+
+        await navigator.clipboard.writeText(output.value);
+
+        alert("HTML copied to clipboard!");
+
+    } catch (error) {
+
+        output.select();
+        document.execCommand("copy");
+
+        alert("HTML copied to clipboard!");
+
+    }
+
+}
+
+
+function showError(message) {
+
+    const errorMessage = document.getElementById("errorMessage");
+
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
+
+}
+
+</script>
+
+</body>
+</html>

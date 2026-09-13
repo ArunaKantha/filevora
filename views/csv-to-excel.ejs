@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV to Excel Converter - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<main class="converter-page">
+    <div class="container">
+        <div class="converter-card">
+
+            <div class="converter-header">
+                <div class="tool-icon">CSV</div>
+                <h1>CSV to Excel Converter</h1>
+                <p>Convert CSV files to Excel XLSX format quickly and easily.</p>
+            </div>
+
+            <label class="upload-area" for="csvInput">
+                <div class="upload-icon">📄</div>
+                <strong>Choose a CSV file</strong>
+                <span>Click here to upload your .csv file</span>
+            </label>
+
+            <input
+                type="file"
+                id="csvInput"
+                accept=".csv,text/csv"
+            >
+
+            <div class="file-info" id="fileInfo">
+                <strong id="fileName"></strong>
+                <span id="fileSize"></span>
+            </div>
+
+            <button
+                class="convert-btn"
+                id="convertBtn"
+                disabled
+            >
+                Convert to Excel
+            </button>
+
+            <div class="result" id="result">
+
+                <h2>Conversion Complete</h2>
+
+                <p id="resultInfo">
+                    Your Excel file is ready.
+                </p>
+
+                <a
+                    class="download-btn"
+                    id="downloadBtn"
+                    href="#"
+                >
+                    ⬇ Download Excel
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<script>
+const csvInput = document.getElementById("csvInput");
+const fileInfo = document.getElementById("fileInfo");
+const fileName = document.getElementById("fileName");
+const fileSize = document.getElementById("fileSize");
+const convertBtn = document.getElementById("convertBtn");
+
+const result = document.getElementById("result");
+const resultInfo = document.getElementById("resultInfo");
+const downloadBtn = document.getElementById("downloadBtn");
+
+let selectedFile = null;
+
+csvInput.addEventListener("change", () => {
+
+    selectedFile = csvInput.files[0];
+
+    if (!selectedFile) {
+        convertBtn.disabled = true;
+        fileInfo.style.display = "none";
+        return;
+    }
+
+    fileName.textContent = selectedFile.name;
+
+    fileSize.textContent =
+        `${(selectedFile.size / 1024).toFixed(2)} KB`;
+
+    fileInfo.style.display = "block";
+    convertBtn.disabled = false;
+
+    result.style.display = "none";
+});
+
+convertBtn.addEventListener("click", async () => {
+
+    if (!selectedFile) {
+        alert("Please select a CSV file first.");
+        return;
+    }
+
+    convertBtn.disabled = true;
+    convertBtn.textContent = "Converting...";
+
+    try {
+
+        const text = await selectedFile.text();
+
+        if (!text.trim()) {
+            throw new Error("The CSV file is empty.");
+        }
+
+        const workbook = XLSX.read(text, {
+            type: "string",
+            raw: true
+        });
+
+        if (!workbook.SheetNames.length) {
+            throw new Error("No data found in the CSV file.");
+        }
+
+        const firstSheet =
+            workbook.Sheets[workbook.SheetNames[0]];
+
+        const worksheetData =
+            XLSX.utils.sheet_to_json(
+                firstSheet,
+                {
+                    header: 1,
+                    defval: ""
+                }
+            );
+
+        if (!worksheetData.length) {
+            throw new Error("No data found in the CSV file.");
+        }
+
+        const newWorkbook =
+            XLSX.utils.book_new();
+
+        const newWorksheet =
+            XLSX.utils.aoa_to_sheet(worksheetData);
+
+        XLSX.utils.book_append_sheet(
+            newWorkbook,
+            newWorksheet,
+            "Sheet1"
+        );
+
+        const outputName =
+            selectedFile.name
+                .replace(/\.csv$/i, "")
+                + ".xlsx";
+
+        const excelData =
+            XLSX.write(newWorkbook, {
+                bookType: "xlsx",
+                type: "array"
+            });
+
+        const blob = new Blob(
+            [excelData],
+            {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            }
+        );
+
+        const url =
+            URL.createObjectURL(blob);
+
+        downloadBtn.href = url;
+        downloadBtn.download = outputName;
+
+        resultInfo.textContent =
+            `Successfully converted ${worksheetData.length} rows to Excel.`;
+
+        result.style.display = "block";
+
+        result.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+        });
+
+    } catch (error) {
+
+        alert(
+            "Conversion failed: " +
+            error.message
+        );
+
+    } finally {
+
+        convertBtn.disabled = false;
+        convertBtn.textContent = "Convert to Excel";
+    }
+});
+</script>
+
+</body>
+</html>

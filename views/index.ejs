@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FileVora - fast, simple and privacy-friendly online file tools. Compress, resize and convert images in seconds.">
+  <title>FileVora — All in One Tool</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="/">
+        <span class="brand-mark">F</span>
+        <span>File<span>Vora</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#tools">Tools</a>
+        <a href="#categories">Categories</a>
+        <a href="#why">Why FileVora</a>
+      </nav>
+      <a class="nav-cta" href="#tools">Explore Tools</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-glow glow-one"></div>
+      <div class="hero-glow glow-two"></div>
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="pulse-dot"></span> Simple tools. Zero hassle.</div>
+          <h1>Everything you need to<br><span>work with your files.</span></h1>
+          <p class="hero-text">Compress, resize and convert your files with fast, easy-to-use online tools. No complicated software required.</p>
+
+          <div class="search-box">
+            <span class="search-icon">⌕</span>
+            <input id="toolSearch" type="search" placeholder="Search a tool..." autocomplete="off" aria-label="Search tools">
+            <span class="search-shortcut">/</span>
+          </div>
+
+          <div class="hero-actions">
+            <a class="primary-btn" href="#tools">Explore all tools <span>→</span></a>
+            <span class="trust-note">✓ Free to use&nbsp;&nbsp; • &nbsp;&nbsp;Fast processing</span>
+          </div>
+        </div>
+
+        <div class="hero-card-wrap" aria-hidden="true">
+          <div class="hero-card">
+            <div class="card-top">
+              <span class="mini-label">FILEVORA</span>
+              <span class="mini-status"><i></i> Ready</span>
+            </div>
+            <div class="file-preview">
+              <div class="file-icon">IMG</div>
+              <div>
+                <strong>your-file.jpg</strong>
+                <small>Ready to process</small>
+              </div>
+              <span class="file-size">2.4 MB</span>
+            </div>
+            <div class="progress-line"><span></span></div>
+            <div class="card-footer"><span>Smart processing</span><strong>100%</strong></div>
+          </div>
+          <div class="float-badge badge-top">⚡ Fast</div>
+          <div class="float-badge badge-bottom">✓ Simple &amp; secure</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tools-section" id="tools">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">POPULAR TOOLS</span>
+            <h2>Get things done in seconds.</h2>
+          </div>
+          <p>Pick a tool and let FileVora handle the technical work.</p>
+        </div>
+
+        <div class="tool-grid" id="toolGrid">
+          <a class="tool-card" data-name="image compressor compress image"  href="/tools/image-compressor">
+            <div class="tool-icon icon-compress">↘</div>
+            <div class="tool-content">
+              <span class="tool-tag">IMAGE</span>
+              <h3>Image Compressor</h3>
+              <p>Reduce image size while keeping it looking sharp.</p>
+              <span class="tool-link">Use tool <b>→</b></span>
+            </div>
+          </a>
+
+          <a class="tool-card" data-name="image resizer resize image"  href="/tools/image-resizer">
+            <div class="tool-icon icon-resize">↗</div>
+            <div class="tool-content">
+              <span class="tool-tag">IMAGE</span>
+              <h3>Image Resizer</h3>
+              <p>Resize images to the exact dimensions you need.</p>
+              <span class="tool-link">Use tool <b>→</b></span>
+            </div>
+          </a>
+
+          <a class="tool-card" data-name="jpg to png convert jpg png" href="/tools/jpg-to-png">
+            <div class="tool-icon icon-jpg">JPG</div>
+            <div class="tool-content">
+              <span class="tool-tag">CONVERTER</span>
+              <h3>JPG to PNG</h3>
+              <p>Convert JPG images to PNG format in a few clicks.</p>
+              <span class="tool-link">Use tool <b>→</b></span>
+            </div>
+          </a>
+
+          <a class="tool-card" data-name="png to jpg convert png jpg" href="/tools/png-to-jpg">
+            <div class="tool-icon icon-png">PNG</div>
+            <div class="tool-content">
+              <span class="tool-tag">CONVERTER</span>
+              <h3>PNG to JPG</h3>
+              <p>Turn PNG files into lightweight JPG images.</p>
+              <span class="tool-link">Use tool <b>→</b></span>
+            </div>
+          </a>
+
+          <div class="tool-card coming-soon" data-name="pdf tools pdf converter">
+            <div class="tool-icon icon-pdf">PDF</div>
+            <div class="tool-content">
+              <span class="tool-tag">COMING SOON</span>
+              <h3>PDF Tools</h3>
+              <p>Merge, split and optimize PDFs with simple tools.</p>
+              <span class="tool-link muted">Coming soon</span>
+            </div>
+          </div>
+
+          <div class="tool-card coming-soon" data-name="text tools word counter text">
+            <div class="tool-icon icon-text">Aa</div>
+            <div class="tool-content">
+              <span class="tool-tag">COMING SOON</span>
+              <h3>Text Tools</h3>
+              <p>Useful everyday tools for cleaning and transforming text.</p>
+              <span class="tool-link muted">Coming soon</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="noResults" class="no-results" hidden>No matching tools found. Try another search.</div>
+      </div>
+    </section>
+
+    <section class="categories-section" id="categories">
+      <div class="container">
+        <div class="section-heading compact">
+          <div>
+            <span class="section-kicker">CATEGORIES</span>
+            <h2>One place for everyday file tasks.</h2>
+          </div>
+        </div>
+        <div class="category-grid">
+          <div class="category-item"><span>◈</span><div><strong>Images</strong><small>Compress, resize &amp; convert</small></div></div>
+          <div class="category-item"><span>▣</span><div><strong>PDF</strong><small>More PDF tools coming soon</small></div></div>
+          <div class="category-item"><span>✦</span><div><strong>Text</strong><small>Everyday text utilities</small></div></div>
+          <div class="category-item"><span>⌁</span><div><strong>Converters</strong><small>Change formats with ease</small></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="why-section" id="why">
+      <div class="container why-grid">
+        <div>
+          <span class="section-kicker">WHY FILEVORA</span>
+          <h2>Useful tools without the clutter.</h2>
+          <p>FileVora is designed around one idea: make common file tasks quick and understandable. More tools can be added without changing the simple experience.</p>
+        </div>
+        <div class="benefits">
+          <div><span>01</span><strong>Easy to use</strong><p>Clear tools with no unnecessary steps.</p></div>
+          <div><span>02</span><strong>Fast workflow</strong><p>Get from upload to result with minimal friction.</p></div>
+          <div><span>03</span><strong>Growing library</strong><p>New file and productivity tools can be added over time.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <a class="brand" href="/"><span class="brand-mark">F</span><span>File<span>Vora</span></span></a>
+      <p>© <span id="year"></span> FileVora. All in One Tool.</p>
+    </div>
+  </footer>
+
+  <script>
+    const search = document.getElementById('toolSearch');
+    const cards = [...document.querySelectorAll('.tool-card')];
+    const noResults = document.getElementById('noResults');
+
+    function filterTools(value) {
+      const q = value.trim().toLowerCase();
+      let visible = 0;
+      cards.forEach(card => {
+        const match = !q || (card.dataset.name || '').includes(q);
+        card.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+      noResults.hidden = visible !== 0;
+    }
+
+    search.addEventListener('input', e => filterTools(e.target.value));
+    document.addEventListener('keydown', e => {
+      if (e.key === '/' && document.activeElement !== search) {
+        e.preventDefault();
+        search.focus();
+      }
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

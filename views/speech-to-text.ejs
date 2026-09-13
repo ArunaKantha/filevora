@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Text - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">🎤</div>
+
+                <h1>Speech to Text</h1>
+
+                <p>
+                    Convert your speech into text directly in your browser.
+                </p>
+
+            </div>
+
+
+            <!-- Language -->
+
+            <div style="text-align:left; margin-bottom:20px;">
+
+                <label
+                    for="languageSelect"
+                    style="font-weight:700; color:#111827;"
+                >
+                    Language
+                </label>
+
+                <select
+                    id="languageSelect"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        margin-top:8px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:15px;
+                        background:#ffffff;
+                    "
+                >
+                    <option value="en-US">English (US)</option>
+                    <option value="en-GB">English (UK)</option>
+                    <option value="si-LK">Sinhala</option>
+                    <option value="ta-LK">Tamil</option>
+                    <option value="hi-IN">Hindi</option>
+                    <option value="fr-FR">French</option>
+                    <option value="de-DE">German</option>
+                    <option value="es-ES">Spanish</option>
+                    <option value="it-IT">Italian</option>
+                    <option value="ja-JP">Japanese</option>
+                    <option value="ko-KR">Korean</option>
+                    <option value="zh-CN">Chinese</option>
+                </select>
+
+            </div>
+
+
+            <!-- Status -->
+
+            <div
+                id="status"
+                style="
+                    padding:14px;
+                    border-radius:10px;
+                    background:#f1f5f9;
+                    color:#475569;
+                    font-size:14px;
+                    margin-bottom:18px;
+                    text-align:center;
+                "
+            >
+                Ready to listen
+            </div>
+
+
+            <!-- Text -->
+
+            <div style="text-align:left;">
+
+                <label
+                    for="textOutput"
+                    style="font-weight:700; color:#111827;"
+                >
+                    Transcribed Text
+                </label>
+
+                <textarea
+                    id="textOutput"
+                    placeholder="Your speech will appear here..."
+                    style="
+                        width:100%;
+                        min-height:220px;
+                        margin-top:8px;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:15px;
+                        line-height:1.6;
+                        resize:vertical;
+                        box-sizing:border-box;
+                        font-family:inherit;
+                    "
+                ></textarea>
+
+            </div>
+
+
+            <!-- Buttons -->
+
+            <div
+                style="
+                    display:grid;
+                    grid-template-columns:1fr 1fr;
+                    gap:12px;
+                    margin-top:22px;
+                "
+            >
+
+                <button
+                    type="button"
+                    id="startBtn"
+                    class="convert-btn"
+                    style="margin-top:0;"
+                >
+                    🎤 Start Listening
+                </button>
+
+                <button
+                    type="button"
+                    id="stopBtn"
+                    class="convert-btn"
+                    style="
+                        margin-top:0;
+                        background:#ef4444;
+                    "
+                    disabled
+                >
+                    ■ Stop
+                </button>
+
+            </div>
+
+
+            <!-- Result -->
+
+            <div
+                id="result"
+                class="result"
+                style="display:none;"
+            >
+
+                <h2>Text Ready</h2>
+
+                <p id="resultText"></p>
+
+                <button
+                    type="button"
+                    id="copyBtn"
+                    class="download-btn"
+                >
+                    Copy Text
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+const languageSelect =
+    document.getElementById("languageSelect");
+
+const textOutput =
+    document.getElementById("textOutput");
+
+const startBtn =
+    document.getElementById("startBtn");
+
+const stopBtn =
+    document.getElementById("stopBtn");
+
+const status =
+    document.getElementById("status");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+
+let recognition = null;
+
+let isListening = false;
+
+
+/* --------------------------------
+   BROWSER SUPPORT
+-------------------------------- */
+
+if (!SpeechRecognition) {
+
+    startBtn.disabled = true;
+
+    status.textContent =
+        "Speech recognition is not supported in this browser.";
+
+    status.style.background =
+        "#fef2f2";
+
+    status.style.color =
+        "#991b1b";
+
+}
+
+
+/* --------------------------------
+   CREATE RECOGNITION
+-------------------------------- */
+
+if (SpeechRecognition) {
+
+    recognition =
+        new SpeechRecognition();
+
+
+    recognition.continuous =
+        true;
+
+    recognition.interimResults =
+        true;
+
+    recognition.lang =
+        languageSelect.value;
+
+
+    recognition.onstart =
+        function() {
+
+            isListening = true;
+
+            startBtn.disabled =
+                true;
+
+            stopBtn.disabled =
+                false;
+
+            status.textContent =
+                "🎤 Listening... Speak now.";
+
+            status.style.background =
+                "#eff6ff";
+
+            status.style.color =
+                "#1d4ed8";
+
+        };
+
+
+    recognition.onresult =
+        function(event) {
+
+            let finalText = "";
+
+            let interimText = "";
+
+
+            for (
+                let i = event.resultIndex;
+                i < event.results.length;
+                i++
+            ) {
+
+                const transcript =
+                    event.results[i][0].transcript;
+
+
+                if (
+                    event.results[i].isFinal
+                ) {
+
+                    finalText +=
+                        transcript + " ";
+
+                }
+
+                else {
+
+                    interimText +=
+                        transcript;
+
+                }
+
+            }
+
+
+            if (finalText) {
+
+                textOutput.value +=
+                    finalText;
+
+            }
+
+
+            if (interimText) {
+
+                status.textContent =
+                    "🎤 " + interimText;
+
+            }
+
+        };
+
+
+    recognition.onerror =
+        function(event) {
+
+            status.textContent =
+                "Error: " + event.error;
+
+            status.style.background =
+                "#fef2f2";
+
+            status.style.color =
+                "#991b1b";
+
+            isListening = false;
+
+            startBtn.disabled =
+                false;
+
+            stopBtn.disabled =
+                true;
+
+        };
+
+
+    recognition.onend =
+        function() {
+
+            isListening = false;
+
+            startBtn.disabled =
+                false;
+
+            stopBtn.disabled =
+                true;
+
+            status.textContent =
+                "Ready to listen";
+
+            status.style.background =
+                "#f1f5f9";
+
+            status.style.color =
+                "#475569";
+
+
+            if (textOutput.value.trim()) {
+
+                result.style.display =
+                    "block";
+
+                resultText.textContent =
+                    "Speech successfully converted to text.";
+
+            }
+
+        };
+
+}
+
+
+/* --------------------------------
+   LANGUAGE CHANGE
+-------------------------------- */
+
+languageSelect.addEventListener(
+    "change",
+    function() {
+
+        if (recognition) {
+
+            recognition.lang =
+                languageSelect.value;
+
+        }
+
+    }
+);
+
+
+/* --------------------------------
+   START
+-------------------------------- */
+
+startBtn.addEventListener(
+    "click",
+    function() {
+
+        if (!recognition) {
+            return;
+        }
+
+
+        if (isListening) {
+            return;
+        }
+
+
+        recognition.lang =
+            languageSelect.value;
+
+
+        try {
+
+            recognition.start();
+
+        }
+
+        catch (error) {
+
+            console.log(error);
+
+        }
+
+    }
+);
+
+
+/* --------------------------------
+   STOP
+-------------------------------- */
+
+stopBtn.addEventListener(
+    "click",
+    function() {
+
+        if (recognition && isListening) {
+
+            recognition.stop();
+
+        }
+
+    }
+);
+
+
+/* --------------------------------
+   COPY
+-------------------------------- */
+
+copyBtn.addEventListener(
+    "click",
+    async function() {
+
+        const text =
+            textOutput.value.trim();
+
+
+        if (!text) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                text
+            );
+
+            copyBtn.textContent =
+                "Copied!";
+
+        }
+
+        catch (error) {
+
+            copyBtn.textContent =
+                "Copy failed";
+
+        }
+
+
+        setTimeout(
+            function() {
+
+                copyBtn.textContent =
+                    "Copy Text";
+
+            },
+            1500
+        );
+
+    }
+);
+
+</script>
+
+</body>
+</html>
