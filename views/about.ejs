@@ -1,20 +1,312 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>About FileVora — FileVora</title><meta name="description" content="Simple online tools, built to remove friction from everyday file tasks."><link rel="stylesheet" href="/css/style.css">    <link rel="stylesheet" href="/css/tool-unified.css">
-</head><body><header class="site-header">
-  <div class="container nav">
-    <a class="brand" href="/" aria-label="FileVora home"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a>
-    <nav class="nav-links" aria-label="Main navigation">
-      <a href="/">Home</a><a href="/#tools">Tools</a><a href="/#categories">Categories</a><a href="/#why">Why FileVora</a>
-    </nav>
-    <a class="nav-contact" href="/contact">Contact</a>
-  </div>
-</header><main class="info-page"><div class="container"><div class="info-card"><div class="section-eyebrow">FILEVORA</div><h1>About FileVora</h1><p class="info-lead">Simple online tools, built to remove friction from everyday file tasks.</p><p>FileVora brings image, PDF, text, developer and utility tools together in one clean place. Our focus is a fast, understandable experience that works directly in the browser whenever possible.</p><a class="hero-button" href="/#tools">Explore tools →</a></div></div></main><footer class="site-footer">
-  <div class="container footer-grid">
-    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
-    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
-    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
-    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
-    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
-  </div>
-  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
-</footer>
-<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>About FileVora — FileVora</title>
+
+  <meta
+    name="description"
+    content="Learn about FileVora, an all-in-one collection of simple online tools for images, PDFs, text, calculations and developer tasks."
+  >
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/tool-unified.css">
+  <link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+  <style>
+    .about-content {
+      margin-top: 32px;
+      color: #334155;
+      line-height: 1.75;
+    }
+
+    .about-content h2 {
+      margin: 32px 0 10px;
+      color: #0f172a;
+      font-size: 23px;
+      line-height: 1.3;
+    }
+
+    .about-content p {
+      margin: 0 0 15px;
+    }
+
+    .about-content a {
+      color: #009a73;
+      font-weight: 700;
+    }
+
+    .about-values {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 28px 0;
+    }
+
+    .about-value {
+      padding: 22px;
+      background: #ffffff;
+      border: 1px solid #d7dce4;
+      border-radius: 14px;
+    }
+
+    .about-value-number {
+      width: 42px;
+      height: 42px;
+      margin-bottom: 13px;
+      display: grid;
+      place-items: center;
+      color: #009a73;
+      background: #ecfdf8;
+      border: 1px solid #a7f3d0;
+      border-radius: 11px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .about-value strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #0f172a;
+      font-size: 17px;
+    }
+
+    .about-value span {
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .about-note {
+      margin: 25px 0;
+      padding: 18px 20px;
+      color: #1e293b;
+      background: #ecfdf8;
+      border: 1px solid #a7f3d0;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 760px) {
+      .about-values {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <%- include("partials/tool-header") %>
+
+  <main class="info-page">
+    <div class="container">
+      <div class="info-card">
+        <div class="section-eyebrow">FILEVORA</div>
+
+        <h1>About FileVora</h1>
+
+        <p class="info-lead">
+          Simple online tools built to remove friction from everyday file and
+          productivity tasks.
+        </p>
+
+        <div class="about-content">
+          <h2>Everything You Need in One Place</h2>
+
+          <p>
+            FileVora brings useful image, PDF, text, calculator, developer,
+            security and audio tools together in one clean website.
+          </p>
+
+          <p>
+            Our aim is to make common digital tasks easier without requiring
+            complicated software, lengthy registration steps or unnecessary
+            setup.
+          </p>
+
+          <div class="about-values">
+            <div class="about-value">
+              <div class="about-value-number">01</div>
+              <strong>Easy to Use</strong>
+              <span>
+                Clear controls and straightforward steps designed for everyday
+                users.
+              </span>
+            </div>
+
+            <div class="about-value">
+              <div class="about-value-number">02</div>
+              <strong>Fast Workflow</strong>
+              <span>
+                Get from input to result quickly with minimal unnecessary
+                actions.
+              </span>
+            </div>
+
+            <div class="about-value">
+              <div class="about-value-number">03</div>
+              <strong>Growing Library</strong>
+              <span>
+                New tools and improvements can be added while keeping the
+                experience familiar.
+              </span>
+            </div>
+          </div>
+
+          <h2>Browser-Based Tools</h2>
+
+          <p>
+            Many FileVora tools are designed to process files and information
+            directly inside your browser whenever the selected feature supports
+            it.
+          </p>
+
+          <p>
+            Browser-based processing helps provide a faster and more private
+            workflow because locally processed files are not intentionally
+            uploaded to FileVora’s servers.
+          </p>
+
+          <p>
+            Tool behaviour and compatibility may vary depending on your
+            browser, device, file format and available system resources.
+          </p>
+
+          <h2>What You Can Do with FileVora</h2>
+
+          <p>FileVora includes tools that can help you:</p>
+
+          <ul>
+            <li>Compress, resize, crop, rotate and convert images</li>
+            <li>Merge, split, convert, protect and edit PDF files</li>
+            <li>Count, clean, sort and transform text</li>
+            <li>Perform calculations and useful conversions</li>
+            <li>Format and convert developer data</li>
+            <li>Generate passwords, hashes, QR codes and UUIDs</li>
+            <li>Work with speech and audio features supported by your browser</li>
+          </ul>
+
+          <h2>Our Approach</h2>
+
+          <p>
+            FileVora focuses on practical tools, understandable interfaces and
+            consistent design. We want users to know what a tool does and how
+            to use it without dealing with unnecessary clutter.
+          </p>
+
+          <div class="about-note">
+            FileVora is continuously improving. Tool availability, browser
+            compatibility and individual features may change as the website
+            develops.
+          </div>
+
+          <h2>Privacy and Security</h2>
+
+          <p>
+            We encourage users to understand how online tools handle their
+            files and to keep backup copies of important originals.
+          </p>
+
+          <p>
+            Learn more by reading our
+            <a href="/privacy">Privacy Policy</a> and
+            <a href="/security">Security page</a>.
+          </p>
+
+          <h2>Feedback and Support</h2>
+
+          <p>
+            Feedback helps us identify issues and understand which tools may be
+            useful in the future.
+          </p>
+
+          <p>
+            To report a problem, suggest a tool or ask a question, visit our
+            <a href="/contact">Contact page</a> or email
+            <a
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=filevora5%40gmail.com&su=FileVora%20Feedback"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              filevora5@gmail.com
+            </a>.
+          </p>
+        </div>
+
+        <a class="hero-button" href="/#tools">Explore tools →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="/">
+          <span class="brand-mark">F</span>
+          <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>Fast, simple online tools for everyday file tasks.</p>
+      </div>
+
+      <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+      </div>
+
+      <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+      </div>
+
+      <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+      </div>
+
+      <div>
+        <h3>Contact</h3>
+
+        <a
+          href="https://mail.google.com/mail/?view=cm&fs=1&to=filevora5%40gmail.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Email
+        </a>
+
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+      </span>
+
+      <span>All in One Tool.</span>
+    </div>
+  </footer>
+
+  <script>
+    document
+      .querySelectorAll("[data-current-year]")
+      .forEach(function (element) {
+        element.textContent = new Date().getFullYear();
+      });
+  </script>
+
+  <script src="/js/filevora-tools.js"></script>
+  <script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

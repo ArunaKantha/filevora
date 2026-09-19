@@ -1,20 +1,326 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Security — FileVora</title><meta name="description" content="A safer, clearer tool experience."><link rel="stylesheet" href="/css/style.css">    <link rel="stylesheet" href="/css/tool-unified.css">
-</head><body><header class="site-header">
-  <div class="container nav">
-    <a class="brand" href="/" aria-label="FileVora home"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a>
-    <nav class="nav-links" aria-label="Main navigation">
-      <a href="/">Home</a><a href="/#tools">Tools</a><a href="/#categories">Categories</a><a href="/#why">Why FileVora</a>
-    </nav>
-    <a class="nav-contact" href="/contact">Contact</a>
-  </div>
-</header><main class="info-page"><div class="container"><div class="info-card"><div class="section-eyebrow">FILEVORA</div><h1>Security</h1><p class="info-lead">A safer, clearer tool experience.</p><p>FileVora is designed to process many tasks in the browser where the individual tool supports it. Avoid uploading sensitive information to any online service unless you understand how that specific tool handles your data.</p><a class="hero-button" href="/#tools">Explore tools →</a></div></div></main><footer class="site-footer">
-  <div class="container footer-grid">
-    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
-    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
-    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
-    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
-    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
-  </div>
-  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
-</footer>
-<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Security — FileVora</title>
+
+  <meta
+    name="description"
+    content="Learn about FileVora security practices, browser-based file processing and steps you can take to protect your files."
+  >
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/tool-unified.css">
+  <link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+  <style>
+    .legal-content {
+      margin-top: 32px;
+      color: #334155;
+      line-height: 1.75;
+    }
+
+    .legal-content h2 {
+      margin: 32px 0 10px;
+      color: #0f172a;
+      font-size: 23px;
+      line-height: 1.3;
+    }
+
+    .legal-content p {
+      margin: 0 0 15px;
+    }
+
+    .legal-content ul {
+      margin: 10px 0 18px;
+      padding-left: 24px;
+    }
+
+    .legal-content li {
+      margin-bottom: 8px;
+    }
+
+    .legal-content a {
+      color: #009a73;
+      font-weight: 700;
+    }
+
+    .legal-date {
+      margin-top: 8px;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .security-note {
+      margin: 22px 0;
+      padding: 18px 20px;
+      background: #ecfdf8;
+      border: 1px solid #a7f3d0;
+      border-radius: 12px;
+      color: #1e293b;
+    }
+
+    .security-note strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #009a73;
+    }
+  </style>
+</head>
+
+<body>
+
+  <%- include("partials/tool-header") %>
+
+  <main class="info-page">
+    <div class="container">
+      <div class="info-card">
+        <div class="section-eyebrow">FILEVORA</div>
+
+        <h1>Security</h1>
+
+        <p class="info-lead">
+          How FileVora approaches file processing, website security and safer
+          use of online tools.
+        </p>
+
+        <p class="legal-date">
+          Last updated: September 20, 2026
+        </p>
+
+        <div class="legal-content">
+          <div class="security-note">
+            <strong>Important security reminder</strong>
+            Avoid processing confidential, highly sensitive or irreplaceable
+            information through any online service unless you understand and
+            accept how that service handles your data.
+          </div>
+
+          <h2>1. Browser-Based Processing</h2>
+
+          <p>
+            FileVora is designed so that many tools process files, text and
+            calculations directly inside your browser. When a tool operates
+            locally, the selected file remains on your device and is not
+            intentionally uploaded to FileVora’s servers.
+          </p>
+
+          <p>
+            Processing behaviour may differ according to the selected tool,
+            browser, device, third-party libraries and future service updates.
+            You should review the operation of a tool before using it with
+            sensitive information.
+          </p>
+
+          <h2>2. Secure Website Connection</h2>
+
+          <p>
+            FileVora is delivered through HTTPS, which helps protect data
+            transmitted between your browser and the website from interception
+            while in transit.
+          </p>
+
+          <p>
+            HTTPS improves connection security, but it cannot protect against
+            every threat, such as compromised devices, unsafe browser
+            extensions, malware or files obtained from untrusted sources.
+          </p>
+
+          <h2>3. Hosting and Infrastructure</h2>
+
+          <p>
+            FileVora relies on third-party hosting, content delivery and
+            infrastructure providers to deliver and protect the website. These
+            providers may use their own technical and organizational security
+            measures.
+          </p>
+
+          <p>
+            Limited technical logs may be generated by hosting or security
+            systems for reliability, diagnostics, abuse prevention and
+            protection of the service.
+          </p>
+
+          <h2>4. No Permanent File Storage</h2>
+
+          <p>
+            FileVora is not a cloud storage or file backup service. Files
+            processed locally by browser-based tools are not intentionally
+            stored by FileVora.
+          </p>
+
+          <p>
+            You should save your results promptly and retain secure backup
+            copies of all important original files.
+          </p>
+
+          <h2>5. Third-Party Libraries and Services</h2>
+
+          <p>
+            Some FileVora features may depend on third-party JavaScript
+            libraries, APIs, hosting services, advertisements or content
+            delivery networks.
+          </p>
+
+          <p>
+            Third-party services operate under their own terms, security
+            practices and privacy policies. FileVora cannot guarantee the
+            security or availability of services that it does not control.
+          </p>
+
+          <h2>6. Your Security Responsibilities</h2>
+
+          <p>
+            You can reduce security risks by following these practices:
+          </p>
+
+          <ul>
+            <li>Keep your browser and operating system updated</li>
+            <li>Use trusted antivirus and security software</li>
+            <li>Avoid processing unknown or suspicious files</li>
+            <li>Do not disable browser security warnings</li>
+            <li>Use secure networks when accessing online services</li>
+            <li>Keep backups of important original files</li>
+            <li>Review generated or converted files before opening or sharing them</li>
+            <li>Avoid entering passwords or private keys into unrelated tools</li>
+          </ul>
+
+          <h2>7. Sensitive Information</h2>
+
+          <p>
+            Do not use FileVora to process information such as account
+            passwords, payment card details, private encryption keys, medical
+            records, government identification documents or other highly
+            sensitive personal information unless you have carefully reviewed
+            the relevant tool and understand the risks.
+          </p>
+
+          <h2>8. File Safety</h2>
+
+          <p>
+            FileVora does not guarantee that every file selected by a user is
+            safe. You are responsible for checking files obtained from external
+            sources before processing, opening or sharing them.
+          </p>
+
+          <p>
+            A converted or modified file may still contain harmful, misleading
+            or unauthorized content. File conversion should not be treated as a
+            malware removal or security-scanning service.
+          </p>
+
+          <h2>9. Security Limitations</h2>
+
+          <p>
+            No website, browser application, network or electronic storage
+            system can be guaranteed to be completely secure. FileVora cannot
+            guarantee protection from every vulnerability, attack, service
+            interruption or unauthorized third-party action.
+          </p>
+
+          <p>
+            Use of FileVora is subject to our
+            <a href="/terms">Terms of Service</a> and
+            <a href="/disclaimer">Disclaimer</a>.
+          </p>
+
+          <h2>10. Reporting a Security Concern</h2>
+
+          <p>
+            If you believe you have discovered a security issue affecting
+            FileVora, please report it responsibly through our
+            <a href="/contact">Contact page</a>.
+          </p>
+
+          <p>
+            Include a clear description of the issue and the affected page or
+            tool. Do not publicly disclose a potential vulnerability or access
+            data that does not belong to you.
+          </p>
+
+          <h2>11. Privacy</h2>
+
+          <p>
+            For information about technical data, cookies, advertising and
+            third-party services, please read our
+            <a href="/privacy">Privacy Policy</a>.
+          </p>
+
+          <h2>12. Changes to This Security Page</h2>
+
+          <p>
+            We may update this page when FileVora’s tools, infrastructure or
+            security practices change. Updates will appear here with a revised
+            “Last updated” date.
+          </p>
+        </div>
+
+        <a class="hero-button" href="/#tools">Explore tools →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="/">
+          <span class="brand-mark">F</span>
+          <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>Fast, simple online tools for everyday file tasks.</p>
+      </div>
+
+      <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+      </div>
+
+      <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+      </div>
+
+      <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+      </div>
+
+      <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+      </span>
+
+      <span>All in One Tool.</span>
+    </div>
+  </footer>
+
+  <script>
+    document
+      .querySelectorAll("[data-current-year]")
+      .forEach(function (element) {
+        element.textContent = new Date().getFullYear();
+      });
+  </script>
+
+  <script src="/js/filevora-tools.js"></script>
+  <script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

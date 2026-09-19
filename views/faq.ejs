@@ -1,20 +1,318 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Frequently Asked Questions — FileVora</title><meta name="description" content="Quick answers about FileVora."><link rel="stylesheet" href="/css/style.css">    <link rel="stylesheet" href="/css/tool-unified.css">
-</head><body><header class="site-header">
-  <div class="container nav">
-    <a class="brand" href="/" aria-label="FileVora home"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a>
-    <nav class="nav-links" aria-label="Main navigation">
-      <a href="/">Home</a><a href="/#tools">Tools</a><a href="/#categories">Categories</a><a href="/#why">Why FileVora</a>
-    </nav>
-    <a class="nav-contact" href="/contact">Contact</a>
-  </div>
-</header><main class="info-page"><div class="container"><div class="info-card"><div class="section-eyebrow">FILEVORA</div><h1>Frequently Asked Questions</h1><p class="info-lead">Quick answers about FileVora.</p><p>FileVora is an all-in-one collection of browser-based tools. Availability and processing method vary by tool. Always keep a copy of important original files before converting or editing them.</p><a class="hero-button" href="/#tools">Explore tools →</a></div></div></main><footer class="site-footer">
-  <div class="container footer-grid">
-    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
-    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
-    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
-    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
-    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
-  </div>
-  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
-</footer>
-<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Frequently Asked Questions — FileVora</title>
+
+  <meta
+    name="description"
+    content="Find answers to frequently asked questions about FileVora tools, file processing, privacy and browser compatibility."
+  >
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/tool-unified.css">
+  <link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+  <style>
+    .faq-list {
+      display: grid;
+      gap: 14px;
+      max-width: 820px;
+      margin: 34px auto 0;
+      text-align: left;
+    }
+
+    .faq-item {
+      overflow: hidden;
+      border: 1px solid #dbe4ee;
+      border-radius: 14px;
+      background: #ffffff;
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .faq-item[open] {
+      border-color: #7dd3c7;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.07);
+    }
+
+    .faq-item summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 22px;
+      color: #0f172a;
+      font-size: 17px;
+      font-weight: 750;
+      line-height: 1.4;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: "+";
+      flex: 0 0 auto;
+      color: #00a884;
+      font-size: 25px;
+      font-weight: 500;
+      line-height: 1;
+      transition: transform 0.2s ease;
+    }
+
+    .faq-item[open] summary::after {
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      padding: 0 22px 21px;
+      color: #475569;
+      line-height: 1.75;
+    }
+
+    .faq-answer p {
+      margin: 0;
+    }
+
+    .faq-answer a {
+      color: #009a73;
+      font-weight: 700;
+    }
+
+    .faq-action {
+      margin-top: 34px;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .faq-item summary {
+        padding: 17px;
+        font-size: 16px;
+      }
+
+      .faq-answer {
+        padding: 0 17px 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <%- include("partials/tool-header") %>
+
+  <main class="info-page">
+    <div class="container">
+      <div class="info-card">
+        <div class="section-eyebrow">FILEVORA</div>
+
+        <h1>Frequently Asked Questions</h1>
+
+        <p class="info-lead">
+          Quick answers about FileVora and our online tools.
+        </p>
+
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>What is FileVora?</summary>
+
+            <div class="faq-answer">
+              <p>
+                FileVora is an all-in-one collection of online tools for
+                working with images, PDF documents, text, developer data,
+                calculations and other everyday file tasks.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Do I need to create an account?</summary>
+
+            <div class="faq-answer">
+              <p>
+                No. Most FileVora tools can be used without creating an
+                account or signing in.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Are FileVora tools free to use?</summary>
+
+            <div class="faq-answer">
+              <p>
+                FileVora tools are currently available for general use without
+                requiring a paid subscription. Usage limits or features may
+                change as the service develops.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Are my files uploaded to a server?</summary>
+
+            <div class="faq-answer">
+              <p>
+                Many FileVora tools are designed to process files directly in
+                your browser. Processing methods may differ between tools, so
+                avoid using confidential or highly sensitive files unless you
+                understand how the selected tool operates.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Does FileVora keep my files?</summary>
+
+            <div class="faq-answer">
+              <p>
+                FileVora does not intentionally retain files processed locally
+                in your browser. Please read our
+                <a href="/privacy">Privacy Policy</a> for more information.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Which browsers are supported?</summary>
+
+            <div class="faq-answer">
+              <p>
+                FileVora is designed for modern versions of Chrome, Edge,
+                Firefox and Safari. For the best experience, keep your browser
+                updated and enable JavaScript.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Will the original quality always be preserved?</summary>
+
+            <div class="faq-answer">
+              <p>
+                Results depend on the tool, input file, selected settings and
+                browser. Compression and format conversion may affect quality,
+                so check important outputs before using or sharing them.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Should I keep a backup of my original file?</summary>
+
+            <div class="faq-answer">
+              <p>
+                Yes. Always keep a separate copy of important original files
+                before converting, compressing or editing them with any online
+                tool.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Why is a tool not working?</summary>
+
+            <div class="faq-answer">
+              <p>
+                Check that the file type is supported, refresh the page and try
+                again using an updated browser. Browser extensions, very large
+                files or damaged input files may also affect some tools.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How can I report a problem?</summary>
+
+            <div class="faq-answer">
+              <p>
+                Please describe the tool, file type and problem through our
+                <a href="/contact">Contact page</a>. Do not send confidential
+                files or sensitive personal information.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <div class="faq-action">
+          <a class="hero-button" href="/#tools">Explore tools →</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="/">
+          <span class="brand-mark">F</span>
+          <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>Fast, simple online tools for everyday file tasks.</p>
+      </div>
+
+      <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+      </div>
+
+      <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+      </div>
+
+      <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+      </div>
+
+      <div>
+        <h3>Contact</h3>
+
+        <a
+          href="https://mail.google.com/mail/?view=cm&fs=1&to=filevora5%40gmail.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Email
+        </a>
+
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+      </span>
+
+      <span>All in One Tool.</span>
+    </div>
+  </footer>
+
+  <script>
+    document
+      .querySelectorAll("[data-current-year]")
+      .forEach((element) => {
+        element.textContent = new Date().getFullYear();
+      });
+  </script>
+
+  <script src="/js/filevora-tools.js"></script>
+  <script src="/js/filevora-header-tools.js"></script>
+</body>
+</html>

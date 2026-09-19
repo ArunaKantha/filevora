@@ -1,20 +1,307 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contact FileVora — FileVora</title><meta name="description" content="Need help or want to share feedback?"><link rel="stylesheet" href="/css/style.css">    <link rel="stylesheet" href="/css/tool-unified.css">
-</head><body><header class="site-header">
-  <div class="container nav">
-    <a class="brand" href="/" aria-label="FileVora home"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a>
-    <nav class="nav-links" aria-label="Main navigation">
-      <a href="/">Home</a><a href="/#tools">Tools</a><a href="/#categories">Categories</a><a href="/#why">Why FileVora</a>
-    </nav>
-    <a class="nav-contact" href="/contact">Contact</a>
-  </div>
-</header><main class="info-page"><div class="container"><div class="info-card"><div class="section-eyebrow">FILEVORA</div><h1>Contact FileVora</h1><p class="info-lead">Need help or want to share feedback?</p><p>Use FileVora’s official contact channels when they are published here. We do not list unverified email or social addresses. This page is ready for your official Email, Facebook and Instagram links.</p><a class="hero-button" href="/#tools">Explore tools →</a></div></div></main><footer class="site-footer">
-  <div class="container footer-grid">
-    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
-    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
-    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
-    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
-    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
-  </div>
-  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
-</footer>
-<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Contact FileVora — FileVora</title>
+
+  <meta
+    name="description"
+    content="Contact FileVora for support, feedback, privacy questions or security reports."
+  >
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/tool-unified.css">
+  <link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+  <style>
+    .contact-content {
+      margin-top: 32px;
+      color: #334155;
+      line-height: 1.75;
+    }
+
+    .contact-content h2 {
+      margin: 32px 0 10px;
+      color: #0f172a;
+      font-size: 23px;
+      line-height: 1.3;
+    }
+
+    .contact-content p {
+      margin: 0 0 15px;
+    }
+
+    .contact-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin: 28px 0;
+    }
+
+    .contact-option {
+      display: block;
+      padding: 22px;
+      color: #334155;
+      text-decoration: none;
+      background: #ffffff;
+      border: 1px solid #d7dce4;
+      border-radius: 14px;
+      transition: 0.2s ease;
+    }
+
+    .contact-option:hover {
+      border-color: #00bc8a;
+      background: #ecfdf8;
+      transform: translateY(-2px);
+    }
+
+    .contact-option-icon {
+      width: 46px;
+      height: 46px;
+      margin-bottom: 14px;
+      display: grid;
+      place-items: center;
+      color: #009a73;
+      background: #ecfdf8;
+      border: 1px solid #a7f3d0;
+      border-radius: 12px;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .contact-option strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #0f172a;
+      font-size: 18px;
+    }
+
+    .contact-option span {
+      display: block;
+      overflow-wrap: anywhere;
+      color: #64748b;
+    }
+
+    .contact-notice {
+      margin: 24px 0;
+      padding: 18px 20px;
+      color: #1e293b;
+      background: #ecfdf8;
+      border: 1px solid #a7f3d0;
+      border-radius: 12px;
+    }
+
+    .contact-notice strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #009a73;
+    }
+
+    .contact-content a:not(.contact-option) {
+      color: #009a73;
+      font-weight: 700;
+    }
+
+    @media (max-width: 700px) {
+      .contact-options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <%- include("partials/tool-header") %>
+
+  <main class="info-page">
+    <div class="container">
+      <div class="info-card">
+        <div class="section-eyebrow">FILEVORA</div>
+
+        <h1>Contact FileVora</h1>
+
+        <p class="info-lead">
+          Need help, found a problem or want to share feedback? Contact us using
+          our official email address.
+        </p>
+
+        <div class="contact-content">
+          <div class="contact-options">
+            <a
+              class="contact-option"
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=filevora5%40gmail.com&su=FileVora%20Support%20Request"
+target="_blank"
+rel="noopener noreferrer"
+            >
+              <div class="contact-option-icon">@</div>
+              <strong>Email FileVora</strong>
+              <span>filevora5@gmail.com</span>
+            </a>
+
+            <a
+              class="contact-option"
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=filevora5%40gmail.com&su=FileVora%20Feedback"
+target="_blank"
+rel="noopener noreferrer"
+            >
+              <div class="contact-option-icon">✦</div>
+              <strong>Send Feedback</strong>
+              <span>Share an idea, suggestion or tool request</span>
+            </a>
+          </div>
+
+          <div class="contact-notice">
+            <strong>Official contact address</strong>
+            FileVora’s official support email is
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=filevora5%40gmail.com"
+target="_blank"
+rel="noopener noreferrer">filevora5@gmail.com</a>.
+            Please be careful with messages claiming to represent FileVora from
+            another address.
+          </div>
+
+          <h2>Support Requests</h2>
+
+          <p>
+            When reporting a problem with a FileVora tool, please include the
+            name of the tool, your browser, your device type and a clear
+            description of what happened.
+          </p>
+
+          <p>
+            A screenshot of the error may help us understand the problem.
+            Please remove personal or sensitive information before attaching
+            screenshots.
+          </p>
+
+          <h2>Privacy Questions</h2>
+
+          <p>
+            For questions relating to privacy, cookies or information handling,
+            use the subject “Privacy Request” when contacting us. You can also
+            review our <a href="/privacy">Privacy Policy</a>.
+          </p>
+
+          <h2>Security Reports</h2>
+
+          <p>
+            If you believe you have discovered a security problem affecting
+            FileVora, use the subject “Security Report” and provide a clear,
+            responsible description of the issue.
+          </p>
+
+          <p>
+            Do not publicly disclose a suspected vulnerability or attempt to
+            access information that does not belong to you. Read our
+            <a href="/security">Security page</a> for more information.
+          </p>
+
+          <h2>File Attachments</h2>
+
+          <p>
+            Do not email passwords, payment details, private keys, identity
+            documents, confidential files or other sensitive personal
+            information.
+          </p>
+
+          <p>
+            If a sample file is required to explain a tool problem, use a
+            non-sensitive test file whenever possible.
+          </p>
+
+          <h2>Response Times</h2>
+
+          <p>
+            We review legitimate messages when possible, but response times may
+            vary. Sending repeated copies of the same request may delay the
+            review process.
+          </p>
+
+          <h2>Social Media</h2>
+
+          <p>
+            Official FileVora social media links will be published on this
+            website when available. Until then, email is the official contact
+            method.
+          </p>
+        </div>
+
+        <a
+  class="hero-button"
+  href="https://mail.google.com/mail/?view=cm&fs=1&to=filevora5%40gmail.com&su=FileVora%20Support%20Request"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Email FileVora →
+</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="/">
+          <span class="brand-mark">F</span>
+          <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>Fast, simple online tools for everyday file tasks.</p>
+      </div>
+
+      <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+      </div>
+
+      <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+      </div>
+
+      <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+      </div>
+
+      <div>
+        <h3>Contact</h3>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=filevora5%40gmail.com"
+target="_blank"
+rel="noopener noreferrer">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+      </span>
+
+      <span>All in One Tool.</span>
+    </div>
+  </footer>
+
+  <script>
+    document
+      .querySelectorAll("[data-current-year]")
+      .forEach(function (element) {
+        element.textContent = new Date().getFullYear();
+      });
+  </script>
+
+  <script src="/js/filevora-tools.js"></script>
+  <script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>
