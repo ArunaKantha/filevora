@@ -114,6 +114,7 @@
                     id="stopwatchTab"
                     class="convert-btn"
                     style="margin-top:0;"
+                    aria-pressed="true"
                 >
                     Stopwatch
                 </button>
@@ -124,8 +125,9 @@
                     class="convert-btn"
                     style="
                         margin-top:0;
-                        background:#64748b;
+                        background:#64748b !important;
                     "
+                    aria-pressed="false"
                 >
                     Countdown Timer
                 </button>
@@ -438,8 +440,10 @@ stopwatchTab.addEventListener("click", () => {
     stopwatchSection.style.display = "block";
     timerSection.style.display = "none";
 
-    stopwatchTab.style.background = "#2563eb";
-    timerTab.style.background = "#64748b";
+    stopwatchTab.style.setProperty("background", "#ef1f2b", "important");
+    timerTab.style.setProperty("background", "#64748b", "important");
+    stopwatchTab.setAttribute("aria-pressed", "true");
+    timerTab.setAttribute("aria-pressed", "false");
 
 });
 
@@ -449,8 +453,10 @@ timerTab.addEventListener("click", () => {
     stopwatchSection.style.display = "none";
     timerSection.style.display = "block";
 
-    stopwatchTab.style.background = "#64748b";
-    timerTab.style.background = "#2563eb";
+    stopwatchTab.style.setProperty("background", "#64748b", "important");
+    timerTab.style.setProperty("background", "#ef1f2b", "important");
+    stopwatchTab.setAttribute("aria-pressed", "false");
+    timerTab.setAttribute("aria-pressed", "true");
 
 });
 
