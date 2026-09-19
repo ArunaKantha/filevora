@@ -39,19 +39,28 @@
 
         .mode-btn {
             padding: 8px 14px;
-            border: 1px solid #cbd5e1;
+            border: 1px solid #64748b;
             border-radius: 8px;
-            background: #ffffff;
-            color: #475569;
+            background: #64748b;
+            color: #ffffff;
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
         }
 
         .mode-btn.active {
-            background: #2563eb;
-            border-color: #2563eb;
+            background: #ef1f2b;
+            border-color: #ef1f2b;
             color: #ffffff;
+            box-shadow: 0 8px 18px rgba(239,31,43,.18);
+        }
+
+        .mode-btn:hover {
+            background: #475569;
+        }
+
+        .mode-btn.active:hover {
+            background: #dc1824;
         }
 
         .calculator-grid {
@@ -165,15 +174,19 @@
             <div class="mode-row">
 
                 <button
+                    type="button"
                     class="mode-btn active"
                     id="degreeBtn"
+                    aria-pressed="true"
                     onclick="setMode('DEG')">
                     DEG
                 </button>
 
                 <button
+                    type="button"
                     class="mode-btn"
                     id="radianBtn"
+                    aria-pressed="false"
                     onclick="setMode('RAD')">
                     RAD
                 </button>
@@ -411,27 +424,25 @@
 
         mode = newMode;
 
-        document
-            .getElementById("degreeBtn")
-            .classList.remove("active");
+        const degreeBtn = document.getElementById("degreeBtn");
+        const radianBtn = document.getElementById("radianBtn");
 
-        document
-            .getElementById("radianBtn")
-            .classList.remove("active");
+        degreeBtn.classList.remove("active");
+
+        radianBtn.classList.remove("active");
 
 
         if (mode === "DEG") {
 
-            document
-                .getElementById("degreeBtn")
-                .classList.add("active");
+            degreeBtn.classList.add("active");
 
         } else {
 
-            document
-                .getElementById("radianBtn")
-                .classList.add("active");
+            radianBtn.classList.add("active");
         }
+
+        degreeBtn.setAttribute("aria-pressed", String(mode === "DEG"));
+        radianBtn.setAttribute("aria-pressed", String(mode === "RAD"));
 
 
         status.textContent = "Mode: " + mode;
