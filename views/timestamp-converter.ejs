@@ -142,7 +142,7 @@
                         type="button"
                         id="millisecondsBtn"
                         class="convert-btn"
-                        style="background:#64748b;"
+                        style="background:#64748b !important;"
                     >
                         Milliseconds
                     </button>
@@ -406,11 +406,17 @@ secondsBtn.addEventListener(
         timestampUnit =
             "seconds";
 
-        secondsBtn.style.background =
-            "#ef1f2b";
+        secondsBtn.style.setProperty(
+            "background",
+            "#ef1f2b",
+            "important"
+        );
 
-        millisecondsBtn.style.background =
-            "#64748b";
+        millisecondsBtn.style.setProperty(
+            "background",
+            "#64748b",
+            "important"
+        );
 
     }
 );
@@ -423,11 +429,17 @@ millisecondsBtn.addEventListener(
         timestampUnit =
             "milliseconds";
 
-        millisecondsBtn.style.background =
-            "#ef1f2b";
+        millisecondsBtn.style.setProperty(
+            "background",
+            "#ef1f2b",
+            "important"
+        );
 
-        secondsBtn.style.background =
-            "#64748b";
+        secondsBtn.style.setProperty(
+            "background",
+            "#64748b",
+            "important"
+        );
 
     }
 );
@@ -571,11 +583,17 @@ resetTimestampBtn.addEventListener(
         timestampUnit =
             "seconds";
 
-        secondsBtn.style.background =
-            "#ef1f2b";
+        secondsBtn.style.setProperty(
+            "background",
+            "#ef1f2b",
+            "important"
+        );
 
-        millisecondsBtn.style.background =
-            "#64748b";
+        millisecondsBtn.style.setProperty(
+            "background",
+            "#64748b",
+            "important"
+        );
 
         timestampResultText.textContent =
             "";
