@@ -90,6 +90,7 @@
                     class="convert-btn"
                     id="encodeBtn"
                     style="margin-top:0;"
+                    aria-pressed="true"
                 >
                     Encode Base64
                 </button>
@@ -99,8 +100,9 @@
                     id="decodeBtn"
                     style="
                         margin-top:0;
-                        background:#475569;
+                        background:#64748b !important;
                     "
+                    aria-pressed="false"
                 >
                     Decode Base64
                 </button>
@@ -154,6 +156,15 @@ const outputText = document.getElementById("outputText");
 const copyBtn = document.getElementById("copyBtn");
 const resetBtn = document.getElementById("resetBtn");
 
+function setActiveOperation(operation) {
+    const isEncode = operation === "encode";
+
+    encodeBtn.style.setProperty("background", isEncode ? "#ef1f2b" : "#64748b", "important");
+    decodeBtn.style.setProperty("background", isEncode ? "#64748b" : "#ef1f2b", "important");
+    encodeBtn.setAttribute("aria-pressed", String(isEncode));
+    decodeBtn.setAttribute("aria-pressed", String(!isEncode));
+}
+
 function showResult(title, info, value) {
 
     resultTitle.textContent = title;
@@ -205,6 +216,8 @@ encodeBtn.addEventListener("click", () => {
         return;
     }
 
+    setActiveOperation("encode");
+
     try {
 
         const encoded = encodeBase64(input);
@@ -233,6 +246,8 @@ decodeBtn.addEventListener("click", () => {
         alert("Please enter Base64 data first.");
         return;
     }
+
+    setActiveOperation("decode");
 
     try {
 
@@ -287,6 +302,7 @@ resetBtn.addEventListener("click", () => {
     resultTitle.textContent = "Result";
     resultInfo.textContent = "";
     result.style.display = "none";
+    setActiveOperation("encode");
     textInput.focus();
 });
 </script>
@@ -308,4 +324,3 @@ resetBtn.addEventListener("click", () => {
 
 </body>
 </html>
-
