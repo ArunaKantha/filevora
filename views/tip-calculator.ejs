@@ -89,9 +89,9 @@
 
         .percent-btn {
             padding:10px 6px;
-            border:1px solid #ef1f2b;
+            border:1px solid #64748b;
             border-radius:8px;
-            background:#ef1f2b;
+            background:#64748b;
             color:#ffffff;
             font-size:13px;
             font-weight:700;
@@ -99,6 +99,16 @@
         }
 
         .percent-btn:hover {
+            background:#475569;
+        }
+
+        .percent-btn.active {
+            border-color:#ef1f2b;
+            background:#ef1f2b;
+            box-shadow:0 8px 18px rgba(239,31,43,.18);
+        }
+
+        .percent-btn.active:hover {
             background:#dc1824;
         }
 
@@ -354,6 +364,8 @@
                         <button
                             type="button"
                             class="percent-btn"
+                            data-percent="5"
+                            aria-pressed="false"
                             onclick="setTip(5)"
                         >
                             5%
@@ -362,6 +374,8 @@
                         <button
                             type="button"
                             class="percent-btn"
+                            data-percent="10"
+                            aria-pressed="false"
                             onclick="setTip(10)"
                         >
                             10%
@@ -369,7 +383,9 @@
 
                         <button
                             type="button"
-                            class="percent-btn"
+                            class="percent-btn active"
+                            data-percent="15"
+                            aria-pressed="true"
                             onclick="setTip(15)"
                         >
                             15%
@@ -378,6 +394,8 @@
                         <button
                             type="button"
                             class="percent-btn"
+                            data-percent="20"
+                            aria-pressed="false"
                             onclick="setTip(20)"
                         >
                             20%
@@ -386,6 +404,8 @@
                         <button
                             type="button"
                             class="percent-btn"
+                            data-percent="25"
+                            aria-pressed="false"
                             onclick="setTip(25)"
                         >
                             25%
@@ -589,12 +609,35 @@ const tipPerPerson =
 const totalPerPerson =
     document.getElementById("totalPerPerson");
 
+const percentButtons =
+    document.querySelectorAll(".percent-btn");
+
+
+function updateSelectedTip(percent) {
+
+    percentButtons.forEach(function (button) {
+
+        const isSelected =
+            Number(button.dataset.percent) === Number(percent);
+
+        button.classList.toggle("active", isSelected);
+        button.setAttribute("aria-pressed", String(isSelected));
+    });
+}
+
 
 function setTip(percent) {
 
     tipPercent.value =
         percent;
+
+    updateSelectedTip(percent);
 }
+
+
+tipPercent.addEventListener("input", function () {
+    updateSelectedTip(tipPercent.value);
+});
 
 
 function changePeople(amount) {
@@ -801,6 +844,8 @@ resetTipBtn.addEventListener(
 
         tipPercent.value =
             "15";
+
+        updateSelectedTip(15);
 
         people.value =
             "1";
