@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Image to PDF Converter - FileVora</title>
+    <meta name="description" content="Convert multiple JPG and PNG images into one PDF file with FileVora.">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+        <div class="container">
+
+            <div class="converter-card">
+
+                <div class="converter-header">
+
+                    <div class="tool-icon">
+                        PDF
+                    </div>
+
+                    <h1>Image to PDF Converter</h1>
+
+                    <p>
+                        Convert multiple JPG and PNG images into one PDF file.
+                    </p>
+
+                </div>
+
+                <label class="upload-area" for="imageInput">
+
+                    <div class="upload-icon">🖼️</div>
+
+                    <strong>Click to upload images</strong>
+
+                    <span>
+                        Supports JPG, JPEG and PNG • Multiple files allowed
+                    </span>
+
+                </label>
+
+                <input
+                    type="file"
+                    id="imageInput"
+                    accept="image/jpeg,image/png"
+                    multiple
+                >
+
+                <div class="file-info" id="fileInfo">
+                    <strong id="fileName"></strong>
+                    <span id="fileSize"></span>
+                </div>
+<div id="imagePreviewArea" style="display:none;">
+    <div id="imagePreviewGrid"></div>
+</div>
+
+<div id="imagePdfActions" style="display:none;">
+    <button
+        class="convert-btn"
+        id="convertBtn"
+        type="button"
+        disabled
+    >
+        Convert to PDF
+    </button>
+
+    <button
+        type="button"
+        id="imagePdfResetBtn"
+    >
+        Reset
+    </button>
+</div>
+                
+
+                <div class="result" id="result">
+
+                    <h2>PDF Ready</h2>
+
+                    <p>
+                        Your images have been combined into one PDF successfully.
+                    </p>
+
+                    <a
+                        href="#"
+                        class="download-btn"
+                        id="downloadBtn"
+                    >
+                        ⬇ Download PDF
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+
+        const imageInput =
+            document.getElementById("imageInput");
+
+        const fileInfo =
+            document.getElementById("fileInfo");
+
+        const fileName =
+            document.getElementById("fileName");
+
+        const fileSize =
+            document.getElementById("fileSize");
+
+        const convertBtn =
+            document.getElementById("convertBtn");
+            const imagePreviewArea =
+    document.getElementById("imagePreviewArea");
+
+const imagePreviewGrid =
+    document.getElementById("imagePreviewGrid");
+
+const imagePdfActions =
+    document.getElementById("imagePdfActions");
+
+const imagePdfResetBtn =
+    document.getElementById("imagePdfResetBtn");
+
+        const result =
+            document.getElementById("result");
+
+        const downloadBtn =
+            document.getElementById("downloadBtn");
+
+
+        let selectedFiles = [];
+
+
+        imageInput.addEventListener("change", function () {
+
+            selectedFiles =
+                Array.from(this.files).filter(file =>
+                    file.type === "image/jpeg" ||
+                    file.type === "image/png"
+                );
+
+            if (selectedFiles.length === 0) {
+
+                fileInfo.style.display = "none";
+                convertBtn.disabled = true;
+
+                return;
+            }
+
+            const totalSize =
+                selectedFiles.reduce(
+                    (total, file) =>
+                        total + file.size,
+                    0
+                );
+
+            fileName.textContent =
+                selectedFiles.length +
+                " image(s) selected";
+
+            fileSize.textContent =
+                "Total size: " +
+                (totalSize / 1024 / 1024).toFixed(2) +
+                " MB";
+
+            fileInfo.style.display = "block";
+
+imagePreviewGrid.innerHTML = "";
+
+selectedFiles.forEach(function (file) {
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    img.alt = file.name;
+    imagePreviewGrid.appendChild(img);
+});
+
+imagePreviewArea.style.display = "block";
+imagePdfActions.style.display = "grid";
+
+convertBtn.disabled = false;
+
+result.style.display = "none";
+
+        });
+
+
+        function readImage(file) {
+
+            return new Promise((resolve, reject) => {
+
+                const reader = new FileReader();
+
+                reader.onload = function (event) {
+
+                    const img = new Image();
+
+                    img.onload = function () {
+
+                        resolve({
+                            image: img,
+                            dataUrl: event.target.result
+                        });
+
+                    };
+
+                    img.onerror = reject;
+
+                    img.src = event.target.result;
+
+                };
+
+                reader.onerror = reject;
+
+                reader.readAsDataURL(file);
+
+            });
+
+        }
+
+
+        convertBtn.addEventListener("click", async function () {
+
+            if (selectedFiles.length === 0) {
+                alert("Please select at least one image.");
+                return;
+            }
+
+            convertBtn.disabled = true;
+            convertBtn.textContent = "Creating PDF...";
+
+            result.style.display = "none";
+
+            try {
+
+                const {
+                    jsPDF
+                } = window.jspdf;
+
+                let pdf = null;
+
+                for (let i = 0; i < selectedFiles.length; i++) {
+
+                    const file = selectedFiles[i];
+
+                    const loaded =
+                        await readImage(file);
+
+                    const img =
+                        loaded.image;
+
+                    const dataUrl =
+                        loaded.dataUrl;
+
+                    let orientation =
+                        img.width >= img.height
+                            ? "landscape"
+                            : "portrait";
+
+                    if (i === 0) {
+
+                        pdf = new jsPDF({
+                            orientation: orientation,
+                            unit: "mm",
+                            format: "a4"
+                        });
+
+                    } else {
+
+                        pdf.addPage(
+                            "a4",
+                            orientation
+                        );
+
+                    }
+
+                    const pageWidth =
+                        pdf.internal.pageSize.getWidth();
+
+                    const pageHeight =
+                        pdf.internal.pageSize.getHeight();
+
+                    const margin = 10;
+
+                    const maxWidth =
+                        pageWidth - margin * 2;
+
+                    const maxHeight =
+                        pageHeight - margin * 2;
+
+                    const imageRatio =
+                        img.width / img.height;
+
+                    let imageWidth =
+                        maxWidth;
+
+                    let imageHeight =
+                        imageWidth / imageRatio;
+
+                    if (imageHeight > maxHeight) {
+
+                        imageHeight =
+                            maxHeight;
+
+                        imageWidth =
+                            imageHeight *
+                            imageRatio;
+                    }
+
+                    const x =
+                        (pageWidth - imageWidth) / 2;
+
+                    const y =
+                        (pageHeight - imageHeight) / 2;
+
+                    const format =
+                        file.type === "image/png"
+                            ? "PNG"
+                            : "JPEG";
+
+                    pdf.addImage(
+                        dataUrl,
+                        format,
+                        x,
+                        y,
+                        imageWidth,
+                        imageHeight
+                    );
+
+                }
+
+                const pdfBlob =
+                    pdf.output("blob");
+
+                const url =
+                    URL.createObjectURL(pdfBlob);
+
+                downloadBtn.href = url;
+
+                downloadBtn.download =
+                    "filevora-images.pdf";
+
+                result.style.display = "block";
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to create PDF. Please check your images and try again."
+                );
+
+            } finally {
+
+                convertBtn.disabled = false;
+
+                convertBtn.textContent =
+                    "Convert to PDF";
+
+            }
+
+        });
+imagePdfResetBtn.addEventListener("click", function () {
+    window.location.reload();
+});
+    </script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>
+

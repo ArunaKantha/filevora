@@ -1,0 +1,672 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Image Metadata Remover - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    🛡️
+                </div>
+
+                <h1>Image Metadata Remover</h1>
+
+                <p>
+                    Remove hidden metadata from your image before sharing it online.
+                </p>
+
+            </div>
+
+
+            <label class="upload-area" for="imageInput">
+
+                <div class="upload-icon">
+                    🖼️
+                </div>
+
+                <strong>
+                    Click to upload an image
+                </strong>
+
+                <span>
+                    JPG, PNG, WEBP and other common image formats
+                </span>
+
+            </label>
+
+
+            <input
+                type="file"
+                id="imageInput"
+                accept="image/*"
+            >
+
+
+            <div class="file-info" id="fileInfo">
+
+    <strong id="fileName"></strong>
+
+    <span id="fileSize"></span>
+
+</div>
+
+<div class="preview-area" id="metadataPreviewArea" style="display:none;">
+    <img id="metadataPreview" alt="Image preview">
+</div>
+
+<div class="fv-image-actions" id="metadataActions" hidden>
+
+    <button
+        class="convert-btn"
+        id="removeBtn"
+        type="button"
+        disabled
+    >
+        Remove Metadata
+    </button>
+
+    <button
+        class="fv-reset-btn"
+        id="metadataResetBtn"
+        type="button"
+    >
+        Reset
+    </button>
+
+</div>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>
+                    Metadata Removed
+                </h2>
+
+                <p>
+                    Your clean image is ready to download.
+                </p>
+
+                <button
+                    type="button"
+                    class="download-btn"
+                    id="downloadBtn"
+                >
+                    Download Clean Image
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const imageInput =
+    document.getElementById("imageInput");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const removeBtn =
+    document.getElementById("removeBtn");
+
+const result =
+    document.getElementById("result");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+    const metadataPreview =
+    document.getElementById("metadataPreview");
+
+const metadataPreviewArea =
+    document.getElementById("metadataPreviewArea");
+
+const metadataActions =
+    document.getElementById("metadataActions");
+
+const metadataResetBtn =
+    document.getElementById("metadataResetBtn");
+
+let metadataPreviewURL = null;
+
+
+let selectedFile = null;
+
+let cleanBlob = null;
+
+let outputExtension = "png";
+
+
+/* =========================
+   SELECT IMAGE
+========================= */
+
+imageInput.addEventListener("change", function () {
+
+    const file = this.files[0];
+
+    if (!file) {
+        return;
+    }
+
+
+    if (!file.type.startsWith("image/")) {
+
+        alert("Please select a valid image file.");
+
+        imageInput.value = "";
+
+        return;
+    }
+
+
+    selectedFile = file;
+
+
+    fileName.textContent =
+        file.name;
+
+
+    if (file.size >= 1024 * 1024) {
+
+        fileSize.textContent =
+            (file.size / (1024 * 1024)).toFixed(2)
+            + " MB";
+
+    } else {
+
+        fileSize.textContent =
+            (file.size / 1024).toFixed(1)
+            + " KB";
+    }
+
+
+    fileInfo.style.display = "block";
+
+if (metadataPreviewURL) {
+    URL.revokeObjectURL(metadataPreviewURL);
+}
+
+metadataPreviewURL = URL.createObjectURL(file);
+
+metadataPreview.src = metadataPreviewURL;
+metadataPreviewArea.style.display = "block";
+
+metadataActions.hidden = false;
+
+removeBtn.disabled = false;
+
+result.style.display = "none";
+
+cleanBlob = null;
+
+});
+
+
+/* =========================
+   REMOVE METADATA
+========================= */
+
+removeBtn.addEventListener("click", function () {
+
+    if (!selectedFile) {
+        return;
+    }
+
+
+    removeBtn.disabled = true;
+
+    removeBtn.textContent =
+        "Removing Metadata...";
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload = function (event) {
+
+        const img =
+            new Image();
+
+
+        img.onload = function () {
+
+            const canvas =
+                document.createElement("canvas");
+
+
+            canvas.width =
+                img.naturalWidth;
+
+            canvas.height =
+                img.naturalHeight;
+
+
+            const ctx =
+                canvas.getContext("2d");
+
+
+            ctx.drawImage(
+                img,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            let mimeType =
+                "image/png";
+
+
+            outputExtension =
+                "png";
+
+
+            /*
+             * JPEG → JPEG
+             */
+
+            if (
+                selectedFile.type === "image/jpeg" ||
+                selectedFile.type === "image/jpg"
+            ) {
+
+                mimeType =
+                    "image/jpeg";
+
+                outputExtension =
+                    "jpg";
+            }
+
+
+            /*
+             * Convert canvas to a new Blob.
+             * This creates a fresh image without
+             * the original EXIF metadata.
+             */
+
+            canvas.toBlob(
+                function (blob) {
+
+                    if (!blob) {
+
+                        alert(
+                            "Could not create the clean image."
+                        );
+
+                        removeBtn.disabled =
+                            false;
+
+                        removeBtn.textContent =
+                            "Remove Metadata";
+
+                        return;
+                    }
+
+
+                    cleanBlob = blob;
+
+
+                    result.style.display =
+                        "block";
+
+
+                    removeBtn.disabled =
+                        false;
+
+                    removeBtn.textContent =
+                        "Remove Metadata";
+
+
+                    result.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+
+                },
+                mimeType,
+                0.92
+            );
+
+        };
+
+
+        img.onerror = function () {
+
+            alert(
+                "Could not load this image."
+            );
+
+            removeBtn.disabled =
+                false;
+
+            removeBtn.textContent =
+                "Remove Metadata";
+        };
+
+
+        img.src =
+            event.target.result;
+    };
+
+
+    reader.onerror = function () {
+
+        alert(
+            "Could not read the selected image."
+        );
+
+        removeBtn.disabled =
+            false;
+
+        removeBtn.textContent =
+            "Remove Metadata";
+    };
+
+
+    reader.readAsDataURL(
+        selectedFile
+    );
+
+});
+
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+downloadBtn.addEventListener("click", function () {
+
+    if (!cleanBlob) {
+
+        alert(
+            "Please remove metadata first."
+        );
+
+        return;
+    }
+
+
+    const url =
+        URL.createObjectURL(cleanBlob);
+
+
+    const originalName =
+        selectedFile.name
+            .replace(/\.[^/.]+$/, "");
+
+
+    const downloadName =
+        originalName
+        + "-clean."
+        + outputExtension;
+
+
+    /*
+     * Create a temporary download link.
+     */
+
+    const link =
+        document.createElement("a");
+
+
+    link.href =
+        url;
+
+    link.download =
+        downloadName;
+
+    link.style.display =
+        "none";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    /*
+     * Force browser download.
+     */
+
+    link.click();
+
+
+    /*
+     * Cleanup after browser
+     * receives the download.
+     */
+
+    setTimeout(function () {
+
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+    }, 2000);
+
+});
+metadataResetBtn.addEventListener("click", function () {
+
+    if (metadataPreviewURL) {
+        URL.revokeObjectURL(metadataPreviewURL);
+        metadataPreviewURL = null;
+    }
+
+    imageInput.value = "";
+
+    selectedFile = null;
+    cleanBlob = null;
+
+    fileName.textContent = "";
+    fileSize.textContent = "";
+
+    fileInfo.style.display = "none";
+
+    metadataPreview.src = "";
+    metadataPreviewArea.style.display = "none";
+
+    metadataActions.hidden = true;
+
+    removeBtn.disabled = true;
+    removeBtn.textContent = "Remove Metadata";
+
+    result.style.display = "none";
+});
+
+</script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

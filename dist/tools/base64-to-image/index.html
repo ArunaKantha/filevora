@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Base64 to Image - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .base64-image-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .base64-image-action-row .convert-btn{
+            width:100% !important;
+            min-height:50px !important;
+            height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .base64-image-reset-btn{
+            background:#ffffff !important;
+            color:#00bc8a !important;
+            border:1px solid #00bc8a !important;
+            box-shadow:none !important;
+        }
+
+        .base64-image-reset-btn:hover{
+            background:#ecfdf8 !important;
+        }
+
+        @media (max-width:600px){
+            .base64-image-action-row{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    B64
+                </div>
+
+                <h1>Base64 to Image</h1>
+
+                <p>
+                    Convert Base64 encoded image data back into an image.
+                </p>
+
+            </div>
+
+
+            <div style="margin-top:10px; text-align:left;">
+
+                <label
+                    for="base64Input"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Paste Base64 Code
+                </label>
+
+
+                <textarea
+                    id="base64Input"
+                    rows="10"
+                    placeholder="Paste your Base64 image data here..."
+                    style="
+                        width:100%;
+                        box-sizing:border-box;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        background:#f8fafc;
+                        color:#334155;
+                        font-family:monospace;
+                        font-size:12px;
+                        line-height:1.5;
+                        resize:vertical;
+                    "
+                ></textarea>
+
+            </div>
+
+
+            <div class="base64-image-action-row">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="convertBtn"
+                >
+                    Convert to Image
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn base64-image-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                id="previewArea"
+                style="
+                    display:none;
+                    margin-top:25px;
+                "
+            >
+
+                <img
+                    id="imagePreview"
+                    alt="Converted Image"
+                    style="
+                        display:block;
+                        max-width:100%;
+                        max-height:350px;
+                        width:auto;
+                        height:auto;
+                        margin:0 auto;
+                        border-radius:12px;
+                    "
+                >
+
+            </div>
+
+
+            <div
+                class="file-info"
+                id="fileInfo"
+                style="display:none;"
+            >
+
+                <strong id="imageType"></strong>
+
+                <span id="imageInfo"></span>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2>
+                    Image Ready
+                </h2>
+
+                <p>
+                    Your Base64 data has been converted into an image.
+                </p>
+
+
+                <button
+                    type="button"
+                    class="download-btn"
+                    id="downloadBtn"
+                >
+                    Download Image
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const base64Input =
+    document.getElementById("base64Input");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const previewArea =
+    document.getElementById("previewArea");
+
+const imagePreview =
+    document.getElementById("imagePreview");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const imageType =
+    document.getElementById("imageType");
+
+const imageInfo =
+    document.getElementById("imageInfo");
+
+const result =
+    document.getElementById("result");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let imageBlob =
+    null;
+
+let imageMimeType =
+    "image/png";
+
+let imageExtension =
+    "png";
+
+let currentPreviewUrl =
+    null;
+
+
+/* =========================
+   CONVERT
+========================= */
+
+convertBtn.addEventListener(
+    "click",
+    function () {
+
+        let input =
+            base64Input.value.trim();
+
+
+        if (!input) {
+
+            alert(
+                "Please paste Base64 image data."
+            );
+
+            return;
+        }
+
+
+        if (
+            currentPreviewUrl
+        ) {
+
+            URL.revokeObjectURL(
+                currentPreviewUrl
+            );
+
+            currentPreviewUrl =
+                null;
+        }
+
+
+        previewArea.style.display =
+            "none";
+
+
+        fileInfo.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        imagePreview.removeAttribute(
+            "src"
+        );
+
+
+        /*
+         * Remove spaces and line breaks.
+         */
+
+        input =
+            input.replace(
+                /\s/g,
+                ""
+            );
+
+
+        let base64Data =
+            input;
+
+
+        imageMimeType =
+            "image/png";
+
+
+        /*
+         * Detect full data URL:
+         * data:image/png;base64,XXXX
+         */
+
+        const match =
+            input.match(
+                /^data:(image\/[^;]+);base64,(.+)$/i
+            );
+
+
+        if (match) {
+
+            imageMimeType =
+                match[1].toLowerCase();
+
+
+            base64Data =
+                match[2];
+        }
+
+
+        try {
+
+            const binaryString =
+                atob(
+                    base64Data
+                );
+
+
+            if (
+                !binaryString.length
+            ) {
+
+                throw new Error(
+                    "Empty Base64 data"
+                );
+            }
+
+
+            const bytes =
+                new Uint8Array(
+                    binaryString.length
+                );
+
+
+            for (
+                let i = 0;
+                i < binaryString.length;
+                i++
+            ) {
+
+                bytes[i] =
+                    binaryString.charCodeAt(
+                        i
+                    );
+            }
+
+
+            imageBlob =
+                new Blob(
+                    [bytes],
+                    {
+                        type:
+                            imageMimeType
+                    }
+                );
+
+
+            imageExtension =
+                getExtension(
+                    imageMimeType
+                );
+
+
+            currentPreviewUrl =
+                URL.createObjectURL(
+                    imageBlob
+                );
+
+
+            imagePreview.onload =
+                function () {
+
+                    previewArea.style.display =
+                        "block";
+
+
+                    fileInfo.style.display =
+                        "block";
+
+
+                    result.style.display =
+                        "block";
+
+
+                    imageType.textContent =
+                        "Image Type: " +
+                        imageMimeType;
+
+
+                    imageInfo.textContent =
+                        "Image Size: " +
+                        formatFileSize(
+                            imageBlob.size
+                        );
+
+
+                    result.scrollIntoView({
+                        behavior:"smooth",
+                        block:"nearest"
+                    });
+                };
+
+
+            imagePreview.onerror =
+                function () {
+
+                    if (
+                        currentPreviewUrl
+                    ) {
+
+                        URL.revokeObjectURL(
+                            currentPreviewUrl
+                        );
+
+                        currentPreviewUrl =
+                            null;
+                    }
+
+
+                    imageBlob =
+                        null;
+
+
+                    previewArea.style.display =
+                        "none";
+
+
+                    fileInfo.style.display =
+                        "none";
+
+
+                    result.style.display =
+                        "none";
+
+
+                    alert(
+                        "The Base64 data is not a valid image."
+                    );
+                };
+
+
+            imagePreview.src =
+                currentPreviewUrl;
+
+
+        } catch (error) {
+
+            imageBlob =
+                null;
+
+
+            previewArea.style.display =
+                "none";
+
+
+            fileInfo.style.display =
+                "none";
+
+
+            result.style.display =
+                "none";
+
+
+            alert(
+                "Invalid Base64 image data."
+            );
+        }
+
+    }
+);
+
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+downloadBtn.addEventListener(
+    "click",
+    function () {
+
+        if (!imageBlob) {
+
+            alert(
+                "Please convert the Base64 data first."
+            );
+
+            return;
+        }
+
+
+        const downloadURL =
+            URL.createObjectURL(
+                imageBlob
+            );
+
+
+        const filename =
+            "filevora-image." +
+            imageExtension;
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.href =
+            downloadURL;
+
+
+        link.download =
+            filename;
+
+
+        link.style.display =
+            "none";
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        document.body.removeChild(
+            link
+        );
+
+
+        setTimeout(
+            function () {
+
+                URL.revokeObjectURL(
+                    downloadURL
+                );
+
+            },
+            3000
+        );
+
+    }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        base64Input.value =
+            "";
+
+
+        imageBlob =
+            null;
+
+
+        imageMimeType =
+            "image/png";
+
+
+        imageExtension =
+            "png";
+
+
+        if (
+            currentPreviewUrl
+        ) {
+
+            URL.revokeObjectURL(
+                currentPreviewUrl
+            );
+
+
+            currentPreviewUrl =
+                null;
+        }
+
+
+        imagePreview.removeAttribute(
+            "src"
+        );
+
+
+        previewArea.style.display =
+            "none";
+
+
+        imageType.textContent =
+            "";
+
+
+        imageInfo.textContent =
+            "";
+
+
+        fileInfo.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        base64Input.focus();
+
+    }
+);
+
+
+/* =========================
+   EXTENSION
+========================= */
+
+function getExtension(
+    mimeType
+) {
+
+    switch (
+        mimeType
+    ) {
+
+        case "image/jpeg":
+            return "jpg";
+
+        case "image/png":
+            return "png";
+
+        case "image/webp":
+            return "webp";
+
+        case "image/gif":
+            return "gif";
+
+        case "image/bmp":
+            return "bmp";
+
+        case "image/svg+xml":
+            return "svg";
+
+        case "image/x-icon":
+            return "ico";
+
+        default:
+            return "png";
+    }
+
+}
+
+
+/* =========================
+   FILE SIZE
+========================= */
+
+function formatFileSize(
+    bytes
+) {
+
+    if (
+        bytes < 1024
+    ) {
+
+        return (
+            bytes +
+            " B"
+        );
+    }
+
+
+    if (
+        bytes <
+        1024 * 1024
+    ) {
+
+        return (
+            bytes /
+            1024
+        ).toFixed(1) +
+        " KB";
+    }
+
+
+    return (
+        bytes /
+        (
+            1024 *
+            1024
+        )
+    ).toFixed(2) +
+    " MB";
+
+}
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+  <div class="container footer-bottom">
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date().getFullYear();
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QR Code Generator - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .qr-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .qr-action-row .convert-btn{
+            width:100% !important;
+            min-height:50px !important;
+            height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .qr-reset-btn{
+            background:#ffffff !important;
+            color:#00bc8a !important;
+            border:1px solid #00bc8a !important;
+            box-shadow:none !important;
+        }
+
+        .qr-reset-btn:hover{
+            background:#ecfdf8 !important;
+        }
+
+        @media (max-width:600px){
+            .qr-action-row{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    QR
+                </div>
+
+                <h1>QR Code Generator</h1>
+
+                <p>
+                    Generate a QR code from any text, URL, phone number, or other information.
+                </p>
+
+            </div>
+
+
+            <textarea
+                id="qrInput"
+                placeholder="Enter text or URL here...&#10;&#10;Example: https://filevora.com"
+                style="
+                    width:100%;
+                    min-height:180px;
+                    padding:18px;
+                    border:2px solid #e5e7eb;
+                    border-radius:14px;
+                    resize:vertical;
+                    font-size:15px;
+                    line-height:1.6;
+                    outline:none;
+                    font-family:inherit;
+                    box-sizing:border-box;
+                "
+            ></textarea>
+
+
+            <div class="qr-action-row">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="generateBtn"
+                >
+                    Generate QR Code
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn qr-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2>
+                    QR Code Ready
+                </h2>
+
+                <p id="resultInfo">
+                    Scan this QR code with a phone camera.
+                </p>
+
+
+                <div
+                    id="qrcode"
+                    style="
+                        display:flex;
+                        justify-content:center;
+                        align-items:center;
+                        margin-top:22px;
+                        padding:20px;
+                        background:#ffffff;
+                        border-radius:12px;
+                    "
+                ></div>
+
+
+                <button
+                    type="button"
+                    class="download-btn"
+                    id="downloadBtn"
+                >
+                    Download QR Code
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+
+const qrInput =
+    document.getElementById("qrInput");
+
+const generateBtn =
+    document.getElementById("generateBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultInfo =
+    document.getElementById("resultInfo");
+
+const qrcodeBox =
+    document.getElementById("qrcode");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+/* =========================
+   GENERATE QR
+========================= */
+
+generateBtn.addEventListener(
+    "click",
+    function () {
+
+        const text =
+            qrInput.value.trim();
+
+
+        if (!text) {
+
+            alert(
+                "Please enter some text or a URL first."
+            );
+
+            return;
+        }
+
+
+        qrcodeBox.innerHTML =
+            "";
+
+
+        result.style.display =
+            "none";
+
+
+        try {
+
+            new QRCode(
+                qrcodeBox,
+                {
+                    text:text,
+                    width:240,
+                    height:240,
+                    colorDark:"#111827",
+                    colorLight:"#ffffff",
+                    correctLevel:
+                        QRCode.CorrectLevel.H
+                }
+            );
+
+
+            resultInfo.textContent =
+                "QR code generated successfully. Scan it with your phone.";
+
+
+            result.style.display =
+                "block";
+
+
+            result.scrollIntoView({
+                behavior:"smooth",
+                block:"nearest"
+            });
+
+
+        } catch (error) {
+
+            qrcodeBox.innerHTML =
+                "";
+
+
+            result.style.display =
+                "none";
+
+
+            alert(
+                "Unable to generate QR code. Please try different text."
+            );
+        }
+
+    }
+);
+
+
+/* =========================
+   DOWNLOAD QR
+========================= */
+
+downloadBtn.addEventListener(
+    "click",
+    function () {
+
+        const canvas =
+            qrcodeBox.querySelector(
+                "canvas"
+            );
+
+
+        const image =
+            qrcodeBox.querySelector(
+                "img"
+            );
+
+
+        let imageUrl =
+            "";
+
+
+        if (canvas) {
+
+            imageUrl =
+                canvas.toDataURL(
+                    "image/png"
+                );
+
+        } else if (image) {
+
+            imageUrl =
+                image.src;
+
+        } else {
+
+            alert(
+                "Please generate a QR code first."
+            );
+
+            return;
+        }
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.download =
+            "filevora-qr-code.png";
+
+
+        link.href =
+            imageUrl;
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        link.remove();
+
+    }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        qrInput.value =
+            "";
+
+
+        qrcodeBox.innerHTML =
+            "";
+
+
+        resultInfo.textContent =
+            "Scan this QR code with a phone camera.";
+
+
+        result.style.display =
+            "none";
+
+
+        qrInput.focus();
+
+    }
+);
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date().getFullYear();
+
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

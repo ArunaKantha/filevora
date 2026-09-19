@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Currency Converter - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .currency-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .currency-action-row .convert-btn{
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .currency-reset-btn{
+            background:#ffffff !important;
+            color:#00bc8a !important;
+            border:1px solid #00bc8a !important;
+            box-shadow:none !important;
+        }
+
+        .currency-reset-btn:hover{
+            background:#ecfdf8 !important;
+        }
+
+        @media (max-width:600px){
+            .currency-action-row{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    $
+                </div>
+
+                <h1>Currency Converter</h1>
+
+                <p>
+                    Convert currencies using the latest available exchange rates.
+                </p>
+
+            </div>
+
+
+            <div style="text-align:left;">
+
+                <label
+                    for="amount"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Amount
+                </label>
+
+                <input
+                    type="number"
+                    id="amount"
+                    value="1"
+                    min="0"
+                    step="any"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                >
+
+
+                <div
+                    style="
+                        display:grid;
+                        grid-template-columns:1fr 1fr;
+                        gap:16px;
+                        margin-top:20px;
+                    "
+                >
+
+                    <div>
+
+                        <label
+                            for="fromCurrency"
+                            style="
+                                display:block;
+                                margin-bottom:8px;
+                                font-weight:700;
+                                color:#111827;
+                            "
+                        >
+                            From
+                        </label>
+
+                        <select
+                            id="fromCurrency"
+                            style="
+                                width:100%;
+                                padding:14px;
+                                border:1px solid #cbd5e1;
+                                border-radius:10px;
+                                font-size:16px;
+                                background:#fff;
+                                box-sizing:border-box;
+                            "
+                        >
+
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - British Pound</option>
+                            <option value="LKR">LKR - Sri Lankan Rupee</option>
+                            <option value="INR">INR - Indian Rupee</option>
+                            <option value="AUD">AUD - Australian Dollar</option>
+                            <option value="CAD">CAD - Canadian Dollar</option>
+                            <option value="SGD">SGD - Singapore Dollar</option>
+                            <option value="JPY">JPY - Japanese Yen</option>
+                            <option value="CNY">CNY - Chinese Yuan</option>
+                            <option value="AED">AED - UAE Dirham</option>
+                            <option value="SAR">SAR - Saudi Riyal</option>
+                            <option value="CHF">CHF - Swiss Franc</option>
+                            <option value="NZD">NZD - New Zealand Dollar</option>
+                            <option value="HKD">HKD - Hong Kong Dollar</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label
+                            for="toCurrency"
+                            style="
+                                display:block;
+                                margin-bottom:8px;
+                                font-weight:700;
+                                color:#111827;
+                            "
+                        >
+                            To
+                        </label>
+
+                        <select
+                            id="toCurrency"
+                            style="
+                                width:100%;
+                                padding:14px;
+                                border:1px solid #cbd5e1;
+                                border-radius:10px;
+                                font-size:16px;
+                                background:#fff;
+                                box-sizing:border-box;
+                            "
+                        >
+
+                            <option value="LKR">LKR - Sri Lankan Rupee</option>
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - British Pound</option>
+                            <option value="INR">INR - Indian Rupee</option>
+                            <option value="AUD">AUD - Australian Dollar</option>
+                            <option value="CAD">CAD - Canadian Dollar</option>
+                            <option value="SGD">SGD - Singapore Dollar</option>
+                            <option value="JPY">JPY - Japanese Yen</option>
+                            <option value="CNY">CNY - Chinese Yuan</option>
+                            <option value="AED">AED - UAE Dirham</option>
+                            <option value="SAR">SAR - Saudi Riyal</option>
+                            <option value="CHF">CHF - Swiss Franc</option>
+                            <option value="NZD">NZD - New Zealand Dollar</option>
+                            <option value="HKD">HKD - Hong Kong Dollar</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="currency-action-row">
+
+                    <button
+                        type="button"
+                        class="convert-btn"
+                        id="convertBtn"
+                    >
+                        Convert Currency
+                    </button>
+
+                    <button
+                        type="button"
+                        class="convert-btn currency-reset-btn"
+                        id="resetBtn"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2 id="resultTitle">
+                    Conversion Result
+                </h2>
+
+                <p id="resultText"></p>
+
+                <p
+                    id="rateText"
+                    style="margin-top:10px;"
+                ></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const amountInput =
+    document.getElementById("amount");
+
+const fromCurrency =
+    document.getElementById("fromCurrency");
+
+const toCurrency =
+    document.getElementById("toCurrency");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+const rateText =
+    document.getElementById("rateText");
+
+
+convertBtn.addEventListener(
+    "click",
+    async function () {
+
+        const amount =
+            parseFloat(
+                amountInput.value
+            );
+
+        const from =
+            fromCurrency.value;
+
+        const to =
+            toCurrency.value;
+
+
+        if (
+            !amount ||
+            amount <= 0
+        ) {
+
+            alert(
+                "Please enter a valid amount."
+            );
+
+            return;
+        }
+
+
+        if (from === to) {
+
+            result.style.display =
+                "block";
+
+            result.style.background =
+                "";
+
+            result.style.borderColor =
+                "";
+
+            resultText.textContent =
+                `${amount} ${from} = ${amount} ${to}`;
+
+            rateText.textContent =
+                `Exchange rate: 1 ${from} = 1 ${to}`;
+
+            return;
+        }
+
+
+        convertBtn.disabled =
+            true;
+
+        convertBtn.textContent =
+            "Getting Exchange Rate...";
+
+
+        result.style.display =
+            "none";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `https://api.frankfurter.dev/v2/rate/${from.toLowerCase()}/${to.toLowerCase()}`
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Exchange rate request failed."
+                );
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.rate) {
+
+                throw new Error(
+                    "Exchange rate not available."
+                );
+            }
+
+
+            const rate =
+                Number(data.rate);
+
+
+            const convertedAmount =
+                amount * rate;
+
+
+            result.style.display =
+                "block";
+
+            result.style.background =
+                "";
+
+            result.style.borderColor =
+                "";
+
+
+            resultText.textContent =
+                `${amount} ${from} = ${convertedAmount.toFixed(2)} ${to}`;
+
+
+            rateText.textContent =
+                `Exchange rate: 1 ${from} = ${rate.toFixed(6)} ${to}`;
+
+
+        } catch (error) {
+
+            console.error(
+                "Currency conversion error:",
+                error
+            );
+
+
+            result.style.display =
+                "block";
+
+            result.style.background =
+                "#fef2f2";
+
+            result.style.borderColor =
+                "#fecaca";
+
+
+            resultText.textContent =
+                "Unable to get the current exchange rate. Please try again.";
+
+
+            rateText.textContent =
+                "";
+
+        }
+
+
+        convertBtn.disabled =
+            false;
+
+        convertBtn.textContent =
+            "Convert Currency";
+
+    }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        amountInput.value =
+            "1";
+
+        fromCurrency.value =
+            "USD";
+
+        toCurrency.value =
+            "LKR";
+
+        resultText.textContent =
+            "";
+
+        rateText.textContent =
+            "";
+
+        result.style.display =
+            "none";
+
+        result.style.background =
+            "";
+
+        result.style.borderColor =
+            "";
+
+        convertBtn.disabled =
+            false;
+
+        convertBtn.textContent =
+            "Convert Currency";
+
+        amountInput.focus();
+
+    }
+);
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+
+        element.textContent =
+            new Date().getFullYear();
+
+    });
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

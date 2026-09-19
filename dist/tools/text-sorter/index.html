@@ -1,0 +1,761 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Text Sorter - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+<style>
+/* FileVora Text Tools batch standardization */
+.text-tool .converter-card textarea,
+.text-tool .converter-card input[type="text"],
+.text-tool .converter-card input[type="number"],
+.text-tool .converter-card select {
+    border-color:#cbd5e1 !important;
+}
+.text-tool .converter-card textarea:focus,
+.text-tool .converter-card input:focus,
+.text-tool .converter-card select:focus {
+    border-color:#00bc8a !important;
+    outline:none !important;
+}
+.text-tool .text-reset-btn {
+    background:#ffffff !important;
+    color:#00bc8a !important;
+    border:1px solid #00bc8a !important;
+    box-shadow:none !important;
+}
+.text-tool .text-reset-btn:hover {
+    background:#ecfdf8 !important;
+}
+.text-tool .text-action-row {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:18px;
+}
+.text-tool .text-action-row > .convert-btn,
+.text-tool .text-action-row > .download-btn,
+.text-tool .text-action-row > button,
+.text-tool .text-action-row > a {
+    margin-top:0 !important;
+    width:100% !important;
+    box-sizing:border-box !important;
+}
+@media (max-width:600px){
+    .text-tool .text-action-row{grid-template-columns:1fr;}
+}
+</style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body class="text-tool">
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">TS</div>
+
+                <h1>Text Sorter</h1>
+
+                <p>
+                    Sort lines of text alphabetically, numerically or by length.
+                </p>
+
+            </div>
+
+
+            <textarea
+                id="textInput"
+                placeholder="Enter one item per line..."
+                style="
+                    width:100%;
+                    min-height:280px;
+                    padding:18px;
+                    border:2px solid #e2e8f0;
+                    border-radius:14px;
+                    resize:vertical;
+                    outline:none;
+                    font-family:inherit;
+                    font-size:15px;
+                    line-height:1.6;
+                    color:#111827;
+                    background:#ffffff;
+                    box-sizing:border-box;
+                "
+            ></textarea>
+
+
+            <div
+                style="
+                    display:grid;
+                    grid-template-columns:repeat(2, 1fr);
+                    gap:12px;
+                    margin-top:20px;
+                "
+            >
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="azBtn"
+                    style="margin-top:0;"
+                >
+                    A → Z
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="zaBtn"
+                    style="margin-top:0;"
+                >
+                    Z → A
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="numAscBtn"
+                    style="margin-top:0;"
+                >
+                    Numbers ↑
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="numDescBtn"
+                    style="margin-top:0;"
+                >
+                    Numbers ↓
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="shortBtn"
+                    style="margin-top:0;"
+                >
+                    Shortest First
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="longBtn"
+                    style="margin-top:0;"
+                >
+                    Longest First
+                </button>
+
+            </div>
+
+
+            <div
+                style="
+                    display:flex;
+                    gap:10px;
+                    margin-top:12px;
+                "
+            >
+
+                <button
+                    type="button"
+                    class="download-btn"
+                    id="copyBtn"
+                    style="
+                        flex:1;
+                        border:none;
+                        margin-top:0;
+                    "
+                >
+                    Copy Result
+                </button>
+
+                <button
+                    type="button"
+                    class="download-btn text-reset-btn"
+                    id="clearBtn"
+                    style="
+                        flex:1;
+                        border:none;
+                        margin-top:0;
+                    "
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                id="result"
+                style="
+                    display:none;
+                    margin-top:20px;
+                    padding:16px;
+                    border-radius:12px;
+                    background:#f0fdf4;
+                    border:1px solid #bbf7d0;
+                    color:#166534;
+                    font-size:14px;
+                    text-align:left;
+                "
+            ></div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const textInput =
+    document.getElementById("textInput");
+
+const azBtn =
+    document.getElementById("azBtn");
+
+const zaBtn =
+    document.getElementById("zaBtn");
+
+const numAscBtn =
+    document.getElementById("numAscBtn");
+
+const numDescBtn =
+    document.getElementById("numDescBtn");
+
+const shortBtn =
+    document.getElementById("shortBtn");
+
+const longBtn =
+    document.getElementById("longBtn");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const clearBtn =
+    document.getElementById("clearBtn");
+
+const result =
+    document.getElementById("result");
+
+
+function getLines() {
+
+    return textInput.value
+        .split(/\r?\n/)
+        .filter(line => line.trim() !== "");
+
+}
+
+
+function showResult(message) {
+
+    result.textContent =
+        message;
+
+    result.style.display =
+        "block";
+
+}
+
+
+/* =========================
+   A → Z
+========================= */
+
+azBtn.addEventListener("click", function () {
+
+    const lines =
+        getLines();
+
+    if (!lines.length) {
+
+        alert("Please enter some text first.");
+
+        return;
+    }
+
+
+    lines.sort(function (a, b) {
+
+        return a.localeCompare(
+            b,
+            undefined,
+            {
+                numeric: true,
+                sensitivity: "base"
+            }
+        );
+
+    });
+
+
+    textInput.value =
+        lines.join("\n");
+
+
+    showResult(
+        lines.length +
+        " lines sorted from A to Z."
+    );
+
+});
+
+
+/* =========================
+   Z → A
+========================= */
+
+zaBtn.addEventListener("click", function () {
+
+    const lines =
+        getLines();
+
+    if (!lines.length) {
+
+        alert("Please enter some text first.");
+
+        return;
+    }
+
+
+    lines.sort(function (a, b) {
+
+        return b.localeCompare(
+            a,
+            undefined,
+            {
+                numeric: true,
+                sensitivity: "base"
+            }
+        );
+
+    });
+
+
+    textInput.value =
+        lines.join("\n");
+
+
+    showResult(
+        lines.length +
+        " lines sorted from Z to A."
+    );
+
+});
+
+
+/* =========================
+   NUMBERS ASCENDING
+========================= */
+
+numAscBtn.addEventListener("click", function () {
+
+    const lines =
+        getLines();
+
+    if (!lines.length) {
+
+        alert("Please enter some text first.");
+
+        return;
+    }
+
+
+    lines.sort(function (a, b) {
+
+        return extractNumber(a) -
+               extractNumber(b);
+
+    });
+
+
+    textInput.value =
+        lines.join("\n");
+
+
+    showResult(
+        lines.length +
+        " lines sorted by number."
+    );
+
+});
+
+
+/* =========================
+   NUMBERS DESCENDING
+========================= */
+
+numDescBtn.addEventListener("click", function () {
+
+    const lines =
+        getLines();
+
+    if (!lines.length) {
+
+        alert("Please enter some text first.");
+
+        return;
+    }
+
+
+    lines.sort(function (a, b) {
+
+        return extractNumber(b) -
+               extractNumber(a);
+
+    });
+
+
+    textInput.value =
+        lines.join("\n");
+
+
+    showResult(
+        lines.length +
+        " lines sorted by number descending."
+    );
+
+});
+
+
+function extractNumber(text) {
+
+    const match =
+        text.match(/-?\d+(?:\.\d+)?/);
+
+    return match
+        ? Number(match[0])
+        : Infinity;
+
+}
+
+
+/* =========================
+   SHORTEST FIRST
+========================= */
+
+shortBtn.addEventListener("click", function () {
+
+    const lines =
+        getLines();
+
+    if (!lines.length) {
+
+        alert("Please enter some text first.");
+
+        return;
+    }
+
+
+    lines.sort(function (a, b) {
+
+        return a.length - b.length;
+
+    });
+
+
+    textInput.value =
+        lines.join("\n");
+
+
+    showResult(
+        lines.length +
+        " lines sorted shortest first."
+    );
+
+});
+
+
+/* =========================
+   LONGEST FIRST
+========================= */
+
+longBtn.addEventListener("click", function () {
+
+    const lines =
+        getLines();
+
+    if (!lines.length) {
+
+        alert("Please enter some text first.");
+
+        return;
+    }
+
+
+    lines.sort(function (a, b) {
+
+        return b.length - a.length;
+
+    });
+
+
+    textInput.value =
+        lines.join("\n");
+
+
+    showResult(
+        lines.length +
+        " lines sorted longest first."
+    );
+
+});
+
+
+/* =========================
+   COPY
+========================= */
+
+copyBtn.addEventListener("click", async function () {
+
+    const text =
+        textInput.value;
+
+    if (!text) {
+        return;
+    }
+
+
+    try {
+
+        await navigator.clipboard.writeText(
+            text
+        );
+
+    } catch (error) {
+
+        const temp =
+            document.createElement("textarea");
+
+        temp.value =
+            text;
+
+        temp.style.position =
+            "fixed";
+
+        temp.style.opacity =
+            "0";
+
+        document.body.appendChild(temp);
+
+        temp.select();
+
+        document.execCommand("copy");
+
+        temp.remove();
+
+    }
+
+
+    const oldText =
+        copyBtn.textContent;
+
+    copyBtn.textContent =
+        "Copied!";
+
+
+    setTimeout(function () {
+
+        copyBtn.textContent =
+            oldText;
+
+    }, 1200);
+
+});
+
+
+/* =========================
+   CLEAR
+========================= */
+
+clearBtn.addEventListener("click", function () {
+
+    textInput.value = "";
+
+    result.style.display =
+        "none";
+
+    textInput.focus();
+
+});
+
+</script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

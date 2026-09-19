@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Remove Duplicate Lines - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+<style>
+/* FileVora Text Tools batch standardization */
+.text-tool .converter-card textarea,
+.text-tool .converter-card input[type="text"],
+.text-tool .converter-card input[type="number"],
+.text-tool .converter-card select {
+    border-color:#cbd5e1 !important;
+}
+
+.text-tool .converter-card textarea:focus,
+.text-tool .converter-card input:focus,
+.text-tool .converter-card select:focus {
+    border-color:#00bc8a !important;
+    outline:none !important;
+}
+
+.text-tool .text-reset-btn {
+    background:#ffffff !important;
+    color:#00bc8a !important;
+    border:1px solid #00bc8a !important;
+    box-shadow:none !important;
+}
+
+.text-tool .text-reset-btn:hover {
+    background:#ecfdf8 !important;
+}
+
+.text-tool .text-action-row {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:18px;
+}
+
+.text-tool .text-action-row > .convert-btn,
+.text-tool .text-action-row > .download-btn,
+.text-tool .text-action-row > button,
+.text-tool .text-action-row > a {
+    margin-top:0 !important;
+    width:100% !important;
+    box-sizing:border-box !important;
+}
+
+/* Result area */
+#result {
+    display:none;
+    margin-top:22px;
+}
+
+#resultInfo {
+    display:block;
+    padding:14px 16px;
+    border-radius:12px;
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+    color:#166534;
+    font-size:14px;
+    font-weight:700;
+}
+
+#resultOutput {
+    width:100%;
+    min-height:180px;
+    margin-top:14px;
+    padding:16px;
+    border:1px solid #cbd5e1;
+    border-radius:12px;
+    resize:vertical;
+    outline:none;
+    font-family:inherit;
+    font-size:15px;
+    line-height:1.6;
+    color:#111827;
+    background:#ffffff;
+    box-sizing:border-box;
+}
+
+#copyBtn {
+    display:none;
+}
+
+@media (max-width:600px){
+    .text-tool .text-action-row {
+        grid-template-columns:1fr;
+    }
+}
+</style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body class="text-tool">
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">DL</div>
+
+                <h1>Remove Duplicate Lines</h1>
+
+                <p>
+                    Remove repeated lines from your text while keeping the original order.
+                </p>
+
+            </div>
+
+
+            <textarea
+                id="textInput"
+                placeholder="Paste your text here..."
+                style="
+                    width:100%;
+                    min-height:280px;
+                    padding:18px;
+                    border:2px solid #e2e8f0;
+                    border-radius:14px;
+                    resize:vertical;
+                    outline:none;
+                    font-family:inherit;
+                    font-size:15px;
+                    line-height:1.6;
+                    color:#111827;
+                    background:#ffffff;
+                    box-sizing:border-box;
+                "
+            ></textarea>
+
+
+            <div class="text-action-row">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="removeBtn"
+                >
+                    Remove Duplicates
+                </button>
+
+
+                <button
+                    type="button"
+                    class="convert-btn text-reset-btn"
+                    id="clearBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div id="result">
+
+                <strong id="resultInfo"></strong>
+
+                <textarea
+                    id="resultOutput"
+                    readonly
+                    placeholder="Cleaned result will appear here..."
+                ></textarea>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="download-btn"
+                id="copyBtn"
+                style="
+                    width:100%;
+                    border:none;
+                    margin-top:18px;
+                "
+            >
+                Copy Result
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const textInput =
+    document.getElementById("textInput");
+
+const removeBtn =
+    document.getElementById("removeBtn");
+
+const clearBtn =
+    document.getElementById("clearBtn");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultInfo =
+    document.getElementById("resultInfo");
+
+const resultOutput =
+    document.getElementById("resultOutput");
+
+
+let resultText = "";
+
+
+/* =========================
+   REMOVE DUPLICATES
+========================= */
+
+removeBtn.addEventListener("click", function () {
+
+    const text =
+        textInput.value;
+
+
+    if (!text.trim()) {
+
+        alert("Please enter some text first.");
+
+        return;
+    }
+
+
+    const lines =
+        text.split(/\r?\n/);
+
+
+    const seen =
+        new Set();
+
+
+    const uniqueLines =
+        [];
+
+
+    let duplicateCount =
+        0;
+
+
+    lines.forEach(function (line) {
+
+        const key =
+            line.trim();
+
+
+        if (seen.has(key)) {
+
+            duplicateCount++;
+
+            return;
+        }
+
+
+        seen.add(key);
+
+        uniqueLines.push(line);
+
+    });
+
+
+    resultText =
+        uniqueLines.join("\n");
+
+
+    /* Do NOT overwrite the original input */
+    resultOutput.value =
+        resultText;
+
+
+    resultInfo.textContent =
+        "Removed " +
+        duplicateCount +
+        " duplicate line" +
+        (duplicateCount === 1 ? "" : "s") +
+        ". " +
+        uniqueLines.length +
+        " unique line" +
+        (uniqueLines.length === 1 ? "" : "s") +
+        " remaining.";
+
+
+    result.style.display =
+        "block";
+
+
+    copyBtn.style.display =
+        "block";
+
+});
+
+
+/* =========================
+   COPY RESULT
+========================= */
+
+copyBtn.addEventListener("click", async function () {
+
+    if (!resultText) {
+        return;
+    }
+
+
+    try {
+
+        await navigator.clipboard.writeText(
+            resultText
+        );
+
+    } catch (error) {
+
+        const textarea =
+            document.createElement("textarea");
+
+
+        textarea.value =
+            resultText;
+
+
+        textarea.style.position =
+            "fixed";
+
+
+        textarea.style.opacity =
+            "0";
+
+
+        document.body.appendChild(
+            textarea
+        );
+
+
+        textarea.select();
+
+
+        document.execCommand(
+            "copy"
+        );
+
+
+        textarea.remove();
+
+    }
+
+
+    copyBtn.textContent =
+        "Copied!";
+
+
+    setTimeout(function () {
+
+        copyBtn.textContent =
+            "Copy Result";
+
+    }, 1200);
+
+});
+
+
+/* =========================
+   RESET
+========================= */
+
+clearBtn.addEventListener("click", function () {
+
+    textInput.value =
+        "";
+
+
+    resultOutput.value =
+        "";
+
+
+    resultInfo.textContent =
+        "";
+
+
+    resultText =
+        "";
+
+
+    result.style.display =
+        "none";
+
+
+    copyBtn.style.display =
+        "none";
+
+
+    copyBtn.textContent =
+        "Copy Result";
+
+
+    textInput.focus();
+
+});
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+        element.textContent =
+            new Date().getFullYear();
+    });
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

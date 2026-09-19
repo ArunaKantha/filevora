@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lorem Ipsum Generator - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+<style>
+/* FileVora Text Tools batch standardization */
+.text-tool .converter-card textarea,
+.text-tool .converter-card input[type="text"],
+.text-tool .converter-card input[type="number"],
+.text-tool .converter-card select {
+    border-color:#cbd5e1 !important;
+}
+.text-tool .converter-card textarea:focus,
+.text-tool .converter-card input:focus,
+.text-tool .converter-card select:focus {
+    border-color:#00bc8a !important;
+    outline:none !important;
+}
+.text-tool .text-reset-btn {
+    background:#ffffff !important;
+    color:#00bc8a !important;
+    border:1px solid #00bc8a !important;
+    box-shadow:none !important;
+}
+.text-tool .text-reset-btn:hover {
+    background:#ecfdf8 !important;
+}
+.text-tool .text-action-row {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:18px;
+}
+.text-tool .text-action-row > .convert-btn,
+.text-tool .text-action-row > .download-btn,
+.text-tool .text-action-row > button,
+.text-tool .text-action-row > a {
+    margin-top:0 !important;
+    width:100% !important;
+    box-sizing:border-box !important;
+}
+@media (max-width:600px){
+    .text-tool .text-action-row{grid-template-columns:1fr;}
+}
+</style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+<body class="text-tool">
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+    <div class="container">
+        <div class="converter-card">
+
+            <div class="converter-header">
+                <div class="tool-icon">LI</div>
+                <h1>Lorem Ipsum Generator</h1>
+                <p>Generate placeholder Lorem Ipsum text for websites, designs, and projects.</p>
+            </div>
+
+            <div style="text-align:left; margin-bottom:20px;">
+                <label for="countType" style="display:block; margin-bottom:8px; font-weight:700; color:#111827;">
+                    Generate By
+                </label>
+
+                <select
+                    id="countType"
+                    style="
+                        width:100%;
+                        padding:13px 15px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:15px;
+                        background:#fff;
+                        box-sizing:border-box;
+                    "
+                >
+                    <option value="paragraphs">Paragraphs</option>
+                    <option value="sentences">Sentences</option>
+                    <option value="words">Words</option>
+                </select>
+            </div>
+
+            <div style="text-align:left;">
+                <label for="count" style="display:block; margin-bottom:8px; font-weight:700; color:#111827;">
+                    Number
+                </label>
+
+                <input
+                    type="number"
+                    id="count"
+                    value="3"
+                    min="1"
+                    max="50"
+                    style="
+                        width:100%;
+                        padding:13px 15px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:15px;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                >
+            </div>
+
+            <div class="text-action-row">
+<button class="convert-btn" id="generateBtn">
+                Generate Lorem Ipsum
+            </button>
+<button type="button" class="convert-btn text-reset-btn" id="resetBtn">Reset</button>
+</div>
+
+            <div class="result" id="result">
+                <h2>Your Lorem Ipsum</h2>
+                <p id="resultInfo">Generated successfully.</p>
+
+                <textarea
+                    id="outputText"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:280px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #d1d5db;
+                        border-radius:10px;
+                        resize:vertical;
+                        font-size:15px;
+                        line-height:1.7;
+                        font-family:inherit;
+                        box-sizing:border-box;
+                        background:#ffffff;
+                    "
+                ></textarea>
+
+                <button class="download-btn" id="copyBtn">
+                    Copy Text
+                </button>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+const words = [
+    "lorem", "ipsum", "dolor", "sit", "amet", "consectetur",
+    "adipiscing", "elit", "sed", "do", "eiusmod", "tempor",
+    "incididunt", "ut", "labore", "et", "dolore", "magna",
+    "aliqua", "enim", "ad", "minim", "veniam", "quis",
+    "nostrud", "exercitation", "ullamco", "laboris", "nisi",
+    "aliquip", "ex", "ea", "commodo", "consequat", "duis",
+    "aute", "irure", "reprehenderit", "voluptate", "velit",
+    "esse", "cillum", "fugiat", "nulla", "pariatur",
+    "excepteur", "sint", "occaecat", "cupidatat", "non",
+    "proident", "sunt", "culpa", "qui", "officia", "deserunt",
+    "mollit", "anim", "id", "est", "laborum"
+];
+
+function randomWord() {
+    return words[Math.floor(Math.random() * words.length)];
+}
+
+function generateWords(count) {
+    const result = [];
+
+    for (let i = 0; i < count; i++) {
+        result.push(randomWord());
+    }
+
+    return result;
+}
+
+function generateSentence() {
+    const length = Math.floor(Math.random() * 10) + 8;
+    const sentenceWords = generateWords(length);
+
+    sentenceWords[0] =
+        sentenceWords[0].charAt(0).toUpperCase() +
+        sentenceWords[0].slice(1);
+
+    return sentenceWords.join(" ") + ".";
+}
+
+function generateSentences(count) {
+    const result = [];
+
+    for (let i = 0; i < count; i++) {
+        result.push(generateSentence());
+    }
+
+    return result;
+}
+
+function generateParagraph() {
+    const sentenceCount = Math.floor(Math.random() * 4) + 4;
+    return generateSentences(sentenceCount).join(" ");
+}
+
+function generateParagraphs(count) {
+    const result = [];
+
+    for (let i = 0; i < count; i++) {
+        result.push(generateParagraph());
+    }
+
+    return result.join("\n\n");
+}
+
+const generateBtn = document.getElementById("generateBtn");
+const countType = document.getElementById("countType");
+const countInput = document.getElementById("count");
+const result = document.getElementById("result");
+const outputText = document.getElementById("outputText");
+const resultInfo = document.getElementById("resultInfo");
+const copyBtn = document.getElementById("copyBtn");
+const resetBtn = document.getElementById("resetBtn");
+
+generateBtn.addEventListener("click", () => {
+
+    let count = parseInt(countInput.value);
+
+    if (isNaN(count) || count < 1) {
+        alert("Please enter a valid number.");
+        return;
+    }
+
+    if (count > 50) {
+        count = 50;
+        countInput.value = 50;
+    }
+
+    let generatedText = "";
+
+    if (countType.value === "words") {
+        generatedText = generateWords(count).join(" ");
+    }
+
+    if (countType.value === "sentences") {
+        generatedText = generateSentences(count).join(" ");
+    }
+
+    if (countType.value === "paragraphs") {
+        generatedText = generateParagraphs(count);
+    }
+
+    outputText.value = generatedText;
+
+    const wordCount = generatedText
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .length;
+
+    resultInfo.textContent =
+        `Generated ${count} ${countType.value}. Total words: ${wordCount}`;
+
+    result.style.display = "block";
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+    });
+});
+
+copyBtn.addEventListener("click", async () => {
+
+    if (!outputText.value) return;
+
+    try {
+        await navigator.clipboard.writeText(outputText.value);
+
+        copyBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+            copyBtn.textContent = "Copy Text";
+        }, 1500);
+
+    } catch (error) {
+        outputText.select();
+        document.execCommand("copy");
+
+        copyBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+            copyBtn.textContent = "Copy Text";
+        }, 1500);
+    }
+});
+
+resetBtn.addEventListener("click", () => {
+    countType.value = "paragraphs";
+    countInput.value = "3";
+    outputText.value = "";
+    resultInfo.textContent = "Generated successfully.";
+    result.style.display = "none";
+});
+</script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>
+

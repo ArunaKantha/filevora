@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Timestamp Converter - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .timestamp-unit-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:12px;
+        }
+
+        .timestamp-unit-row .convert-btn{
+            width:100% !important;
+            min-height:46px !important;
+            height:46px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .timestamp-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .timestamp-action-row .convert-btn{
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .timestamp-reset-btn{
+            background:#ffffff !important;
+            color:#00bc8a !important;
+            border:1px solid #00bc8a !important;
+            box-shadow:none !important;
+        }
+
+        .timestamp-reset-btn:hover{
+            background:#ecfdf8 !important;
+        }
+
+        @media (max-width:600px){
+            .timestamp-action-row{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+    TS
+</div>
+
+                <h1>Timestamp Converter</h1>
+
+                <p>
+                    Convert Unix timestamps to dates and dates to Unix timestamps.
+                </p>
+
+            </div>
+
+
+            <!-- TIMESTAMP TO DATE -->
+
+            <div style="text-align:left;">
+
+                <h2
+                    style="
+                        margin:0 0 15px;
+                        font-size:20px;
+                        color:#111827;
+                    "
+                >
+                    Timestamp → Date
+                </h2>
+
+
+                <label
+                    for="timestampInput"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Unix Timestamp
+                </label>
+
+
+                <input
+                    type="number"
+                    id="timestampInput"
+                    placeholder="Example: 1757840400"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                    "
+                >
+
+
+                <div class="timestamp-unit-row">
+
+                    <button
+                        type="button"
+                        id="secondsBtn"
+                        class="convert-btn"
+                    >
+                        Seconds
+                    </button>
+
+                    <button
+                        type="button"
+                        id="millisecondsBtn"
+                        class="convert-btn"
+                        style="background:#64748b !important;"
+                    >
+                        Milliseconds
+                    </button>
+
+                </div>
+
+
+                <div class="timestamp-action-row">
+
+                    <button
+                        type="button"
+                        id="timestampToDateBtn"
+                        class="convert-btn"
+                    >
+                        Convert Timestamp
+                    </button>
+
+                    <button
+                        type="button"
+                        id="resetTimestampBtn"
+                        class="convert-btn timestamp-reset-btn"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="timestampResult"
+                class="result"
+                style="display:none;"
+            >
+
+                <h2>Converted Date & Time</h2>
+
+                <p id="timestampResultText"></p>
+
+                <p
+                    id="timestampLocalText"
+                    style="margin-top:10px;"
+                ></p>
+
+                <p
+                    id="timestampUtcText"
+                    style="margin-top:10px;"
+                ></p>
+
+            </div>
+
+
+            <div
+                style="
+                    height:1px;
+                    background:#e5e7eb;
+                    margin:35px 0;
+                "
+            ></div>
+
+
+            <!-- DATE TO TIMESTAMP -->
+
+            <div style="text-align:left;">
+
+                <h2
+                    style="
+                        margin:0 0 15px;
+                        font-size:20px;
+                        color:#111827;
+                    "
+                >
+                    Date → Timestamp
+                </h2>
+
+
+                <label
+                    for="dateInput"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Date & Time
+                </label>
+
+
+                <input
+                    type="datetime-local"
+                    id="dateInput"
+                    step="1"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                    "
+                >
+
+
+                <div class="timestamp-action-row">
+
+                    <button
+                        type="button"
+                        id="dateToTimestampBtn"
+                        class="convert-btn"
+                    >
+                        Convert Date
+                    </button>
+
+                    <button
+                        type="button"
+                        id="resetDateBtn"
+                        class="convert-btn timestamp-reset-btn"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="dateResult"
+                class="result"
+                style="display:none;"
+            >
+
+                <h2>Unix Timestamp</h2>
+
+                <p id="secondsResultText"></p>
+
+                <p
+                    id="millisecondsResultText"
+                    style="margin-top:10px;"
+                ></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const timestampInput =
+    document.getElementById("timestampInput");
+
+const secondsBtn =
+    document.getElementById("secondsBtn");
+
+const millisecondsBtn =
+    document.getElementById("millisecondsBtn");
+
+const timestampToDateBtn =
+    document.getElementById("timestampToDateBtn");
+
+const resetTimestampBtn =
+    document.getElementById("resetTimestampBtn");
+
+const timestampResult =
+    document.getElementById("timestampResult");
+
+const timestampResultText =
+    document.getElementById("timestampResultText");
+
+const timestampLocalText =
+    document.getElementById("timestampLocalText");
+
+const timestampUtcText =
+    document.getElementById("timestampUtcText");
+
+
+const dateInput =
+    document.getElementById("dateInput");
+
+const dateToTimestampBtn =
+    document.getElementById("dateToTimestampBtn");
+
+const resetDateBtn =
+    document.getElementById("resetDateBtn");
+
+const dateResult =
+    document.getElementById("dateResult");
+
+const secondsResultText =
+    document.getElementById("secondsResultText");
+
+const millisecondsResultText =
+    document.getElementById("millisecondsResultText");
+
+
+let timestampUnit =
+    "seconds";
+
+
+/* =========================
+   CURRENT DATE & TIME
+========================= */
+
+function setCurrentDateTime() {
+
+    const now =
+        new Date();
+
+    const year =
+        now.getFullYear();
+
+    const month =
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            now.getDate()
+        ).padStart(2, "0");
+
+    const hours =
+        String(
+            now.getHours()
+        ).padStart(2, "0");
+
+    const minutes =
+        String(
+            now.getMinutes()
+        ).padStart(2, "0");
+
+    const seconds =
+        String(
+            now.getSeconds()
+        ).padStart(2, "0");
+
+
+    dateInput.value =
+        `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+}
+
+
+/* =========================
+   UNIT BUTTONS
+========================= */
+
+secondsBtn.addEventListener(
+    "click",
+    function () {
+
+        timestampUnit =
+            "seconds";
+
+        secondsBtn.style.setProperty(
+            "background",
+            "#00bc8a",
+            "important"
+        );
+
+        millisecondsBtn.style.setProperty(
+            "background",
+            "#64748b",
+            "important"
+        );
+
+    }
+);
+
+
+millisecondsBtn.addEventListener(
+    "click",
+    function () {
+
+        timestampUnit =
+            "milliseconds";
+
+        millisecondsBtn.style.setProperty(
+            "background",
+            "#00bc8a",
+            "important"
+        );
+
+        secondsBtn.style.setProperty(
+            "background",
+            "#64748b",
+            "important"
+        );
+
+    }
+);
+
+
+/* =========================
+   FORMAT DATE
+========================= */
+
+function formatDate(date) {
+
+    return new Intl.DateTimeFormat(
+        "en-US",
+        {
+            year:"numeric",
+            month:"long",
+            day:"numeric",
+            hour:"numeric",
+            minute:"2-digit",
+            second:"2-digit",
+            hour12:true
+        }
+    ).format(date);
+}
+
+
+/* =========================
+   TIMESTAMP → DATE
+========================= */
+
+timestampToDateBtn.addEventListener(
+    "click",
+    function () {
+
+        const value =
+            timestampInput.value.trim();
+
+
+        if (!value) {
+
+            alert(
+                "Please enter a Unix timestamp."
+            );
+
+            return;
+        }
+
+
+        const timestamp =
+            Number(value);
+
+
+        if (
+            !Number.isFinite(timestamp)
+        ) {
+
+            alert(
+                "Please enter a valid timestamp."
+            );
+
+            return;
+        }
+
+
+        let milliseconds;
+
+
+        if (
+            timestampUnit ===
+            "seconds"
+        ) {
+
+            milliseconds =
+                timestamp * 1000;
+
+        } else {
+
+            milliseconds =
+                timestamp;
+        }
+
+
+        const date =
+            new Date(
+                milliseconds
+            );
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            alert(
+                "Invalid timestamp."
+            );
+
+            return;
+        }
+
+
+        timestampResult.style.display =
+            "block";
+
+
+        timestampResult.style.background =
+            "#f0fdf4";
+
+
+        timestampResult.style.borderColor =
+            "#bbf7d0";
+
+
+        timestampResultText.textContent =
+            formatDate(date);
+
+
+        timestampLocalText.textContent =
+            `Your local time: ${date.toLocaleString()}`;
+
+
+        timestampUtcText.textContent =
+            `UTC: ${date.toISOString()}`;
+
+    }
+);
+
+
+/* =========================
+   RESET TIMESTAMP
+========================= */
+
+resetTimestampBtn.addEventListener(
+    "click",
+    function () {
+
+        timestampInput.value =
+            "";
+
+        timestampUnit =
+            "seconds";
+
+        secondsBtn.style.setProperty(
+            "background",
+            "#00bc8a",
+            "important"
+        );
+
+        millisecondsBtn.style.setProperty(
+            "background",
+            "#64748b",
+            "important"
+        );
+
+        timestampResultText.textContent =
+            "";
+
+        timestampLocalText.textContent =
+            "";
+
+        timestampUtcText.textContent =
+            "";
+
+        timestampResult.style.display =
+            "none";
+
+        timestampResult.style.background =
+            "";
+
+        timestampResult.style.borderColor =
+            "";
+
+        timestampInput.focus();
+
+    }
+);
+
+
+/* =========================
+   DATE → TIMESTAMP
+========================= */
+
+dateToTimestampBtn.addEventListener(
+    "click",
+    function () {
+
+        const value =
+            dateInput.value;
+
+
+        if (!value) {
+
+            alert(
+                "Please select a date and time."
+            );
+
+            return;
+        }
+
+
+        const date =
+            new Date(value);
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            alert(
+                "Invalid date and time."
+            );
+
+            return;
+        }
+
+
+        const milliseconds =
+            date.getTime();
+
+
+        const seconds =
+            Math.floor(
+                milliseconds / 1000
+            );
+
+
+        dateResult.style.display =
+            "block";
+
+
+        dateResult.style.background =
+            "#f0fdf4";
+
+
+        dateResult.style.borderColor =
+            "#bbf7d0";
+
+
+        secondsResultText.textContent =
+            `Seconds: ${seconds}`;
+
+
+        millisecondsResultText.textContent =
+            `Milliseconds: ${milliseconds}`;
+
+    }
+);
+
+
+/* =========================
+   RESET DATE
+========================= */
+
+resetDateBtn.addEventListener(
+    "click",
+    function () {
+
+        setCurrentDateTime();
+
+        secondsResultText.textContent =
+            "";
+
+        millisecondsResultText.textContent =
+            "";
+
+        dateResult.style.display =
+            "none";
+
+        dateResult.style.background =
+            "";
+
+        dateResult.style.borderColor =
+            "";
+
+        dateInput.focus();
+
+    }
+);
+
+
+/* =========================
+   INITIAL VALUE
+========================= */
+
+setCurrentDateTime();
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+
+        element.textContent =
+            new Date().getFullYear();
+
+    });
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

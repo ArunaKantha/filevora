@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tip Calculator - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .tip-calculator {
+            max-width:760px;
+        }
+
+        .tip-form {
+            display:grid;
+            gap:18px;
+        }
+
+        .field-group {
+            text-align:left;
+        }
+
+        .field-group label {
+            display:block;
+            margin-bottom:8px;
+            color:#374151;
+            font-size:14px;
+            font-weight:700;
+        }
+
+        .input-wrapper {
+            position:relative;
+        }
+
+        .currency-symbol {
+            position:absolute;
+            left:16px;
+            top:50%;
+            transform:translateY(-50%);
+            color:#64748b;
+            font-size:16px;
+            font-weight:700;
+            pointer-events:none;
+            z-index:2;
+        }
+
+        .tip-input {
+            width:100%;
+            padding:14px 16px 14px 50px;
+            border:1px solid #cbd5e1;
+            border-radius:10px;
+            background:#f8fafc;
+            color:#111827;
+            font-size:16px;
+            outline:none;
+            box-sizing:border-box;
+        }
+
+        .tip-input:focus {
+            border-color:#ef1f2b;
+            background:#ffffff;
+        }
+
+        .tip-percent {
+            width:100%;
+            padding:14px 16px;
+            border:1px solid #cbd5e1;
+            border-radius:10px;
+            background:#f8fafc;
+            color:#111827;
+            font-size:16px;
+            outline:none;
+            box-sizing:border-box;
+        }
+
+        .tip-percent:focus {
+            border-color:#ef1f2b;
+            background:#ffffff;
+        }
+
+        .tip-buttons {
+            display:grid;
+            grid-template-columns:repeat(5, 1fr);
+            gap:8px;
+            margin-top:10px;
+        }
+
+        .tip-calculator .percent-btn {
+            padding:10px 6px;
+            border:1px solid #64748b !important;
+            border-radius:8px;
+            background:#64748b !important;
+            color:#ffffff;
+            font-size:13px;
+            font-weight:700;
+            cursor:pointer;
+            box-shadow:none !important;
+        }
+
+        .tip-calculator .percent-btn:hover {
+            background:#475569 !important;
+        }
+
+        .tip-calculator .percent-btn.active {
+            border-color:#ef1f2b !important;
+            background:#ef1f2b !important;
+            box-shadow:0 8px 18px rgba(239,31,43,.18) !important;
+        }
+
+        .tip-calculator .percent-btn.active:hover {
+            background:#dc1824 !important;
+        }
+
+        .people-control {
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+
+        .people-btn {
+            width:44px;
+            height:44px;
+            border:1px solid #cbd5e1;
+            border-radius:9px;
+            background:#f8fafc;
+            color:#2563eb;
+            font-size:20px;
+            font-weight:700;
+            cursor:pointer;
+        }
+
+        .people-btn:hover {
+            background:#eff6ff;
+        }
+
+        .people-input {
+            flex:1;
+            padding:13px;
+            border:1px solid #cbd5e1;
+            border-radius:9px;
+            background:#f8fafc;
+            color:#111827;
+            font-size:16px;
+            text-align:center;
+            outline:none;
+            box-sizing:border-box;
+        }
+
+        .tip-action-row {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:4px;
+        }
+
+        .calculate-btn,
+        .reset-tip-btn {
+            width:100%;
+            height:50px;
+            min-height:50px;
+            padding:13px 20px;
+            border-radius:10px;
+            font-size:15px;
+            font-weight:800;
+            cursor:pointer;
+            box-sizing:border-box;
+        }
+
+        .calculate-btn {
+            border:1px solid #ef1f2b;
+            background:#ef1f2b;
+            color:#ffffff;
+            box-shadow:0 8px 18px rgba(239,31,43,.18);
+        }
+
+        .calculate-btn:hover {
+            background:#dc1824;
+        }
+
+        .reset-tip-btn {
+            background:#ffffff;
+            color:#ef1f2b;
+            border:1px solid #ef1f2b;
+            box-shadow:none;
+        }
+
+        .reset-tip-btn:hover {
+            background:#fff5f5;
+        }
+
+        .tip-result {
+            display:none;
+            margin-top:28px;
+            padding:24px;
+            border-radius:14px;
+            background:#f0fdf4;
+            border:1px solid #bbf7d0;
+        }
+
+        .tip-result h2 {
+            margin:0 0 18px;
+            color:#166534;
+            font-size:20px;
+        }
+
+        .result-grid {
+            display:grid;
+            grid-template-columns:repeat(2, 1fr);
+            gap:12px;
+        }
+
+        .result-item {
+            padding:16px;
+            background:#ffffff;
+            border:1px solid #dcfce7;
+            border-radius:10px;
+            text-align:left;
+        }
+
+        .result-item span {
+            display:block;
+            margin-bottom:5px;
+            color:#64748b;
+            font-size:13px;
+        }
+
+        .result-item strong {
+            display:block;
+            color:#166534;
+            font-size:20px;
+        }
+
+        .total-result {
+            grid-column:1 / -1;
+        }
+
+        .total-result strong {
+            font-size:25px;
+        }
+
+        .error-message {
+            display:none;
+            margin-top:18px;
+            padding:13px;
+            border-radius:10px;
+            background:#fef2f2;
+            border:1px solid #fecaca;
+            color:#b91c1c;
+            font-size:14px;
+            text-align:left;
+        }
+
+        @media (max-width:600px) {
+
+            .tip-buttons {
+                grid-template-columns:repeat(3, 1fr);
+            }
+
+            .result-grid {
+                grid-template-columns:1fr;
+            }
+
+            .total-result {
+                grid-column:auto;
+            }
+
+            .tip-action-row {
+                grid-template-columns:1fr;
+            }
+        }
+        /* Fix Bill Amount $ overlap */
+.tip-calculator .input-wrapper {
+    position: relative !important;
+}
+
+.tip-calculator .currency-symbol {
+    position: absolute !important;
+    left: 16px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 5 !important;
+    pointer-events: none !important;
+}
+
+.tip-calculator #billAmount {
+    padding-left: 58px !important;
+}
+    </style>
+
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card tip-calculator">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    %
+                </div>
+
+                <h1>Tip Calculator</h1>
+
+                <p>
+                    Calculate tip, total bill and amount per person quickly.
+                </p>
+
+            </div>
+
+
+            <div class="tip-form">
+
+                <div class="field-group">
+
+                    <label for="billAmount">
+                        Bill Amount
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="currency-symbol">$</span>
+
+                        <input
+                            type="number"
+                            id="billAmount"
+                            class="tip-input"
+                            placeholder="100"
+                            min="0"
+                            step="0.01"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="field-group">
+
+                    <label for="tipPercent">
+                        Tip Percentage
+                    </label>
+
+                    <input
+                        type="number"
+                        id="tipPercent"
+                        class="tip-percent"
+                        value="15"
+                        min="0"
+                        step="0.1"
+                    >
+
+
+                    <div class="tip-buttons">
+
+                        <button
+                            type="button"
+                            class="percent-btn"
+                            data-percent="5"
+                            aria-pressed="false"
+                            onclick="setTip(5)"
+                        >
+                            5%
+                        </button>
+
+                        <button
+                            type="button"
+                            class="percent-btn"
+                            data-percent="10"
+                            aria-pressed="false"
+                            onclick="setTip(10)"
+                        >
+                            10%
+                        </button>
+
+                        <button
+                            type="button"
+                            class="percent-btn active"
+                            data-percent="15"
+                            aria-pressed="true"
+                            onclick="setTip(15)"
+                        >
+                            15%
+                        </button>
+
+                        <button
+                            type="button"
+                            class="percent-btn"
+                            data-percent="20"
+                            aria-pressed="false"
+                            onclick="setTip(20)"
+                        >
+                            20%
+                        </button>
+
+                        <button
+                            type="button"
+                            class="percent-btn"
+                            data-percent="25"
+                            aria-pressed="false"
+                            onclick="setTip(25)"
+                        >
+                            25%
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="field-group">
+
+                    <label>
+                        Number of People
+                    </label>
+
+
+                    <div class="people-control">
+
+                        <button
+                            type="button"
+                            class="people-btn"
+                            onclick="changePeople(-1)"
+                        >
+                            −
+                        </button>
+
+
+                        <input
+                            type="number"
+                            id="people"
+                            class="people-input"
+                            value="1"
+                            min="1"
+                            step="1"
+                        >
+
+
+                        <button
+                            type="button"
+                            class="people-btn"
+                            onclick="changePeople(1)"
+                        >
+                            +
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="tip-action-row">
+
+                    <button
+                        type="button"
+                        class="calculate-btn"
+                        id="calculateTipBtn"
+                    >
+                        Calculate Tip
+                    </button>
+
+                    <button
+                        type="button"
+                        class="reset-tip-btn"
+                        id="resetTipBtn"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="errorMessage"
+                class="error-message"
+            ></div>
+
+
+            <div
+                id="tipResult"
+                class="tip-result"
+            >
+
+                <h2>Bill Summary</h2>
+
+
+                <div class="result-grid">
+
+                    <div class="result-item">
+
+                        <span>
+                            Bill Amount
+                        </span>
+
+                        <strong id="billResult">
+                            $0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="result-item">
+
+                        <span>
+                            Tip Amount
+                        </span>
+
+                        <strong id="tipResultValue">
+                            $0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="result-item">
+
+                        <span>
+                            Total Bill
+                        </span>
+
+                        <strong id="totalResult">
+                            $0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="result-item">
+
+                        <span>
+                            Tip Per Person
+                        </span>
+
+                        <strong id="tipPerPerson">
+                            $0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="result-item total-result">
+
+                        <span>
+                            Total Per Person
+                        </span>
+
+                        <strong id="totalPerPerson">
+                            $0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const billAmount =
+    document.getElementById("billAmount");
+
+const tipPercent =
+    document.getElementById("tipPercent");
+
+const people =
+    document.getElementById("people");
+
+const calculateTipBtn =
+    document.getElementById("calculateTipBtn");
+
+const resetTipBtn =
+    document.getElementById("resetTipBtn");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const tipResult =
+    document.getElementById("tipResult");
+
+const billResult =
+    document.getElementById("billResult");
+
+const tipResultValue =
+    document.getElementById("tipResultValue");
+
+const totalResult =
+    document.getElementById("totalResult");
+
+const tipPerPerson =
+    document.getElementById("tipPerPerson");
+
+const totalPerPerson =
+    document.getElementById("totalPerPerson");
+
+const percentButtons =
+    document.querySelectorAll(".percent-btn");
+
+
+function updateSelectedTip(percent) {
+
+    percentButtons.forEach(function (button) {
+
+        const isSelected =
+            Number(button.dataset.percent) === Number(percent);
+
+        button.classList.toggle("active", isSelected);
+        button.setAttribute("aria-pressed", String(isSelected));
+    });
+}
+
+
+function setTip(percent) {
+
+    tipPercent.value =
+        percent;
+
+    updateSelectedTip(percent);
+}
+
+
+tipPercent.addEventListener("input", function () {
+    updateSelectedTip(tipPercent.value);
+});
+
+
+function changePeople(amount) {
+
+    let value =
+        parseInt(
+            people.value,
+            10
+        ) || 1;
+
+
+    value +=
+        amount;
+
+
+    if (
+        value < 1
+    ) {
+
+        value = 1;
+    }
+
+
+    people.value =
+        value;
+}
+
+
+function formatMoney(value) {
+
+    return "$" +
+        Number(value)
+            .toFixed(2);
+}
+
+
+function showError(message) {
+
+    tipResult.style.display =
+        "none";
+
+    errorMessage.textContent =
+        message;
+
+    errorMessage.style.display =
+        "block";
+}
+
+
+function calculateTip() {
+
+    const billInput =
+        billAmount.value.trim();
+
+    const tipInput =
+        tipPercent.value.trim();
+
+    const peopleInput =
+        people.value.trim();
+
+
+    const bill =
+        Number(
+            billInput
+        );
+
+    const tipValue =
+        Number(
+            tipInput
+        );
+
+    const peopleValue =
+        Number(
+            peopleInput
+        );
+
+
+    tipResult.style.display =
+        "none";
+
+    errorMessage.style.display =
+        "none";
+
+
+    if (
+        billInput === "" ||
+        !Number.isFinite(bill) ||
+        bill < 0
+    ) {
+
+        showError(
+            "Please enter a valid bill amount."
+        );
+
+        return;
+    }
+
+
+    if (
+        tipInput === "" ||
+        !Number.isFinite(tipValue) ||
+        tipValue < 0
+    ) {
+
+        showError(
+            "Please enter a valid tip percentage."
+        );
+
+        return;
+    }
+
+
+    if (
+        peopleInput === "" ||
+        !Number.isFinite(peopleValue) ||
+        !Number.isInteger(peopleValue) ||
+        peopleValue < 1
+    ) {
+
+        showError(
+            "Number of people must be at least 1."
+        );
+
+        return;
+    }
+
+
+    const tipAmount =
+        bill *
+        tipValue /
+        100;
+
+
+    const totalBill =
+        bill +
+        tipAmount;
+
+
+    const tipPerPersonValue =
+        tipAmount /
+        peopleValue;
+
+
+    const totalPerPersonValue =
+        totalBill /
+        peopleValue;
+
+
+    billResult.textContent =
+        formatMoney(
+            bill
+        );
+
+
+    tipResultValue.textContent =
+        formatMoney(
+            tipAmount
+        );
+
+
+    totalResult.textContent =
+        formatMoney(
+            totalBill
+        );
+
+
+    tipPerPerson.textContent =
+        formatMoney(
+            tipPerPersonValue
+        );
+
+
+    totalPerPerson.textContent =
+        formatMoney(
+            totalPerPersonValue
+        );
+
+
+    tipResult.style.display =
+        "block";
+}
+
+
+/* =========================
+   CALCULATE
+========================= */
+
+calculateTipBtn.addEventListener(
+    "click",
+    calculateTip
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetTipBtn.addEventListener(
+    "click",
+    function () {
+
+        billAmount.value =
+            "";
+
+        tipPercent.value =
+            "15";
+
+        updateSelectedTip(15);
+
+        people.value =
+            "1";
+
+
+        billResult.textContent =
+            "$0.00";
+
+        tipResultValue.textContent =
+            "$0.00";
+
+        totalResult.textContent =
+            "$0.00";
+
+        tipPerPerson.textContent =
+            "$0.00";
+
+        totalPerPerson.textContent =
+            "$0.00";
+
+
+        errorMessage.textContent =
+            "";
+
+        errorMessage.style.display =
+            "none";
+
+
+        tipResult.style.display =
+            "none";
+
+
+        billAmount.focus();
+
+    }
+);
+
+
+/* ENTER KEY */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            calculateTip();
+        }
+
+    }
+);
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date()
+                    .getFullYear();
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+<style>
+/* FileVora Text Tools batch standardization */
+.text-tool .converter-card textarea,
+.text-tool .converter-card input[type="text"],
+.text-tool .converter-card input[type="number"],
+.text-tool .converter-card select {
+    border-color:#cbd5e1 !important;
+}
+.text-tool .converter-card textarea:focus,
+.text-tool .converter-card input:focus,
+.text-tool .converter-card select:focus {
+    border-color:#00bc8a !important;
+    outline:none !important;
+}
+.text-tool .text-reset-btn {
+    background:#ffffff !important;
+    color:#00bc8a !important;
+    border:1px solid #00bc8a !important;
+    box-shadow:none !important;
+}
+.text-tool .text-reset-btn:hover {
+    background:#ecfdf8 !important;
+}
+.text-tool .text-action-row {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:18px;
+}
+.text-tool .text-action-row > .convert-btn,
+.text-tool .text-action-row > .download-btn,
+.text-tool .text-action-row > button,
+.text-tool .text-action-row > a {
+    margin-top:0 !important;
+    width:100% !important;
+    box-sizing:border-box !important;
+}
+@media (max-width:600px){
+    .text-tool .text-action-row{grid-template-columns:1fr;}
+}
+</style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body class="text-tool">
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">TTS</div>
+
+                <h1>Text to Speech</h1>
+
+                <p>
+                    Convert your text into natural-sounding speech directly in your browser.
+                </p>
+
+            </div>
+
+
+            <!-- Text -->
+
+            <div style="text-align:left;">
+
+                <label
+                    for="textInput"
+                    style="font-weight:700; color:#111827;"
+                >
+                    Enter Text
+                </label>
+
+                <textarea
+                    id="textInput"
+                    placeholder="Type or paste your text here..."
+                    style="
+                        width:100%;
+                        min-height:180px;
+                        margin-top:8px;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:15px;
+                        line-height:1.6;
+                        resize:vertical;
+                        box-sizing:border-box;
+                        font-family:inherit;
+                    "
+                ></textarea>
+
+            </div>
+
+
+            <!-- Voice -->
+
+            <div
+                style="
+                    display:grid;
+                    gap:18px;
+                    margin-top:20px;
+                    text-align:left;
+                "
+            >
+
+                <div>
+
+                    <label
+                        for="voiceSelect"
+                        style="font-weight:700; color:#111827;"
+                    >
+                        Voice
+                    </label>
+
+                    <select
+                        id="voiceSelect"
+                        style="
+                            width:100%;
+                            padding:14px;
+                            margin-top:8px;
+                            border:1px solid #cbd5e1;
+                            border-radius:10px;
+                            font-size:15px;
+                            background:#ffffff;
+                        "
+                    ></select>
+
+                </div>
+
+
+                <!-- Speed -->
+
+                <div>
+
+                    <label
+                        for="rate"
+                        style="font-weight:700; color:#111827;"
+                    >
+                        Speed:
+                        <span id="rateValue">1</span>
+                    </label>
+
+                    <input
+                        type="range"
+                        id="rate"
+                        min="0.5"
+                        max="2"
+                        step="0.1"
+                        value="1"
+                        style="
+                            width:100%;
+                            margin-top:10px;
+                        "
+                    >
+
+                </div>
+
+
+                <!-- Pitch -->
+
+                <div>
+
+                    <label
+                        for="pitch"
+                        style="font-weight:700; color:#111827;"
+                    >
+                        Pitch:
+                        <span id="pitchValue">1</span>
+                    </label>
+
+                    <input
+                        type="range"
+                        id="pitch"
+                        min="0"
+                        max="2"
+                        step="0.1"
+                        value="1"
+                        style="
+                            width:100%;
+                            margin-top:10px;
+                        "
+                    >
+
+                </div>
+
+
+                <!-- Volume -->
+
+                <div>
+
+                    <label
+                        for="volume"
+                        style="font-weight:700; color:#111827;"
+                    >
+                        Volume:
+                        <span id="volumeValue">1</span>
+                    </label>
+
+                    <input
+                        type="range"
+                        id="volume"
+                        min="0"
+                        max="1"
+                        step="0.1"
+                        value="1"
+                        style="
+                            width:100%;
+                            margin-top:10px;
+                        "
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Buttons -->
+
+            <div
+                style="
+                    display:grid;
+                    grid-template-columns:1fr 1fr;
+                    gap:12px;
+                    margin-top:24px;
+                "
+            >
+
+                <button
+                    type="button"
+                    id="speakBtn"
+                    class="convert-btn"
+                    style="margin-top:0;"
+                >
+                    Speak
+                </button>
+
+                <button
+                    type="button"
+                    id="stopBtn"
+                    class="convert-btn"
+                    style="
+                        margin-top:0;
+                        background:#ef4444;
+                    "
+                >
+                    Stop
+                </button>
+<button type="button" class="convert-btn text-reset-btn" id="resetBtn" style="margin-top:0;">Reset</button>
+
+            </div>
+
+
+            <!-- Result -->
+
+            <div
+                id="result"
+                class="result"
+                style="display:none;"
+            >
+
+                <h2>Speech Ready</h2>
+
+                <p id="resultText"></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const textInput =
+    document.getElementById("textInput");
+
+const voiceSelect =
+    document.getElementById("voiceSelect");
+
+const rate =
+    document.getElementById("rate");
+
+const pitch =
+    document.getElementById("pitch");
+
+const volume =
+    document.getElementById("volume");
+
+const rateValue =
+    document.getElementById("rateValue");
+
+const pitchValue =
+    document.getElementById("pitchValue");
+
+const volumeValue =
+    document.getElementById("volumeValue");
+
+const speakBtn =
+    document.getElementById("speakBtn");
+
+const stopBtn =
+    document.getElementById("stopBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+
+let voices = [];
+
+
+/* --------------------------------
+   LOAD VOICES
+-------------------------------- */
+
+function loadVoices() {
+
+    voices =
+        window.speechSynthesis.getVoices();
+
+    voiceSelect.innerHTML = "";
+
+
+    if (voices.length === 0) {
+
+        const option =
+            document.createElement("option");
+
+        option.textContent =
+            "Default browser voice";
+
+        option.value = "";
+
+        voiceSelect.appendChild(option);
+
+        return;
+    }
+
+
+    voices.forEach(
+        (voice, index) => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = index;
+
+            option.textContent =
+                `${voice.name} (${voice.lang})`;
+
+            voiceSelect.appendChild(option);
+
+        }
+    );
+
+}
+
+
+loadVoices();
+
+if ("onvoiceschanged" in speechSynthesis) {
+
+    speechSynthesis.onvoiceschanged =
+        loadVoices;
+
+}
+
+
+/* --------------------------------
+   RANGE VALUES
+-------------------------------- */
+
+rate.addEventListener(
+    "input",
+    function() {
+
+        rateValue.textContent =
+            rate.value;
+
+    }
+);
+
+
+pitch.addEventListener(
+    "input",
+    function() {
+
+        pitchValue.textContent =
+            pitch.value;
+
+    }
+);
+
+
+volume.addEventListener(
+    "input",
+    function() {
+
+        volumeValue.textContent =
+            volume.value;
+
+    }
+);
+
+
+/* --------------------------------
+   SPEAK
+-------------------------------- */
+
+speakBtn.addEventListener(
+    "click",
+    function() {
+
+        const text =
+            textInput.value.trim();
+
+
+        if (!text) {
+
+            result.style.display =
+                "block";
+
+            resultText.textContent =
+                "Please enter some text first.";
+
+            return;
+        }
+
+
+        if (!("speechSynthesis" in window)) {
+
+            result.style.display =
+                "block";
+
+            resultText.textContent =
+                "Text to Speech is not supported by this browser.";
+
+            return;
+        }
+
+
+        speechSynthesis.cancel();
+
+
+        const utterance =
+            new SpeechSynthesisUtterance(text);
+
+
+        const selectedIndex =
+            voiceSelect.value;
+
+
+        if (
+            selectedIndex !== "" &&
+            voices[selectedIndex]
+        ) {
+
+            utterance.voice =
+                voices[selectedIndex];
+
+        }
+
+
+        utterance.rate =
+            Number(rate.value);
+
+        utterance.pitch =
+            Number(pitch.value);
+
+        utterance.volume =
+            Number(volume.value);
+
+
+        utterance.onstart =
+            function() {
+
+                speakBtn.textContent =
+                    "Speaking...";
+
+                result.style.display =
+                    "block";
+
+                resultText.textContent =
+                    "Your text is being spoken.";
+
+            };
+
+
+        utterance.onend =
+            function() {
+
+                speakBtn.textContent =
+                    "Speak";
+
+                resultText.textContent =
+                    "Speech finished.";
+
+            };
+
+
+        utterance.onerror =
+            function() {
+
+                speakBtn.textContent =
+                    "Speak";
+
+                result.style.display =
+                    "block";
+
+                resultText.textContent =
+                    "Unable to play the speech.";
+
+            };
+
+
+        speechSynthesis.speak(
+            utterance
+        );
+
+    }
+);
+
+
+/* --------------------------------
+   STOP
+-------------------------------- */
+
+stopBtn.addEventListener(
+    "click",
+    function() {
+
+        speechSynthesis.cancel();
+
+        speakBtn.textContent =
+            "Speak";
+
+        result.style.display =
+            "block";
+
+        resultText.textContent =
+            "Speech stopped.";
+
+    }
+);
+
+
+resetBtn.addEventListener("click", function () {
+    window.speechSynthesis.cancel();
+    textInput.value = "";
+    rate.value = "1";
+    pitch.value = "1";
+    volume.value = "1";
+    rateValue.textContent = "1";
+    pitchValue.textContent = "1";
+    volumeValue.textContent = "1";
+    speakBtn.textContent = "Speak";
+    result.style.display = "none";
+    resultText.textContent = "";
+    textInput.focus();
+});
+</script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>
+

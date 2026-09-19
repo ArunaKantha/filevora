@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Encoder / Decoder - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+<style>
+/* FileVora Text Tools batch standardization */
+.text-tool .converter-card textarea,
+.text-tool .converter-card input[type="text"],
+.text-tool .converter-card input[type="number"],
+.text-tool .converter-card select {
+    border-color:#cbd5e1 !important;
+}
+.text-tool .converter-card textarea:focus,
+.text-tool .converter-card input:focus,
+.text-tool .converter-card select:focus {
+    border-color:#ef1f2b !important;
+    outline:none !important;
+}
+.text-tool .text-reset-btn {
+    background:#ffffff !important;
+    color:#ef1f2b !important;
+    border:1px solid #ef1f2b !important;
+    box-shadow:none !important;
+}
+.text-tool .text-reset-btn:hover {
+    background:#fff5f5 !important;
+}
+.text-tool .text-action-row {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:18px;
+}
+.text-tool .text-action-row > .convert-btn,
+.text-tool .text-action-row > .download-btn,
+.text-tool .text-action-row > button,
+.text-tool .text-action-row > a {
+    margin-top:0 !important;
+    width:100% !important;
+    box-sizing:border-box !important;
+}
+@media (max-width:600px){
+    .text-tool .text-action-row{grid-template-columns:1fr;}
+}
+</style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+<body class="text-tool">
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+    <div class="container">
+        <div class="converter-card">
+
+            <div class="converter-header">
+                <div class="tool-icon">URL</div>
+                <h1>URL Encoder / Decoder</h1>
+                <p>Encode or decode URLs and text safely using URL encoding.</p>
+            </div>
+
+            <textarea
+                id="textInput"
+                placeholder="Enter URL or text here..."
+                style="
+                    width:100%;
+                    min-height:250px;
+                    padding:18px;
+                    border:2px solid #e5e7eb;
+                    border-radius:14px;
+                    resize:vertical;
+                    font-size:15px;
+                    line-height:1.6;
+                    outline:none;
+                    font-family:monospace;
+                    box-sizing:border-box;
+                "
+            ></textarea>
+
+            <div style="
+                display:flex;
+                gap:12px;
+                margin-top:18px;
+            ">
+                <button
+                    class="convert-btn"
+                    id="encodeBtn"
+                    style="margin-top:0;"
+                    aria-pressed="true"
+                >
+                    Encode URL
+                </button>
+
+                <button
+                    class="convert-btn"
+                    id="decodeBtn"
+                    style="
+                        margin-top:0;
+                        background:#64748b !important;
+                    "
+                    aria-pressed="false"
+                >
+                    Decode URL
+                </button>
+<button type="button" class="convert-btn text-reset-btn" id="resetBtn" style="margin-top:0;">Reset</button>
+            </div>
+
+            <div class="result" id="result">
+
+                <h2 id="resultTitle">Result</h2>
+
+                <p id="resultInfo"></p>
+
+                <textarea
+                    id="outputText"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:220px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #d1d5db;
+                        border-radius:10px;
+                        resize:vertical;
+                        font-size:14px;
+                        line-height:1.6;
+                        font-family:monospace;
+                        box-sizing:border-box;
+                        background:#ffffff;
+                    "
+                ></textarea>
+
+                <button class="download-btn" id="copyBtn">
+                    Copy Result
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+const textInput = document.getElementById("textInput");
+const encodeBtn = document.getElementById("encodeBtn");
+const decodeBtn = document.getElementById("decodeBtn");
+
+const result = document.getElementById("result");
+const resultTitle = document.getElementById("resultTitle");
+const resultInfo = document.getElementById("resultInfo");
+const outputText = document.getElementById("outputText");
+const copyBtn = document.getElementById("copyBtn");
+const resetBtn = document.getElementById("resetBtn");
+
+function setActiveOperation(operation) {
+    const isEncode = operation === "encode";
+
+    encodeBtn.style.setProperty("background", isEncode ? "#ef1f2b" : "#64748b", "important");
+    decodeBtn.style.setProperty("background", isEncode ? "#64748b" : "#ef1f2b", "important");
+    encodeBtn.setAttribute("aria-pressed", String(isEncode));
+    decodeBtn.setAttribute("aria-pressed", String(!isEncode));
+}
+
+function showResult(title, info, value) {
+
+    resultTitle.textContent = title;
+    resultInfo.textContent = info;
+    outputText.value = value;
+
+    result.style.display = "block";
+
+    result.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+    });
+}
+
+encodeBtn.addEventListener("click", () => {
+
+    const input = textInput.value;
+
+    if (!input) {
+        alert("Please enter some text or a URL first.");
+        return;
+    }
+
+    setActiveOperation("encode");
+
+    try {
+
+        const encoded = encodeURIComponent(input);
+
+        showResult(
+            "URL Encoded Successfully",
+            "Your text has been URL encoded.",
+            encoded
+        );
+
+    } catch (error) {
+
+        showResult(
+            "Encoding Failed",
+            "Unable to encode the provided text.",
+            ""
+        );
+    }
+});
+
+decodeBtn.addEventListener("click", () => {
+
+    const input = textInput.value;
+
+    if (!input) {
+        alert("Please enter encoded text first.");
+        return;
+    }
+
+    setActiveOperation("decode");
+
+    try {
+
+        const decoded = decodeURIComponent(input);
+
+        showResult(
+            "URL Decoded Successfully",
+            "Your encoded text has been decoded.",
+            decoded
+        );
+
+    } catch (error) {
+
+        showResult(
+            "Invalid Encoded URL",
+            "The provided text contains invalid URL encoding.",
+            ""
+        );
+    }
+});
+
+copyBtn.addEventListener("click", async () => {
+
+    if (!outputText.value) return;
+
+    try {
+
+        await navigator.clipboard.writeText(outputText.value);
+
+        copyBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+            copyBtn.textContent = "Copy Result";
+        }, 1500);
+
+    } catch (error) {
+
+        outputText.select();
+        document.execCommand("copy");
+
+        copyBtn.textContent = "Copied!";
+
+        setTimeout(() => {
+            copyBtn.textContent = "Copy Result";
+        }, 1500);
+    }
+});
+
+resetBtn.addEventListener("click", () => {
+    textInput.value = "";
+    outputText.value = "";
+    resultTitle.textContent = "Result";
+    resultInfo.textContent = "";
+    result.style.display = "none";
+    setActiveOperation("encode");
+    textInput.focus();
+});
+</script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Average Median Mode Calculator - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .statistics-calculator {
+            max-width:760px;
+        }
+
+        .numbers-input {
+            width:100%;
+            min-height:150px;
+            padding:16px;
+            border:1px solid #cbd5e1;
+            border-radius:12px;
+            background:#f8fafc;
+            color:#111827;
+            font-family:inherit;
+            font-size:16px;
+            line-height:1.6;
+            resize:vertical;
+            outline:none;
+            box-sizing:border-box;
+        }
+
+        .numbers-input:focus {
+            border-color:#00bc8a;
+            background:#ffffff;
+        }
+
+        .input-label {
+            display:block;
+            margin-bottom:9px;
+            color:#374151;
+            font-size:14px;
+            font-weight:700;
+            text-align:left;
+        }
+
+        .input-help {
+            margin:8px 0 0;
+            color:#64748b;
+            font-size:13px;
+            text-align:left;
+        }
+
+        .statistics-action-row {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:22px;
+        }
+
+        .statistics-action-row button {
+            width:100%;
+            height:50px;
+            min-height:50px;
+            margin:0;
+            padding:13px 20px;
+            border-radius:10px;
+            font-size:15px;
+            font-weight:800;
+            cursor:pointer;
+            box-sizing:border-box;
+        }
+
+        .calculate-btn {
+            border:1px solid #00bc8a;
+            background:#00bc8a;
+            color:#ffffff;
+            box-shadow:0 8px 18px rgba(0,188,138,.18);
+        }
+
+        .calculate-btn:hover {
+            background:#009a73;
+        }
+
+        .reset-statistics-btn {
+            background:#ffffff;
+            color:#00bc8a;
+            border:1px solid #00bc8a;
+            box-shadow:none;
+        }
+
+        .reset-statistics-btn:hover {
+            background:#ecfdf8;
+        }
+
+        .statistics-result {
+            display:none;
+            margin-top:28px;
+            padding:24px;
+            border-radius:14px;
+            background:#f0fdf4;
+            border:1px solid #bbf7d0;
+        }
+
+        .statistics-result h2 {
+            margin:0 0 18px;
+            color:#166534;
+            font-size:20px;
+        }
+
+        .stats-grid {
+            display:grid;
+            grid-template-columns:repeat(2, 1fr);
+            gap:12px;
+        }
+
+        .stat-item {
+            padding:16px;
+            background:#ffffff;
+            border:1px solid #dcfce7;
+            border-radius:10px;
+            text-align:left;
+        }
+
+        .stat-item span {
+            display:block;
+            margin-bottom:5px;
+            color:#64748b;
+            font-size:13px;
+        }
+
+        .stat-item strong {
+            display:block;
+            color:#166534;
+            font-size:19px;
+            word-break:break-word;
+        }
+
+        .error-message {
+            display:none;
+            margin-top:18px;
+            padding:13px;
+            border-radius:10px;
+            background:#fef2f2;
+            border:1px solid #fecaca;
+            color:#b91c1c;
+            font-size:14px;
+            text-align:left;
+        }
+
+        @media (max-width:600px) {
+            .stats-grid {
+                grid-template-columns:1fr;
+            }
+
+            .statistics-action-row {
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card statistics-calculator">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    AVG
+                </div>
+
+                <h1>Average / Median / Mode</h1>
+
+                <p>
+                    Calculate mean, median, mode and other statistics from a list of numbers.
+                </p>
+
+            </div>
+
+
+            <label
+                class="input-label"
+                for="numbersInput"
+            >
+                Enter Numbers
+            </label>
+
+
+            <textarea
+                id="numbersInput"
+                class="numbers-input"
+                placeholder="Example: 10, 20, 20, 30, 40"
+            ></textarea>
+
+
+            <p class="input-help">
+                Separate numbers using commas, spaces, or new lines.
+            </p>
+
+
+            <div class="statistics-action-row">
+
+                <button
+                    type="button"
+                    class="calculate-btn"
+                    id="calculateStatisticsBtn"
+                >
+                    Calculate Statistics
+                </button>
+
+                <button
+                    type="button"
+                    class="reset-statistics-btn"
+                    id="resetStatisticsBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                id="errorMessage"
+                class="error-message"
+            ></div>
+
+
+            <div
+                id="statisticsResult"
+                class="statistics-result"
+            >
+
+                <h2>Results</h2>
+
+                <div class="stats-grid">
+
+                    <div class="stat-item">
+                        <span>Average (Mean)</span>
+                        <strong id="meanResult">-</strong>
+                    </div>
+
+                    <div class="stat-item">
+                        <span>Median</span>
+                        <strong id="medianResult">-</strong>
+                    </div>
+
+                    <div class="stat-item">
+                        <span>Mode</span>
+                        <strong id="modeResult">-</strong>
+                    </div>
+
+                    <div class="stat-item">
+                        <span>Sum</span>
+                        <strong id="sumResult">-</strong>
+                    </div>
+
+                    <div class="stat-item">
+                        <span>Count</span>
+                        <strong id="countResult">-</strong>
+                    </div>
+
+                    <div class="stat-item">
+                        <span>Minimum</span>
+                        <strong id="minResult">-</strong>
+                    </div>
+
+                    <div class="stat-item">
+                        <span>Maximum</span>
+                        <strong id="maxResult">-</strong>
+                    </div>
+
+                    <div class="stat-item">
+                        <span>Range</span>
+                        <strong id="rangeResult">-</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const numbersInput =
+    document.getElementById("numbersInput");
+
+const calculateStatisticsBtn =
+    document.getElementById("calculateStatisticsBtn");
+
+const resetStatisticsBtn =
+    document.getElementById("resetStatisticsBtn");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const statisticsResult =
+    document.getElementById("statisticsResult");
+
+const meanResult =
+    document.getElementById("meanResult");
+
+const medianResult =
+    document.getElementById("medianResult");
+
+const modeResult =
+    document.getElementById("modeResult");
+
+const sumResult =
+    document.getElementById("sumResult");
+
+const countResult =
+    document.getElementById("countResult");
+
+const minResult =
+    document.getElementById("minResult");
+
+const maxResult =
+    document.getElementById("maxResult");
+
+const rangeResult =
+    document.getElementById("rangeResult");
+
+
+function parseNumbers() {
+
+    const input =
+        numbersInput.value.trim();
+
+
+    if (!input) {
+
+        throw new Error(
+            "Please enter some numbers."
+        );
+    }
+
+
+    const values =
+        input
+            .split(/[\s,]+/)
+            .filter(
+                function (value) {
+                    return value !== "";
+                }
+            )
+            .map(
+                function (value) {
+                    return Number(value);
+                }
+            );
+
+
+    if (values.length === 0) {
+
+        throw new Error(
+            "No valid numbers found."
+        );
+    }
+
+
+    if (
+        values.some(
+            function (value) {
+                return !Number.isFinite(value);
+            }
+        )
+    ) {
+
+        throw new Error(
+            "Please enter valid numbers only."
+        );
+    }
+
+
+    return values;
+}
+
+
+function formatNumber(number) {
+
+    if (
+        Math.abs(number) <
+        1e-12
+    ) {
+        number = 0;
+    }
+
+
+    return Number(
+        number.toFixed(10)
+    ).toString();
+}
+
+
+function calculateMean(numbers) {
+
+    const sum =
+        numbers.reduce(
+            function (
+                total,
+                number
+            ) {
+                return total + number;
+            },
+            0
+        );
+
+
+    return sum /
+        numbers.length;
+}
+
+
+function calculateMedian(numbers) {
+
+    const sorted =
+        [...numbers].sort(
+            function (a, b) {
+                return a - b;
+            }
+        );
+
+
+    const middle =
+        Math.floor(
+            sorted.length / 2
+        );
+
+
+    if (
+        sorted.length % 2 === 0
+    ) {
+
+        return (
+            sorted[middle - 1] +
+            sorted[middle]
+        ) / 2;
+    }
+
+
+    return sorted[middle];
+}
+
+
+function calculateMode(numbers) {
+
+    const frequency =
+        new Map();
+
+
+    numbers.forEach(
+        function (number) {
+
+            frequency.set(
+                number,
+                (
+                    frequency.get(number) ||
+                    0
+                ) + 1
+            );
+        }
+    );
+
+
+    let highestFrequency =
+        0;
+
+
+    frequency.forEach(
+        function (count) {
+
+            if (
+                count >
+                highestFrequency
+            ) {
+
+                highestFrequency =
+                    count;
+            }
+        }
+    );
+
+
+    if (
+        highestFrequency === 1
+    ) {
+
+        return "No mode";
+    }
+
+
+    const modes =
+        [];
+
+
+    frequency.forEach(
+        function (
+            count,
+            number
+        ) {
+
+            if (
+                count ===
+                highestFrequency
+            ) {
+
+                modes.push(
+                    number
+                );
+            }
+        }
+    );
+
+
+    modes.sort(
+        function (a, b) {
+            return a - b;
+        }
+    );
+
+
+    return modes
+        .map(formatNumber)
+        .join(", ");
+}
+
+
+function calculateStatistics() {
+
+    statisticsResult.style.display =
+        "none";
+
+    errorMessage.style.display =
+        "none";
+
+
+    try {
+
+        const numbers =
+            parseNumbers();
+
+
+        const sum =
+            numbers.reduce(
+                function (
+                    total,
+                    number
+                ) {
+                    return total + number;
+                },
+                0
+            );
+
+
+        const mean =
+            calculateMean(
+                numbers
+            );
+
+
+        const median =
+            calculateMedian(
+                numbers
+            );
+
+
+        const mode =
+            calculateMode(
+                numbers
+            );
+
+
+        const minimum =
+            Math.min(
+                ...numbers
+            );
+
+
+        const maximum =
+            Math.max(
+                ...numbers
+            );
+
+
+        const range =
+            maximum -
+            minimum;
+
+
+        meanResult.textContent =
+            formatNumber(
+                mean
+            );
+
+
+        medianResult.textContent =
+            formatNumber(
+                median
+            );
+
+
+        modeResult.textContent =
+            mode;
+
+
+        sumResult.textContent =
+            formatNumber(
+                sum
+            );
+
+
+        countResult.textContent =
+            numbers.length;
+
+
+        minResult.textContent =
+            formatNumber(
+                minimum
+            );
+
+
+        maxResult.textContent =
+            formatNumber(
+                maximum
+            );
+
+
+        rangeResult.textContent =
+            formatNumber(
+                range
+            );
+
+
+        statisticsResult.style.display =
+            "block";
+
+    } catch (error) {
+
+        errorMessage.textContent =
+            error.message;
+
+
+        errorMessage.style.display =
+            "block";
+    }
+}
+
+
+/* =========================
+   CALCULATE
+========================= */
+
+calculateStatisticsBtn.addEventListener(
+    "click",
+    calculateStatistics
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetStatisticsBtn.addEventListener(
+    "click",
+    function () {
+
+        numbersInput.value =
+            "";
+
+
+        meanResult.textContent =
+            "-";
+
+        medianResult.textContent =
+            "-";
+
+        modeResult.textContent =
+            "-";
+
+        sumResult.textContent =
+            "-";
+
+        countResult.textContent =
+            "-";
+
+        minResult.textContent =
+            "-";
+
+        maxResult.textContent =
+            "-";
+
+        rangeResult.textContent =
+            "-";
+
+
+        errorMessage.textContent =
+            "";
+
+        errorMessage.style.display =
+            "none";
+
+
+        statisticsResult.style.display =
+            "none";
+
+
+        numbersInput.focus();
+
+    }
+);
+
+
+/* Ctrl + Enter = Calculate */
+
+numbersInput.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.ctrlKey &&
+            event.key === "Enter"
+        ) {
+
+            calculateStatistics();
+        }
+
+    }
+);
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date()
+                    .getFullYear();
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Image Compressor — FileVora</title>
+
+    <meta
+        name="description"
+        content="Compress JPG, PNG and WebP images online for free with FileVora."
+    >
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    IMG
+                </div>
+
+                <h1>Image Compressor</h1>
+
+                <p>
+                    Compress JPG, PNG and WebP images quickly while keeping
+                    your image quality under control.
+                </p>
+
+            </div>
+
+
+            <label class="upload-area" for="imageInput">
+
+                <span class="upload-icon">🖼️</span>
+
+                <strong>Choose an image</strong>
+
+                <span>JPG, PNG or WebP</span>
+
+            </label>
+
+            <input
+                id="imageInput"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                hidden
+            >
+
+
+            <div
+                id="previewArea"
+                class="compressor-preview"
+                hidden
+            >
+
+                <div class="preview-frame">
+
+                    <img
+                        id="previewImage"
+                        alt="Selected image preview"
+                    >
+
+                </div>
+
+
+                <div class="compressor-controls">
+
+                    <div class="compressor-info">
+
+                        <span>Original size</span>
+
+                        <strong id="originalSize">-</strong>
+
+                    </div>
+
+
+                    <div class="quality-control">
+
+                        <div class="quality-header">
+
+                            <label for="quality">
+                                Compression Quality
+                            </label>
+
+                            <strong id="qualityValue">
+                                80%
+                            </strong>
+
+                        </div>
+
+                        <input
+                            type="range"
+                            id="quality"
+                            min="10"
+                            max="100"
+                            value="80"
+                        >
+
+                    </div>
+
+
+                    <div class="compressor-action-buttons">
+
+    <button
+        id="compressBtn"
+        class="convert-btn"
+        type="button"
+    >
+        Compress Image
+    </button>
+
+    <button
+        id="compressResetBtn"
+        class="compressor-reset-btn"
+        type="button"
+    >
+        Reset
+    </button>
+
+</div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="resultArea"
+                class="result compressor-result"
+                hidden
+            >
+
+                <h2>Compressed Image Ready</h2>
+
+                <div class="result-stats">
+
+                    <div>
+                        <span>New size</span>
+                        <strong id="compressedSize">-</strong>
+                    </div>
+
+                    <div>
+                        <span>Size reduced</span>
+                        <strong id="reduction">-</strong>
+                    </div>
+
+                </div>
+
+                <a
+                    id="downloadBtn"
+                    class="download-btn"
+                    download="filevora-compressed-image.jpg"
+                >
+                    ↓ Download Image
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+        <div class="footer-brand">
+
+            <a class="brand" href="/">
+
+                <span class="brand-mark">F</span>
+
+                <span class="brand-name">
+                    File<span>Vora</span>
+                </span>
+
+            </a>
+
+            <p>
+                Fast, simple online tools for everyday file tasks.
+            </p>
+
+        </div>
+
+
+        <div>
+            <h3>Company</h3>
+
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/security">Security</a>
+        </div>
+
+
+        <div>
+            <h3>Resources</h3>
+
+            <a href="/blog">Blog</a>
+            <a href="/#tools">Tools</a>
+            <a href="/faq">FAQ</a>
+        </div>
+
+
+        <div>
+            <h3>Legal</h3>
+
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+            <a href="/disclaimer">Disclaimer</a>
+        </div>
+
+
+        <div>
+            <h3>Contact</h3>
+
+            <a href="/contact">Email</a>
+            <a href="/contact">Facebook</a>
+            <a href="/contact">Instagram</a>
+        </div>
+
+    </div>
+
+
+    <div class="container footer-bottom">
+
+        <span>
+            © <span data-current-year></span>
+            FileVora. All rights reserved.
+        </span>
+
+        <span>All in One Tool.</span>
+
+    </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+        element.textContent = new Date().getFullYear();
+    });
+</script>
+
+<script src="/js/image-compressor.js"></script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

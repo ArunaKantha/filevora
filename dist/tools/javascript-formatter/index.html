@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JavaScript Formatter - FileVora</title>
+    <meta name="description" content="Format and beautify JavaScript code online with FileVora.">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .js-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .js-action-row .convert-btn{
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .js-reset-btn{
+            background:#ffffff !important;
+            color:#00bc8a !important;
+            border:1px solid #00bc8a !important;
+            box-shadow:none !important;
+        }
+
+        .js-reset-btn:hover{
+            background:#ecfdf8 !important;
+        }
+
+        .js-result-actions{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:15px;
+        }
+
+        .js-result-actions .download-btn{
+            width:100% !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+            text-align:center !important;
+        }
+
+        @media (max-width:600px){
+            .js-action-row,
+            .js-result-actions{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    JS
+                </div>
+
+                <h1>JavaScript Formatter</h1>
+
+                <p>
+                    Beautify and format JavaScript code with clean indentation.
+                </p>
+
+            </div>
+
+
+            <div style="text-align:left;">
+
+                <label
+                    for="jsInput"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    JavaScript Code
+                </label>
+
+
+                <textarea
+                    id="jsInput"
+                    placeholder="Paste your JavaScript code here..."
+                    style="
+                        width:100%;
+                        min-height:320px;
+                        padding:16px;
+                        border:1px solid #cbd5e1;
+                        border-radius:12px;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                ></textarea>
+
+            </div>
+
+
+            <div class="js-action-row">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="formatBtn"
+                >
+                    Format JavaScript
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn js-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                id="errorMessage"
+                style="
+                    display:none;
+                    margin-top:18px;
+                    padding:14px 18px;
+                    background:#fef2f2;
+                    border:1px solid #fecaca;
+                    border-radius:10px;
+                    color:#b91c1c;
+                    text-align:left;
+                "
+            ></div>
+
+
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2>
+                    JavaScript Formatted
+                </h2>
+
+                <p>
+                    Your JavaScript code has been successfully formatted.
+                </p>
+
+
+                <textarea
+                    id="output"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:320px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #bbf7d0;
+                        border-radius:10px;
+                        background:#ffffff;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                ></textarea>
+
+
+                <div class="js-result-actions">
+
+                    <button
+                        type="button"
+                        class="download-btn"
+                        id="copyBtn"
+                    >
+                        Copy JavaScript
+                    </button>
+
+                    <a
+                        id="downloadBtn"
+                        class="download-btn"
+                        href="#"
+                        download="formatted.js"
+                    >
+                        Download JS
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const jsInput =
+    document.getElementById("jsInput");
+
+const formatBtn =
+    document.getElementById("formatBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const result =
+    document.getElementById("result");
+
+const output =
+    document.getElementById("output");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let currentDownloadUrl =
+    null;
+
+
+/* =========================
+   FORMAT JAVASCRIPT
+========================= */
+
+function formatJavaScript() {
+
+    const input =
+        jsInput.value.trim();
+
+
+    result.style.display =
+        "none";
+
+
+    errorMessage.style.display =
+        "none";
+
+
+    if (!input) {
+
+        showError(
+            "Please enter JavaScript code."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const formatted =
+            beautifyJavaScript(
+                input
+            );
+
+
+        output.value =
+            formatted;
+
+
+        const blob =
+            new Blob(
+                [formatted],
+                {
+                    type:
+                        "text/javascript;charset=utf-8;"
+                }
+            );
+
+
+        if (
+            currentDownloadUrl
+        ) {
+
+            URL.revokeObjectURL(
+                currentDownloadUrl
+            );
+        }
+
+
+        currentDownloadUrl =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        downloadBtn.href =
+            currentDownloadUrl;
+
+
+        result.style.display =
+            "block";
+
+
+        result.scrollIntoView({
+            behavior:"smooth",
+            block:"nearest"
+        });
+
+
+    } catch (error) {
+
+        showError(
+            "Unable to format the JavaScript code."
+        );
+    }
+
+}
+
+
+/* =========================
+   BEAUTIFY JAVASCRIPT
+========================= */
+
+function beautifyJavaScript(code) {
+
+    code =
+        code
+            .replace(/\r\n/g, "\n")
+            .replace(/\r/g, "\n")
+            .trim();
+
+
+    let formatted =
+        "";
+
+    let current =
+        "";
+
+    let indent =
+        0;
+
+    let parenDepth =
+        0;
+
+    let bracketDepth =
+        0;
+
+    let inString =
+        false;
+
+    let stringChar =
+        "";
+
+    let inTemplate =
+        false;
+
+    let inLineComment =
+        false;
+
+    let inBlockComment =
+        false;
+
+
+    function indentation() {
+
+        return "    ".repeat(
+            indent
+        );
+    }
+
+
+    function flushLine() {
+
+        const line =
+            current.trim();
+
+
+        if (line) {
+
+            formatted +=
+                indentation() +
+                line +
+                "\n";
+        }
+
+
+        current =
+            "";
+    }
+
+
+    for (
+        let i = 0;
+        i < code.length;
+        i++
+    ) {
+
+        const char =
+            code[i];
+
+        const next =
+            code[i + 1];
+
+
+        /* LINE COMMENT */
+
+        if (
+            inLineComment
+        ) {
+
+            current +=
+                char;
+
+
+            if (
+                char === "\n"
+            ) {
+
+                inLineComment =
+                    false;
+
+                flushLine();
+            }
+
+
+            continue;
+        }
+
+
+        /* BLOCK COMMENT */
+
+        if (
+            inBlockComment
+        ) {
+
+            current +=
+                char;
+
+
+            if (
+                char === "*" &&
+                next === "/"
+            ) {
+
+                current +=
+                    "/";
+
+                i++;
+
+
+                inBlockComment =
+                    false;
+
+
+                flushLine();
+            }
+
+
+            continue;
+        }
+
+
+        /* STRING */
+
+        if (
+            inString
+        ) {
+
+            current +=
+                char;
+
+
+            if (
+                char === "\\" &&
+                next
+            ) {
+
+                current +=
+                    next;
+
+                i++;
+
+
+            } else if (
+                char === stringChar
+            ) {
+
+                inString =
+                    false;
+            }
+
+
+            continue;
+        }
+
+
+        /* TEMPLATE */
+
+        if (
+            inTemplate
+        ) {
+
+            current +=
+                char;
+
+
+            if (
+                char === "\\" &&
+                next
+            ) {
+
+                current +=
+                    next;
+
+                i++;
+
+
+            } else if (
+                char === "`"
+            ) {
+
+                inTemplate =
+                    false;
+            }
+
+
+            continue;
+        }
+
+
+        /* START COMMENTS */
+
+        if (
+            char === "/" &&
+            next === "/"
+        ) {
+
+            current +=
+                "//";
+
+            i++;
+
+
+            inLineComment =
+                true;
+
+            continue;
+        }
+
+
+        if (
+            char === "/" &&
+            next === "*"
+        ) {
+
+            current +=
+                "/*";
+
+            i++;
+
+
+            inBlockComment =
+                true;
+
+            continue;
+        }
+
+
+        /* START STRING */
+
+        if (
+            char === '"' ||
+            char === "'"
+        ) {
+
+            current +=
+                char;
+
+
+            inString =
+                true;
+
+
+            stringChar =
+                char;
+
+
+            continue;
+        }
+
+
+        /* START TEMPLATE */
+
+        if (
+            char === "`"
+        ) {
+
+            current +=
+                char;
+
+
+            inTemplate =
+                true;
+
+
+            continue;
+        }
+
+
+        /* PARENTHESES */
+
+        if (
+            char === "("
+        ) {
+
+            parenDepth++;
+
+
+            current +=
+                char;
+
+
+            continue;
+        }
+
+
+        if (
+            char === ")"
+        ) {
+
+            parenDepth =
+                Math.max(
+                    0,
+                    parenDepth - 1
+                );
+
+
+            current +=
+                char;
+
+
+            continue;
+        }
+
+
+        /* BRACKETS */
+
+        if (
+            char === "["
+        ) {
+
+            bracketDepth++;
+
+
+            current +=
+                char;
+
+
+            continue;
+        }
+
+
+        if (
+            char === "]"
+        ) {
+
+            bracketDepth =
+                Math.max(
+                    0,
+                    bracketDepth - 1
+                );
+
+
+            current +=
+                char;
+
+
+            continue;
+        }
+
+
+        /* OPEN BRACE */
+
+        if (
+            char === "{"
+        ) {
+
+            const before =
+                current.trim();
+
+
+            if (before) {
+
+                formatted +=
+                    indentation() +
+                    before +
+                    " {\n";
+
+            } else {
+
+                formatted +=
+                    indentation() +
+                    "{\n";
+            }
+
+
+            current =
+                "";
+
+
+            indent++;
+
+
+            continue;
+        }
+
+
+        /* CLOSE BRACE */
+
+        if (
+            char === "}"
+        ) {
+
+            if (
+                current.trim()
+            ) {
+
+                flushLine();
+            }
+
+
+            indent =
+                Math.max(
+                    0,
+                    indent - 1
+                );
+
+
+            formatted +=
+                indentation() +
+                "}";
+
+
+            let lookAhead =
+                code
+                    .slice(i + 1)
+                    .trimStart();
+
+
+            if (
+                lookAhead.startsWith(
+                    "else"
+                ) ||
+                lookAhead.startsWith(
+                    "catch"
+                ) ||
+                lookAhead.startsWith(
+                    "finally"
+                )
+            ) {
+
+                formatted +=
+                    " ";
+
+            } else if (
+                next !== ";" &&
+                next !== "," &&
+                next !== ")" &&
+                next !== "]"
+            ) {
+
+                formatted +=
+                    "\n";
+            }
+
+
+            continue;
+        }
+
+
+        /* SEMICOLON */
+
+        if (
+            char === ";"
+        ) {
+
+            current +=
+                ";";
+
+
+            /*
+             * Do not break lines for:
+             * for (let i = 0; i < 10; i++)
+             */
+
+            if (
+                parenDepth === 0
+            ) {
+
+                flushLine();
+            }
+
+
+            continue;
+        }
+
+
+        /* NEWLINE */
+
+        if (
+            char === "\n"
+        ) {
+
+            if (
+                current.trim() &&
+                parenDepth === 0
+            ) {
+
+                flushLine();
+
+            } else if (
+                current &&
+                !current.endsWith(" ")
+            ) {
+
+                current +=
+                    " ";
+            }
+
+
+            continue;
+        }
+
+
+        /* WHITESPACE */
+
+        if (
+            /\s/.test(char)
+        ) {
+
+            if (
+                current.length > 0 &&
+                !current.endsWith(" ")
+            ) {
+
+                current +=
+                    " ";
+            }
+
+
+            continue;
+        }
+
+
+        current +=
+            char;
+    }
+
+
+    if (
+        current.trim()
+    ) {
+
+        flushLine();
+    }
+
+
+    let finalCode =
+        formatted.trim();
+
+
+    finalCode =
+        finalCode
+            .replace(
+                /\}\s*\n?\s*else\s*\{/g,
+                "} else {"
+            )
+            .replace(
+                /\}\s*\n?\s*catch\s*\(/g,
+                "} catch ("
+            )
+            .replace(
+                /\}\s*\n?\s*finally\s*\{/g,
+                "} finally {"
+            );
+
+
+    return finalCode;
+}
+
+
+/* =========================
+   COPY
+========================= */
+
+copyBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (
+            !output.value
+        ) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                output.value
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy JavaScript";
+
+                },
+                1500
+            );
+
+
+        } catch (error) {
+
+            output.select();
+
+
+            document.execCommand(
+                "copy"
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy JavaScript";
+
+                },
+                1500
+            );
+        }
+
+    }
+);
+
+
+/* =========================
+   ERROR
+========================= */
+
+function showError(message) {
+
+    errorMessage.textContent =
+        message;
+
+
+    errorMessage.style.display =
+        "block";
+
+
+    result.style.display =
+        "none";
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        jsInput.value =
+            "";
+
+
+        output.value =
+            "";
+
+
+        errorMessage.textContent =
+            "";
+
+
+        errorMessage.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        copyBtn.textContent =
+            "Copy JavaScript";
+
+
+        if (
+            currentDownloadUrl
+        ) {
+
+            URL.revokeObjectURL(
+                currentDownloadUrl
+            );
+
+
+            currentDownloadUrl =
+                null;
+        }
+
+
+        downloadBtn.href =
+            "#";
+
+
+        jsInput.focus();
+
+    }
+);
+
+
+/* =========================
+   EVENT
+========================= */
+
+formatBtn.addEventListener(
+    "click",
+    formatJavaScript
+);
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date().getFullYear();
+
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

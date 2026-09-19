@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Time Zone Converter - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .timezone-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .timezone-action-row .convert-btn{
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .timezone-reset-btn{
+            background:#ffffff !important;
+            color:#00bc8a !important;
+            border:1px solid #00bc8a !important;
+            box-shadow:none !important;
+        }
+
+        .timezone-reset-btn:hover{
+            background:#ecfdf8 !important;
+        }
+
+        @media (max-width:600px){
+            .timezone-action-row{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    TIME
+                </div>
+
+                <h1>Time Zone Converter</h1>
+
+                <p>
+                    Convert date and time between different time zones instantly.
+                </p>
+
+            </div>
+
+
+            <div style="text-align:left;">
+
+                <label
+                    for="dateTime"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Date & Time
+                </label>
+
+                <input
+                    type="datetime-local"
+                    id="dateTime"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                >
+
+
+                <div
+                    style="
+                        display:grid;
+                        grid-template-columns:1fr 1fr;
+                        gap:16px;
+                        margin-top:20px;
+                    "
+                >
+
+                    <div>
+
+                        <label
+                            for="fromZone"
+                            style="
+                                display:block;
+                                margin-bottom:8px;
+                                font-weight:700;
+                                color:#111827;
+                            "
+                        >
+                            From Time Zone
+                        </label>
+
+                        <select
+                            id="fromZone"
+                            style="
+                                width:100%;
+                                padding:14px;
+                                border:1px solid #cbd5e1;
+                                border-radius:10px;
+                                font-size:16px;
+                                background:#fff;
+                                box-sizing:border-box;
+                            "
+                        >
+
+                            <option value="Asia/Colombo">Sri Lanka - Colombo</option>
+                            <option value="Asia/Kolkata">India - Kolkata</option>
+                            <option value="Asia/Dubai">UAE - Dubai</option>
+                            <option value="Asia/Singapore">Singapore</option>
+                            <option value="Asia/Tokyo">Japan - Tokyo</option>
+                            <option value="Asia/Shanghai">China - Shanghai</option>
+                            <option value="Europe/London">UK - London</option>
+                            <option value="Europe/Paris">France - Paris</option>
+                            <option value="Europe/Berlin">Germany - Berlin</option>
+                            <option value="America/New_York">USA - New York</option>
+                            <option value="America/Chicago">USA - Chicago</option>
+                            <option value="America/Denver">USA - Denver</option>
+                            <option value="America/Los_Angeles">USA - Los Angeles</option>
+                            <option value="Australia/Sydney">Australia - Sydney</option>
+                            <option value="Pacific/Auckland">New Zealand - Auckland</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label
+                            for="toZone"
+                            style="
+                                display:block;
+                                margin-bottom:8px;
+                                font-weight:700;
+                                color:#111827;
+                            "
+                        >
+                            To Time Zone
+                        </label>
+
+                        <select
+                            id="toZone"
+                            style="
+                                width:100%;
+                                padding:14px;
+                                border:1px solid #cbd5e1;
+                                border-radius:10px;
+                                font-size:16px;
+                                background:#fff;
+                                box-sizing:border-box;
+                            "
+                        >
+
+                            <option value="America/New_York">USA - New York</option>
+                            <option value="America/Los_Angeles">USA - Los Angeles</option>
+                            <option value="America/Chicago">USA - Chicago</option>
+                            <option value="Europe/London">UK - London</option>
+                            <option value="Europe/Paris">France - Paris</option>
+                            <option value="Europe/Berlin">Germany - Berlin</option>
+                            <option value="Asia/Colombo">Sri Lanka - Colombo</option>
+                            <option value="Asia/Kolkata">India - Kolkata</option>
+                            <option value="Asia/Dubai">UAE - Dubai</option>
+                            <option value="Asia/Singapore">Singapore</option>
+                            <option value="Asia/Tokyo">Japan - Tokyo</option>
+                            <option value="Asia/Shanghai">China - Shanghai</option>
+                            <option value="Australia/Sydney">Australia - Sydney</option>
+                            <option value="Pacific/Auckland">New Zealand - Auckland</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="timezone-action-row">
+
+                    <button
+                        type="button"
+                        class="convert-btn"
+                        id="convertBtn"
+                    >
+                        Convert Time
+                    </button>
+
+                    <button
+                        type="button"
+                        class="convert-btn timezone-reset-btn"
+                        id="resetBtn"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2>Converted Time</h2>
+
+                <p id="resultText"></p>
+
+                <p
+                    id="zoneText"
+                    style="margin-top:10px;"
+                ></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const dateTimeInput =
+    document.getElementById("dateTime");
+
+const fromZone =
+    document.getElementById("fromZone");
+
+const toZone =
+    document.getElementById("toZone");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+const zoneText =
+    document.getElementById("zoneText");
+
+
+function setCurrentDateTime() {
+
+    const now =
+        new Date();
+
+    const year =
+        now.getFullYear();
+
+    const month =
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            now.getDate()
+        ).padStart(2, "0");
+
+    const hours =
+        String(
+            now.getHours()
+        ).padStart(2, "0");
+
+    const minutes =
+        String(
+            now.getMinutes()
+        ).padStart(2, "0");
+
+
+    dateTimeInput.value =
+        `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+
+function getOffsetMinutes(
+    timeZone,
+    date
+) {
+
+    const parts =
+        new Intl.DateTimeFormat(
+            "en-US",
+            {
+                timeZone,
+                timeZoneName:"longOffset"
+            }
+        ).formatToParts(date);
+
+
+    const offsetPart =
+        parts.find(
+            function (part) {
+                return part.type === "timeZoneName";
+            }
+        );
+
+
+    if (!offsetPart) {
+        return 0;
+    }
+
+
+    const value =
+        offsetPart.value;
+
+
+    if (
+        value === "GMT" ||
+        value === "UTC"
+    ) {
+        return 0;
+    }
+
+
+    const match =
+        value.match(
+            /GMT([+-])(\d{1,2})(?::(\d{2}))?/
+        );
+
+
+    if (!match) {
+        return 0;
+    }
+
+
+    const sign =
+        match[1] === "+"
+            ? 1
+            : -1;
+
+
+    const hours =
+        Number(
+            match[2]
+        );
+
+
+    const minutes =
+        Number(
+            match[3] || 0
+        );
+
+
+    return sign *
+        (
+            hours * 60 +
+            minutes
+        );
+}
+
+
+function convertTime() {
+
+    if (!dateTimeInput.value) {
+
+        alert(
+            "Please select a date and time."
+        );
+
+        return;
+    }
+
+
+    const localValue =
+        dateTimeInput.value;
+
+
+    const parts =
+        localValue.split("T");
+
+    const datePart =
+        parts[0];
+
+    const timePart =
+        parts[1];
+
+
+    const dateParts =
+        datePart
+            .split("-")
+            .map(Number);
+
+    const timeParts =
+        timePart
+            .split(":")
+            .map(Number);
+
+
+    const year =
+        dateParts[0];
+
+    const month =
+        dateParts[1];
+
+    const day =
+        dateParts[2];
+
+    const hours =
+        timeParts[0];
+
+    const minutes =
+        timeParts[1];
+
+
+    const assumedUTC =
+        Date.UTC(
+            year,
+            month - 1,
+            day,
+            hours,
+            minutes
+        );
+
+
+    const firstDate =
+        new Date(
+            assumedUTC
+        );
+
+
+    const sourceOffset1 =
+        getOffsetMinutes(
+            fromZone.value,
+            firstDate
+        );
+
+
+    let utcTime =
+        assumedUTC -
+        (
+            sourceOffset1 *
+            60 *
+            1000
+        );
+
+
+    const sourceOffset2 =
+        getOffsetMinutes(
+            fromZone.value,
+            new Date(
+                utcTime
+            )
+        );
+
+
+    utcTime =
+        assumedUTC -
+        (
+            sourceOffset2 *
+            60 *
+            1000
+        );
+
+
+    const finalDate =
+        new Date(
+            utcTime
+        );
+
+
+    const formatted =
+        new Intl.DateTimeFormat(
+            "en-US",
+            {
+                timeZone:
+                    toZone.value,
+
+                weekday:
+                    "long",
+
+                year:
+                    "numeric",
+
+                month:
+                    "long",
+
+                day:
+                    "numeric",
+
+                hour:
+                    "numeric",
+
+                minute:
+                    "2-digit",
+
+                hour12:
+                    true
+            }
+        ).format(
+            finalDate
+        );
+
+
+    const targetZoneName =
+        new Intl.DateTimeFormat(
+            "en-US",
+            {
+                timeZone:
+                    toZone.value,
+
+                timeZoneName:
+                    "long"
+            }
+        )
+        .formatToParts(
+            finalDate
+        )
+        .find(
+            function (part) {
+                return part.type === "timeZoneName";
+            }
+        );
+
+
+    result.style.display =
+        "block";
+
+
+    result.style.background =
+        "#f0fdf4";
+
+
+    result.style.borderColor =
+        "#bbf7d0";
+
+
+    resultText.textContent =
+        formatted;
+
+
+    zoneText.textContent =
+        `From ${fromZone.value} → ${toZone.value}` +
+        (
+            targetZoneName
+                ? ` (${targetZoneName.value})`
+                : ""
+        );
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        setCurrentDateTime();
+
+
+        fromZone.value =
+            "Asia/Colombo";
+
+
+        toZone.value =
+            "America/New_York";
+
+
+        resultText.textContent =
+            "";
+
+
+        zoneText.textContent =
+            "";
+
+
+        result.style.display =
+            "none";
+
+
+        result.style.background =
+            "";
+
+
+        result.style.borderColor =
+            "";
+
+
+        dateTimeInput.focus();
+
+    }
+);
+
+
+setCurrentDateTime();
+
+
+convertBtn.addEventListener(
+    "click",
+    convertTime
+);
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+
+        element.textContent =
+            new Date().getFullYear();
+
+    });
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

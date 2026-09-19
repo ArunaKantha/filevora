@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PDF Resize - FileVora</title>
+
+    <meta
+        name="description"
+        content="Resize PDF pages to A3, A4, A5, Letter and other standard paper sizes without cutting content."
+    >
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        #resizeControls {
+            display: none;
+            margin-top: 22px;
+        }
+
+        .resize-options {
+            text-align: left;
+        }
+
+        .resize-options label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .resize-options select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #111827;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .resize-options select:focus {
+            border-color: #00bc8a;
+        }
+
+        .resize-note {
+            margin-top: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .custom-size {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .custom-size label {
+            margin-bottom: 6px;
+        }
+
+        .custom-size input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .custom-size input:focus {
+            border-color: #00bc8a;
+        }
+
+        .custom-size small {
+            display: block;
+            margin-top: 5px;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 400;
+        }
+
+        #resizeActions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        #resizeActions #resizeBtn,
+        #resizeActions #resetBtn {
+            width: 100% !important;
+            height: 50px !important;
+            min-height: 50px !important;
+            margin: 0 !important;
+            padding: 0 20px !important;
+            box-sizing: border-box !important;
+        }
+
+        #resizeActions #resetBtn {
+            background: #ffffff !important;
+            color: #00bc8a !important;
+            border: 1px solid #00bc8a !important;
+            box-shadow: none !important;
+        }
+
+        #resizeActions #resetBtn:hover {
+            background: #ecfdf8 !important;
+            color: #00bc8a !important;
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 18px;
+            padding: 13px 15px;
+            border-radius: 10px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .progress-message {
+            display: none;
+            margin-top: 18px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .custom-size,
+            #resizeActions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body class="pdf-tool">
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    PDF
+                </div>
+
+                <h1>PDF Resize</h1>
+
+                <p>
+                    Change PDF page size without cutting or removing your content.
+                </p>
+
+            </div>
+
+
+            <label class="upload-area" for="pdfInput">
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+                <strong>
+                    Click to upload PDF
+                </strong>
+
+                <span>
+                    Choose one PDF file
+                </span>
+
+            </label>
+
+
+            <input
+                type="file"
+                id="pdfInput"
+                accept="application/pdf,.pdf"
+                style="display:none;"
+            >
+
+
+            <div class="file-info" id="fileInfo">
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <div id="resizeControls">
+
+                <div class="resize-options">
+
+                    <label for="pageSize">
+                        New Page Size
+                    </label>
+
+                    <select id="pageSize">
+
+                        <option value="a4" selected>
+                            A4 — 210 × 297 mm
+                        </option>
+
+                        <option value="a3">
+                            A3 — 297 × 420 mm
+                        </option>
+
+                        <option value="a5">
+                            A5 — 148 × 210 mm
+                        </option>
+
+                        <option value="a6">
+                            A6 — 105 × 148 mm
+                        </option>
+
+                        <option value="letter">
+                            Letter — 8.5 × 11 in
+                        </option>
+
+                        <option value="legal">
+                            Legal — 8.5 × 14 in
+                        </option>
+
+                        <option value="tabloid">
+                            Tabloid — 11 × 17 in
+                        </option>
+
+                        <option value="custom">
+                            Custom Size
+                        </option>
+
+                    </select>
+
+
+                    <div
+                        class="custom-size"
+                        id="customSize"
+                    >
+
+                        <div>
+
+                            <label for="customWidth">
+                                Width
+                            </label>
+
+                            <input
+                                type="number"
+                                id="customWidth"
+                                min="10"
+                                max="1000"
+                                step="0.1"
+                                value="210"
+                            >
+
+                            <small>
+                                millimeters
+                            </small>
+
+                        </div>
+
+
+                        <div>
+
+                            <label for="customHeight">
+                                Height
+                            </label>
+
+                            <input
+                                type="number"
+                                id="customHeight"
+                                min="10"
+                                max="1000"
+                                step="0.1"
+                                value="297"
+                            >
+
+                            <small>
+                                millimeters
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="resize-note">
+                        The entire original page content is scaled proportionally
+                        to fit the new page size. Content will not be intentionally
+                        cropped.
+                    </div>
+
+                </div>
+
+
+                <div id="resizeActions">
+
+                    <button
+                        class="convert-btn"
+                        id="resizeBtn"
+                        type="button"
+                        disabled
+                    >
+                        Resize PDF
+                    </button>
+
+                    <button
+                        class="convert-btn reset-btn"
+                        id="resetBtn"
+                        type="button"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="progress-message"
+                id="progressMessage"
+            >
+                Resizing PDF...
+            </div>
+
+
+            <div
+                class="error-message"
+                id="errorMessage"
+            ></div>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>
+                    PDF Resized Successfully
+                </h2>
+
+                <p id="resultText">
+                    Your resized PDF is ready.
+                </p>
+
+                <a
+                    class="download-btn"
+                    id="downloadBtn"
+                    href="#"
+                    download="filevora-resized.pdf"
+                >
+                    Download Resized PDF
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+        <div class="footer-brand">
+
+            <a class="brand" href="/">
+                <span class="brand-mark">F</span>
+                <span class="brand-name">File<span>Vora</span></span>
+            </a>
+
+            <p>
+                Fast, simple online tools for everyday file tasks.
+            </p>
+
+        </div>
+
+        <div>
+            <h3>Company</h3>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/security">Security</a>
+        </div>
+
+        <div>
+            <h3>Resources</h3>
+            <a href="/blog">Blog</a>
+            <a href="/#tools">Tools</a>
+            <a href="/faq">FAQ</a>
+        </div>
+
+        <div>
+            <h3>Legal</h3>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+            <a href="/disclaimer">Disclaimer</a>
+        </div>
+
+        <div>
+            <h3>Contact</h3>
+            <a href="/contact">Email</a>
+            <a href="/contact">Facebook</a>
+            <a href="/contact">Instagram</a>
+        </div>
+
+    </div>
+
+    <div class="container footer-bottom">
+
+        <span>
+            © <span data-current-year></span> FileVora. All rights reserved.
+        </span>
+
+        <span>
+            All in One Tool.
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+        element.textContent =
+            new Date().getFullYear();
+    });
+</script>
+
+
+<script>
+
+const pdfInput =
+    document.getElementById("pdfInput");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const resizeControls =
+    document.getElementById("resizeControls");
+
+const pageSize =
+    document.getElementById("pageSize");
+
+const customSize =
+    document.getElementById("customSize");
+
+const customWidth =
+    document.getElementById("customWidth");
+
+const customHeight =
+    document.getElementById("customHeight");
+
+const resizeBtn =
+    document.getElementById("resizeBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const progressMessage =
+    document.getElementById("progressMessage");
+
+
+let selectedFile = null;
+let downloadUrl = null;
+
+
+function formatBytes(bytes) {
+
+    if (bytes === 0) {
+        return "0 Bytes";
+    }
+
+
+    const units = [
+        "Bytes",
+        "KB",
+        "MB",
+        "GB"
+    ];
+
+
+    const index =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+
+    return (
+        parseFloat(
+            (
+                bytes /
+                Math.pow(1024, index)
+            ).toFixed(2)
+        ) +
+        " " +
+        units[index]
+    );
+}
+
+
+function showError(message) {
+
+    errorMessage.textContent =
+        message;
+
+    errorMessage.style.display =
+        "block";
+}
+
+
+function hideError() {
+
+    errorMessage.textContent =
+        "";
+
+    errorMessage.style.display =
+        "none";
+}
+
+
+function mmToPoints(mm) {
+
+    return mm * 72 / 25.4;
+}
+
+
+function getSelectedSize() {
+
+    if (pageSize.value === "a4") {
+
+        return {
+            width: mmToPoints(210),
+            height: mmToPoints(297),
+            name: "A4"
+        };
+    }
+
+
+    if (pageSize.value === "a3") {
+
+        return {
+            width: mmToPoints(297),
+            height: mmToPoints(420),
+            name: "A3"
+        };
+    }
+
+
+    if (pageSize.value === "a5") {
+
+        return {
+            width: mmToPoints(148),
+            height: mmToPoints(210),
+            name: "A5"
+        };
+    }
+
+
+    if (pageSize.value === "a6") {
+
+        return {
+            width: mmToPoints(105),
+            height: mmToPoints(148),
+            name: "A6"
+        };
+    }
+
+
+    if (pageSize.value === "letter") {
+
+        return {
+            width: 612,
+            height: 792,
+            name: "Letter"
+        };
+    }
+
+
+    if (pageSize.value === "legal") {
+
+        return {
+            width: 612,
+            height: 1008,
+            name: "Legal"
+        };
+    }
+
+
+    if (pageSize.value === "tabloid") {
+
+        return {
+            width: 792,
+            height: 1224,
+            name: "Tabloid"
+        };
+    }
+
+
+    if (pageSize.value === "custom") {
+
+        const width =
+            Number(
+                customWidth.value
+            );
+
+
+        const height =
+            Number(
+                customHeight.value
+            );
+
+
+        if (
+            !Number.isFinite(width) ||
+            !Number.isFinite(height) ||
+            width <= 0 ||
+            height <= 0
+        ) {
+
+            throw new Error(
+                "Please enter valid custom dimensions."
+            );
+        }
+
+
+        return {
+            width: mmToPoints(width),
+            height: mmToPoints(height),
+            name: `${width} × ${height} mm`
+        };
+    }
+}
+
+
+pageSize.addEventListener(
+    "change",
+    function () {
+
+        if (
+            pageSize.value ===
+            "custom"
+        ) {
+
+            customSize.style.display =
+                "grid";
+
+        } else {
+
+            customSize.style.display =
+                "none";
+        }
+    }
+);
+
+
+pdfInput.addEventListener(
+    "change",
+    function () {
+
+        hideError();
+
+
+        result.style.display =
+            "none";
+
+
+        selectedFile =
+            pdfInput.files[0];
+
+
+        if (!selectedFile) {
+
+            resizeBtn.disabled =
+                true;
+
+
+            fileInfo.style.display =
+                "none";
+
+
+            resizeControls.style.display =
+                "none";
+
+
+            return;
+        }
+
+
+        if (
+            selectedFile.type !==
+                "application/pdf" &&
+            !selectedFile.name
+                .toLowerCase()
+                .endsWith(".pdf")
+        ) {
+
+            showError(
+                "Please select a valid PDF file."
+            );
+
+
+            pdfInput.value =
+                "";
+
+
+            selectedFile =
+                null;
+
+
+            resizeBtn.disabled =
+                true;
+
+
+            fileInfo.style.display =
+                "none";
+
+
+            resizeControls.style.display =
+                "none";
+
+
+            return;
+        }
+
+
+        fileName.textContent =
+            selectedFile.name;
+
+
+        fileSize.textContent =
+            formatBytes(
+                selectedFile.size
+            );
+
+
+        fileInfo.style.display =
+            "block";
+
+
+        resizeControls.style.display =
+            "block";
+
+
+        resizeBtn.disabled =
+            false;
+    }
+);
+
+
+resizeBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (!selectedFile) {
+
+            showError(
+                "Please select a PDF file first."
+            );
+
+            return;
+        }
+
+
+        hideError();
+
+
+        result.style.display =
+            "none";
+
+
+        resizeBtn.disabled =
+            true;
+
+
+        progressMessage.style.display =
+            "block";
+
+
+        try {
+
+            if (
+                typeof PDFLib ===
+                    "undefined" ||
+                !PDFLib.PDFDocument
+            ) {
+
+                throw new Error(
+                    "PDF library failed to load. Please refresh the page and try again."
+                );
+            }
+
+
+            const target =
+                getSelectedSize();
+
+
+            const inputBytes =
+                await selectedFile.arrayBuffer();
+
+
+            const sourcePdf =
+                await PDFLib.PDFDocument.load(
+                    inputBytes
+                );
+
+
+            const outputPdf =
+                await PDFLib.PDFDocument.create();
+
+
+            const sourcePages =
+                sourcePdf.getPages();
+
+
+            for (
+                let i = 0;
+                i < sourcePages.length;
+                i++
+            ) {
+
+                const sourcePage =
+                    sourcePages[i];
+
+
+                const sourceWidth =
+                    sourcePage.getWidth();
+
+
+                const sourceHeight =
+                    sourcePage.getHeight();
+
+
+                const embeddedPage =
+                    await outputPdf.embedPage(
+                        sourcePage
+                    );
+
+
+                const scale =
+                    Math.min(
+                        target.width /
+                            sourceWidth,
+                        target.height /
+                            sourceHeight
+                    );
+
+
+                const scaledWidth =
+                    sourceWidth *
+                    scale;
+
+
+                const scaledHeight =
+                    sourceHeight *
+                    scale;
+
+
+                const x =
+                    (
+                        target.width -
+                        scaledWidth
+                    ) / 2;
+
+
+                const y =
+                    (
+                        target.height -
+                        scaledHeight
+                    ) / 2;
+
+
+                const newPage =
+                    outputPdf.addPage([
+                        target.width,
+                        target.height
+                    ]);
+
+
+                newPage.drawPage(
+                    embeddedPage,
+                    {
+                        x: x,
+                        y: y,
+                        width:
+                            scaledWidth,
+                        height:
+                            scaledHeight
+                    }
+                );
+
+
+                progressMessage.textContent =
+                    `Resizing page ${i + 1} of ${sourcePages.length}...`;
+            }
+
+
+            const outputBytes =
+                await outputPdf.save();
+
+
+            const blob =
+                new Blob(
+                    [outputBytes],
+                    {
+                        type:
+                            "application/pdf"
+                    }
+                );
+
+
+            if (downloadUrl) {
+
+                URL.revokeObjectURL(
+                    downloadUrl
+                );
+            }
+
+
+            downloadUrl =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            downloadBtn.href =
+                downloadUrl;
+
+
+            resultText.textContent =
+                `${sourcePages.length} page${sourcePages.length === 1 ? "" : "s"} resized to ${target.name}. Original content was scaled to fit without intentional cropping.`;
+
+
+            result.style.display =
+                "block";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            showError(
+                error.message ||
+                "PDF resizing failed. Please try again."
+            );
+
+
+        } finally {
+
+            resizeBtn.disabled =
+                false;
+
+
+            progressMessage.style.display =
+                "none";
+        }
+    }
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        pdfInput.value =
+            "";
+
+
+        selectedFile =
+            null;
+
+
+        fileName.textContent =
+            "";
+
+
+        fileSize.textContent =
+            "";
+
+
+        fileInfo.style.display =
+            "none";
+
+
+        resizeControls.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        progressMessage.style.display =
+            "none";
+
+
+        hideError();
+
+
+        resizeBtn.disabled =
+            true;
+
+
+        pageSize.value =
+            "a4";
+
+
+        customSize.style.display =
+            "none";
+
+
+        customWidth.value =
+            "210";
+
+
+        customHeight.value =
+            "297";
+
+
+        downloadBtn.href =
+            "#";
+
+
+        if (downloadUrl) {
+
+            URL.revokeObjectURL(
+                downloadUrl
+            );
+
+
+            downloadUrl =
+                null;
+        }
+    }
+);
+
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,2069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PDF Images Extractor - FileVora</title>
+
+    <meta
+        name="description"
+        content="Extract embedded images from PDF files online with FileVora."
+    >
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .extract-info {
+            display: none;
+            margin-top: 20px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .extract-actions {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .reset-btn {
+            background: #ffffff !important;
+            color: #00bc8a !important;
+            border: 1px solid #00bc8a !important;
+            box-shadow: none !important;
+        }
+
+        .reset-btn:hover {
+            background: #ecfdf8 !important;
+        }
+
+        .image-results {
+            display: none;
+            margin-top: 28px;
+            text-align: left;
+        }
+
+        .image-results h2 {
+            margin: 0 0 16px;
+            color: #111827;
+            font-size: 20px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .image-item {
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            background: #ffffff;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 190px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
+            background: #f8fafc;
+        }
+
+        .image-preview img {
+            display: block !important;
+            width: auto !important;
+            height: auto !important;
+            max-width: 100% !important;
+            max-height: 170px !important;
+            object-fit: contain !important;
+            margin: 0 auto !important;
+            border: none !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+        }
+
+        .image-details {
+            padding: 12px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .image-details strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #111827;
+            font-size: 13px;
+        }
+
+        .image-details span {
+            display: block;
+            margin-bottom: 9px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .image-download {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 42px;
+            box-sizing: border-box;
+            padding: 9px 12px;
+            border-radius: 8px;
+            background: #00bc8a;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .image-download:hover {
+            background: #009a73;
+        }
+
+        .download-all {
+            display: none;
+            width: 100%;
+            min-height: 48px;
+            margin-top: 16px;
+            padding: 12px 20px;
+            border: 0;
+            border-radius: 10px;
+            background: #00bc8a;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .download-all:hover {
+            background: #009a73;
+        }
+
+        .empty-result {
+            display: none;
+            margin-top: 22px;
+            padding: 16px;
+            border-radius: 10px;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #9a3412;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 18px;
+            padding: 13px 15px;
+            border-radius: 10px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .progress-message {
+            display: none;
+            margin-top: 18px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .image-grid,
+            .extract-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body class="pdf-tool">
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">PDF</div>
+
+                <h1>PDF Images Extractor</h1>
+
+                <p>
+                    Extract embedded images from your PDF and download them separately.
+                </p>
+
+            </div>
+
+
+            <label
+                class="upload-area"
+                for="pdfInput"
+            >
+
+                <div class="upload-icon">↑</div>
+
+                <strong>Click to upload PDF</strong>
+
+                <span>Choose one PDF file</span>
+
+            </label>
+
+
+            <input
+                type="file"
+                id="pdfInput"
+                accept="application/pdf,.pdf"
+                style="display:none;"
+            >
+
+
+            <div
+                class="file-info"
+                id="fileInfo"
+            >
+                <strong id="fileName"></strong>
+                <span id="fileSize"></span>
+            </div>
+
+
+            <div
+                class="extract-info"
+                id="extractInfo"
+            >
+                Images embedded inside the PDF will be detected and extracted.
+                Text and other PDF elements will not be exported as images.
+            </div>
+
+
+            <div
+                class="extract-actions"
+                id="extractActions"
+            >
+
+                <button
+                    class="convert-btn"
+                    id="extractBtn"
+                    type="button"
+                    disabled
+                >
+                    Extract Images
+                </button>
+
+                <button
+                    class="convert-btn reset-btn"
+                    id="resetBtn"
+                    type="button"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                class="progress-message"
+                id="progressMessage"
+            >
+                Reading PDF...
+            </div>
+
+
+            <div
+                class="error-message"
+                id="errorMessage"
+            ></div>
+
+
+            <div
+                class="empty-result"
+                id="emptyResult"
+            >
+                No extractable embedded images were found in this PDF.
+            </div>
+
+
+            <div
+                class="image-results"
+                id="imageResults"
+            >
+
+                <h2 id="imageCount">
+                    Extracted Images
+                </h2>
+
+                <div
+                    class="image-grid"
+                    id="imageGrid"
+                ></div>
+
+                <button
+                    class="download-all"
+                    id="downloadAll"
+                    type="button"
+                >
+                    Download All Images
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+
+<script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+    const pdfInput =
+        document.getElementById("pdfInput");
+
+    const fileInfo =
+        document.getElementById("fileInfo");
+
+    const fileName =
+        document.getElementById("fileName");
+
+    const fileSize =
+        document.getElementById("fileSize");
+
+    const extractInfo =
+        document.getElementById("extractInfo");
+
+    const extractActions =
+        document.getElementById("extractActions");
+
+    const extractBtn =
+        document.getElementById("extractBtn");
+
+    const resetBtn =
+        document.getElementById("resetBtn");
+
+    const progressMessage =
+        document.getElementById("progressMessage");
+
+    const errorMessage =
+        document.getElementById("errorMessage");
+
+    const imageResults =
+        document.getElementById("imageResults");
+
+    const imageGrid =
+        document.getElementById("imageGrid");
+
+    const imageCount =
+        document.getElementById("imageCount");
+
+    const emptyResult =
+        document.getElementById("emptyResult");
+
+    const downloadAll =
+        document.getElementById("downloadAll");
+
+
+    let selectedFile = null;
+
+    let extractedImages = [];
+
+    let extractedKeys =
+        new Set();
+
+
+    function formatBytes(bytes) {
+
+        if (!bytes) {
+            return "0 Bytes";
+        }
+
+        const units = [
+            "Bytes",
+            "KB",
+            "MB",
+            "GB"
+        ];
+
+        const index =
+            Math.min(
+                Math.floor(
+                    Math.log(bytes) /
+                    Math.log(1024)
+                ),
+                units.length - 1
+            );
+
+        return (
+            parseFloat(
+                (
+                    bytes /
+                    Math.pow(
+                        1024,
+                        index
+                    )
+                ).toFixed(2)
+            ) +
+            " " +
+            units[index]
+        );
+    }
+
+
+    function showError(message) {
+
+        errorMessage.textContent =
+            message;
+
+        errorMessage.style.display =
+            "block";
+    }
+
+
+    function hideError() {
+
+        errorMessage.textContent =
+            "";
+
+        errorMessage.style.display =
+            "none";
+    }
+
+
+    function revokeExtractedImages() {
+
+        extractedImages.forEach(image => {
+
+            if (image.url) {
+                URL.revokeObjectURL(
+                    image.url
+                );
+            }
+
+        });
+
+        extractedImages =
+            [];
+
+        extractedKeys =
+            new Set();
+    }
+
+
+    function resetResults() {
+
+        revokeExtractedImages();
+
+        imageGrid.innerHTML =
+            "";
+
+        imageResults.style.display =
+            "none";
+
+        emptyResult.style.display =
+            "none";
+
+        downloadAll.style.display =
+            "none";
+
+        imageCount.textContent =
+            "Extracted Images";
+    }
+
+
+    function canvasToBlob(canvas) {
+
+        return new Promise(resolve => {
+
+            canvas.toBlob(
+                blob => resolve(blob),
+                "image/png"
+            );
+
+        });
+    }
+
+
+    async function imageBitmapToBlob(bitmap) {
+
+        const canvas =
+            document.createElement("canvas");
+
+        canvas.width =
+            bitmap.width;
+
+        canvas.height =
+            bitmap.height;
+
+        const context =
+            canvas.getContext(
+                "2d",
+                {
+                    alpha: true
+                }
+            );
+
+        context.drawImage(
+            bitmap,
+            0,
+            0
+        );
+
+        return await canvasToBlob(
+            canvas
+        );
+    }
+
+
+    async function htmlImageToBlob(image) {
+
+        const width =
+            image.naturalWidth ||
+            image.width;
+
+        const height =
+            image.naturalHeight ||
+            image.height;
+
+
+        if (!width || !height) {
+            return null;
+        }
+
+
+        const canvas =
+            document.createElement(
+                "canvas"
+            );
+
+        canvas.width =
+            width;
+
+        canvas.height =
+            height;
+
+
+        const context =
+            canvas.getContext(
+                "2d",
+                {
+                    alpha: true
+                }
+            );
+
+
+        context.drawImage(
+            image,
+            0,
+            0,
+            width,
+            height
+        );
+
+
+        return await canvasToBlob(
+            canvas
+        );
+    }
+
+
+    async function rawImageDataToBlob(
+        image
+    ) {
+
+        if (
+            !image ||
+            !image.data ||
+            !image.width ||
+            !image.height
+        ) {
+            return null;
+        }
+
+
+        const width =
+            image.width;
+
+        const height =
+            image.height;
+
+        const data =
+            image.data;
+
+
+        const pixelCount =
+            width *
+            height;
+
+
+        let rgbaData =
+            null;
+
+
+        /*
+         * RGBA
+         */
+        if (
+            data.length ===
+            pixelCount * 4
+        ) {
+
+            rgbaData =
+                new Uint8ClampedArray(
+                    data
+                );
+
+        }
+
+
+        /*
+         * RGB
+         */
+        else if (
+            data.length ===
+            pixelCount * 3
+        ) {
+
+            rgbaData =
+                new Uint8ClampedArray(
+                    pixelCount * 4
+                );
+
+
+            let sourceIndex =
+                0;
+
+            let targetIndex =
+                0;
+
+
+            while (
+                sourceIndex <
+                data.length
+            ) {
+
+                rgbaData[targetIndex] =
+                    data[sourceIndex];
+
+                rgbaData[targetIndex + 1] =
+                    data[sourceIndex + 1];
+
+                rgbaData[targetIndex + 2] =
+                    data[sourceIndex + 2];
+
+                rgbaData[targetIndex + 3] =
+                    255;
+
+
+                sourceIndex +=
+                    3;
+
+                targetIndex +=
+                    4;
+
+            }
+
+        }
+
+
+        /*
+         * Grayscale
+         */
+        else if (
+            data.length ===
+            pixelCount
+        ) {
+
+            rgbaData =
+                new Uint8ClampedArray(
+                    pixelCount * 4
+                );
+
+
+            for (
+                let i = 0;
+                i < pixelCount;
+                i++
+            ) {
+
+                const value =
+                    data[i];
+
+                const index =
+                    i * 4;
+
+
+                rgbaData[index] =
+                    value;
+
+                rgbaData[index + 1] =
+                    value;
+
+                rgbaData[index + 2] =
+                    value;
+
+                rgbaData[index + 3] =
+                    255;
+
+            }
+
+        }
+
+
+        if (!rgbaData) {
+
+            console.warn(
+                "Unsupported image data format",
+                {
+                    width,
+                    height,
+                    dataLength:
+                        data.length
+                }
+            );
+
+            return null;
+
+        }
+
+
+        const canvas =
+            document.createElement(
+                "canvas"
+            );
+
+        canvas.width =
+            width;
+
+        canvas.height =
+            height;
+
+
+        const context =
+            canvas.getContext(
+                "2d",
+                {
+                    alpha: true
+                }
+            );
+
+
+        const output =
+            new ImageData(
+                rgbaData,
+                width,
+                height
+            );
+
+
+        context.putImageData(
+            output,
+            0,
+            0
+        );
+
+
+        return await canvasToBlob(
+            canvas
+        );
+    }
+
+
+    async function convertPdfImageToBlob(
+        image
+    ) {
+
+        if (!image) {
+            return null;
+        }
+
+
+        /*
+         * ImageBitmap
+         */
+        if (
+            typeof ImageBitmap !==
+                "undefined" &&
+            image instanceof ImageBitmap
+        ) {
+
+            return await imageBitmapToBlob(
+                image
+            );
+
+        }
+
+
+        /*
+         * HTML image
+         */
+        if (
+            typeof HTMLImageElement !==
+                "undefined" &&
+            image instanceof HTMLImageElement
+        ) {
+
+            return await htmlImageToBlob(
+                image
+            );
+
+        }
+
+
+        /*
+         * Canvas
+         */
+        if (
+            typeof HTMLCanvasElement !==
+                "undefined" &&
+            image instanceof HTMLCanvasElement
+        ) {
+
+            return await canvasToBlob(
+                image
+            );
+
+        }
+
+
+        /*
+         * PDF.js can sometimes keep bitmap
+         * inside the object.
+         */
+        if (
+            image.bitmap &&
+            typeof ImageBitmap !==
+                "undefined" &&
+            image.bitmap instanceof
+                ImageBitmap
+        ) {
+
+            return await imageBitmapToBlob(
+                image.bitmap
+            );
+
+        }
+
+
+        /*
+         * Some PDF.js objects expose an
+         * image element through .img.
+         */
+        if (
+            image.img &&
+            typeof HTMLImageElement !==
+                "undefined" &&
+            image.img instanceof
+                HTMLImageElement
+        ) {
+
+            return await htmlImageToBlob(
+                image.img
+            );
+
+        }
+
+
+        /*
+         * Raw image data.
+         */
+        if (
+            image.data &&
+            image.width &&
+            image.height
+        ) {
+
+            return await rawImageDataToBlob(
+                image
+            );
+
+        }
+
+
+        console.warn(
+            "Unsupported PDF image object:",
+            image
+        );
+
+
+        return null;
+    }
+
+
+    function getPdfObject(
+        store,
+        objectId
+    ) {
+
+        return new Promise(resolve => {
+
+            let completed =
+                false;
+
+
+            const finish =
+                value => {
+
+                    if (completed) {
+                        return;
+                    }
+
+                    completed =
+                        true;
+
+                    resolve(
+                        value || null
+                    );
+
+                };
+
+
+            try {
+
+                /*
+                 * Callback form waits until
+                 * PDF.js image data is ready.
+                 */
+                const immediate =
+                    store.get(
+                        objectId,
+                        value => {
+                            finish(value);
+                        }
+                    );
+
+
+                if (immediate) {
+                    finish(immediate);
+                }
+
+
+                /*
+                 * Prevent permanent waiting on
+                 * damaged/unavailable objects.
+                 */
+                setTimeout(
+                    () => finish(null),
+                    5000
+                );
+
+
+            } catch (error) {
+
+                console.warn(
+                    "Could not get PDF object:",
+                    objectId,
+                    error
+                );
+
+                finish(null);
+
+            }
+
+        });
+    }
+
+
+    async function getImageObject(
+        page,
+        objectId
+    ) {
+
+        let image =
+            null;
+
+
+        /*
+         * Page-local PDF image object.
+         */
+        try {
+
+            image =
+                await getPdfObject(
+                    page.objs,
+                    objectId
+                );
+
+        } catch (error) {
+
+            console.warn(
+                "page.objs failed:",
+                error
+            );
+
+        }
+
+
+        /*
+         * Fallback for shared/common objects.
+         */
+        if (
+            !image &&
+            page.commonObjs
+        ) {
+
+            try {
+
+                image =
+                    await getPdfObject(
+                        page.commonObjs,
+                        objectId
+                    );
+
+            } catch (error) {
+
+                console.warn(
+                    "commonObjs failed:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        return image;
+    }
+
+
+    async function extractImagesFromPage(
+        page
+    ) {
+
+        const found =
+            [];
+
+
+        const operatorList =
+            await page.getOperatorList();
+
+
+        const OPS =
+            pdfjsLib.OPS;
+
+
+        for (
+            let i = 0;
+            i <
+            operatorList.fnArray.length;
+            i++
+        ) {
+
+            const fn =
+                operatorList.fnArray[i];
+
+            const args =
+                operatorList.argsArray[i];
+
+
+            /*
+             * Standard PDF image XObject.
+             */
+            if (
+                fn ===
+                OPS.paintImageXObject
+            ) {
+
+                const objectId =
+                    args &&
+                    args[0];
+
+
+                if (!objectId) {
+                    continue;
+                }
+
+
+                const image =
+                    await getImageObject(
+                        page,
+                        objectId
+                    );
+
+
+                if (image) {
+
+                    found.push({
+                        image: image,
+                        key:
+                            `xobject-${objectId}`
+                    });
+
+                }
+
+            }
+
+
+            /*
+             * Inline image.
+             */
+            else if (
+                fn ===
+                OPS.paintInlineImageXObject
+            ) {
+
+                const image =
+                    args &&
+                    args[0];
+
+
+                if (image) {
+
+                    found.push({
+                        image: image,
+                        key:
+                            `inline-${i}`
+                    });
+
+                }
+
+            }
+
+        }
+
+
+        return found;
+    }
+
+
+    function getImageDimensions(
+        image
+    ) {
+
+        if (!image) {
+
+            return {
+                width: 0,
+                height: 0
+            };
+
+        }
+
+
+        if (
+            typeof ImageBitmap !==
+                "undefined" &&
+            image instanceof ImageBitmap
+        ) {
+
+            return {
+                width:
+                    image.width,
+                height:
+                    image.height
+            };
+
+        }
+
+
+        if (
+            typeof HTMLImageElement !==
+                "undefined" &&
+            image instanceof HTMLImageElement
+        ) {
+
+            return {
+                width:
+                    image.naturalWidth ||
+                    image.width,
+                height:
+                    image.naturalHeight ||
+                    image.height
+            };
+
+        }
+
+
+        if (image.bitmap) {
+
+            return {
+                width:
+                    image.bitmap.width ||
+                    image.width ||
+                    0,
+                height:
+                    image.bitmap.height ||
+                    image.height ||
+                    0
+            };
+
+        }
+
+
+        return {
+            width:
+                image.width || 0,
+            height:
+                image.height || 0
+        };
+    }
+
+
+    function addImageToUI(
+        blob,
+        index,
+        width,
+        height,
+        pageNumber
+    ) {
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        extractedImages.push({
+            blob,
+            url,
+            index
+        });
+
+
+        const item =
+            document.createElement(
+                "div"
+            );
+
+        item.className =
+            "image-item";
+
+
+        const preview =
+            document.createElement(
+                "div"
+            );
+
+        preview.className =
+            "image-preview";
+
+
+        const img =
+            document.createElement(
+                "img"
+            );
+
+        img.src =
+            url;
+
+        img.alt =
+            `Extracted image ${index}`;
+
+
+        preview.appendChild(
+            img
+        );
+
+
+        const details =
+            document.createElement(
+                "div"
+            );
+
+        details.className =
+            "image-details";
+
+
+        const title =
+            document.createElement(
+                "strong"
+            );
+
+        title.textContent =
+            `Image ${index}`;
+
+
+        const info =
+            document.createElement(
+                "span"
+            );
+
+        info.textContent =
+            `${width} × ${height} px • Page ${pageNumber}`;
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+        link.className =
+            "image-download";
+
+        link.href =
+            url;
+
+        link.download =
+            `filevora-image-${index}.png`;
+
+        link.textContent =
+            "Download Image";
+
+
+        details.appendChild(
+            title
+        );
+
+        details.appendChild(
+            info
+        );
+
+        details.appendChild(
+            link
+        );
+
+
+        item.appendChild(
+            preview
+        );
+
+        item.appendChild(
+            details
+        );
+
+
+        imageGrid.appendChild(
+            item
+        );
+
+    }
+
+
+    pdfInput.addEventListener(
+        "change",
+        () => {
+
+            hideError();
+
+            resetResults();
+
+
+            progressMessage.style.display =
+                "none";
+
+            progressMessage.textContent =
+                "Reading PDF...";
+
+
+            selectedFile =
+                pdfInput.files[0];
+
+
+            if (!selectedFile) {
+
+                fileInfo.style.display =
+                    "none";
+
+                extractInfo.style.display =
+                    "none";
+
+                extractActions.style.display =
+                    "none";
+
+                extractBtn.disabled =
+                    true;
+
+                return;
+
+            }
+
+
+            if (
+                selectedFile.type !==
+                    "application/pdf" &&
+                !selectedFile.name
+                    .toLowerCase()
+                    .endsWith(".pdf")
+            ) {
+
+                showError(
+                    "Please select a valid PDF file."
+                );
+
+
+                pdfInput.value =
+                    "";
+
+                selectedFile =
+                    null;
+
+                fileInfo.style.display =
+                    "none";
+
+                extractInfo.style.display =
+                    "none";
+
+                extractActions.style.display =
+                    "none";
+
+                extractBtn.disabled =
+                    true;
+
+                return;
+
+            }
+
+
+            fileName.textContent =
+                selectedFile.name;
+
+
+            fileSize.textContent =
+                formatBytes(
+                    selectedFile.size
+                );
+
+
+            fileInfo.style.display =
+                "block";
+
+            extractInfo.style.display =
+                "block";
+
+            extractActions.style.display =
+                "grid";
+
+            extractBtn.disabled =
+                false;
+
+        }
+    );
+
+
+    extractBtn.addEventListener(
+        "click",
+        async () => {
+
+            if (!selectedFile) {
+
+                showError(
+                    "Please select a PDF file first."
+                );
+
+                return;
+
+            }
+
+
+            hideError();
+
+            resetResults();
+
+
+            extractBtn.disabled =
+                true;
+
+            resetBtn.disabled =
+                true;
+
+
+            progressMessage.style.display =
+                "block";
+
+            progressMessage.textContent =
+                "Reading PDF...";
+
+
+            try {
+
+                if (
+                    typeof pdfjsLib ===
+                    "undefined"
+                ) {
+
+                    throw new Error(
+                        "PDF library failed to load. Please refresh the page and try again."
+                    );
+
+                }
+
+
+                const bytes =
+                    await selectedFile
+                        .arrayBuffer();
+
+
+                const loadingTask =
+                    pdfjsLib.getDocument({
+                        data: bytes
+                    });
+
+
+                const pdf =
+                    await loadingTask.promise;
+
+
+                let imageNumber =
+                    0;
+
+
+                for (
+                    let pageNumber = 1;
+                    pageNumber <=
+                    pdf.numPages;
+                    pageNumber++
+                ) {
+
+                    progressMessage.textContent =
+                        `Scanning page ${pageNumber} of ${pdf.numPages}...`;
+
+
+                    const page =
+                        await pdf.getPage(
+                            pageNumber
+                        );
+
+
+                    /*
+                     * Force PDF.js to prepare page
+                     * resources before accessing
+                     * image XObjects.
+                     */
+                    await page.getOperatorList();
+
+
+                    const images =
+                        await extractImagesFromPage(
+                            page
+                        );
+
+
+                    for (
+                        let itemIndex = 0;
+                        itemIndex <
+                        images.length;
+                        itemIndex++
+                    ) {
+
+                        const item =
+                            images[itemIndex];
+
+
+                        /*
+                         * Prevent same shared image
+                         * object appearing repeatedly
+                         * on the same page.
+                         */
+                        const uniqueKey =
+                            `${pageNumber}-${item.key}`;
+
+
+                        if (
+                            extractedKeys.has(
+                                uniqueKey
+                            )
+                        ) {
+                            continue;
+                        }
+
+
+                        try {
+
+                            const blob =
+                                await convertPdfImageToBlob(
+                                    item.image
+                                );
+
+
+                            if (!blob) {
+
+                                console.warn(
+                                    "Image could not be converted:",
+                                    item.image
+                                );
+
+                                continue;
+
+                            }
+
+
+                            const dimensions =
+                                getImageDimensions(
+                                    item.image
+                                );
+
+
+                            /*
+                             * Ignore tiny PDF graphics,
+                             * dots and small decorative
+                             * objects.
+                             */
+                            if (
+                                dimensions.width > 0 &&
+                                dimensions.height > 0 &&
+                                dimensions.width < 20 &&
+                                dimensions.height < 20
+                            ) {
+
+                                continue;
+
+                            }
+
+
+                            extractedKeys.add(
+                                uniqueKey
+                            );
+
+
+                            imageNumber++;
+
+
+                            addImageToUI(
+                                blob,
+                                imageNumber,
+                                dimensions.width,
+                                dimensions.height,
+                                pageNumber
+                            );
+
+
+                        } catch (error) {
+
+                            console.warn(
+                                "Image conversion failed:",
+                                error
+                            );
+
+                        }
+
+                    }
+
+
+                    if (
+                        typeof page.cleanup ===
+                        "function"
+                    ) {
+
+                        /*
+                         * Do not force cleanup while
+                         * image objects are still being
+                         * processed.
+                         */
+                    }
+
+                }
+
+
+                if (
+                    imageNumber === 0
+                ) {
+
+                    emptyResult.style.display =
+                        "block";
+
+                } else {
+
+                    imageCount.textContent =
+                        `${imageNumber} Image${imageNumber === 1 ? "" : "s"} Extracted`;
+
+
+                    imageResults.style.display =
+                        "block";
+
+
+                    if (
+                        imageNumber > 1
+                    ) {
+
+                        downloadAll.style.display =
+                            "block";
+
+                    }
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "PDF IMAGE EXTRACTOR ERROR:",
+                    error
+                );
+
+
+                showError(
+                    error.message ||
+                    "Could not extract images from this PDF."
+                );
+
+
+            } finally {
+
+                extractBtn.disabled =
+                    false;
+
+                resetBtn.disabled =
+                    false;
+
+                progressMessage.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
+
+    resetBtn.addEventListener(
+        "click",
+        () => {
+
+            pdfInput.value =
+                "";
+
+            selectedFile =
+                null;
+
+
+            resetResults();
+
+            hideError();
+
+
+            fileName.textContent =
+                "";
+
+            fileSize.textContent =
+                "";
+
+
+            fileInfo.style.display =
+                "none";
+
+            extractInfo.style.display =
+                "none";
+
+            extractActions.style.display =
+                "none";
+
+            progressMessage.style.display =
+                "none";
+
+            progressMessage.textContent =
+                "Reading PDF...";
+
+
+            extractBtn.disabled =
+                true;
+
+        }
+    );
+
+
+    downloadAll.addEventListener(
+        "click",
+        async () => {
+
+            if (
+                extractedImages.length ===
+                0
+            ) {
+                return;
+            }
+
+
+            for (
+                let i = 0;
+                i <
+                extractedImages.length;
+                i++
+            ) {
+
+                const image =
+                    extractedImages[i];
+
+
+                const link =
+                    document.createElement(
+                        "a"
+                    );
+
+
+                link.href =
+                    image.url;
+
+                link.download =
+                    `filevora-image-${image.index}.png`;
+
+
+                document.body.appendChild(
+                    link
+                );
+
+
+                link.click();
+
+                link.remove();
+
+
+                await new Promise(
+                    resolve =>
+                        setTimeout(
+                            resolve,
+                            180
+                        )
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+        <div class="footer-brand">
+
+            <a class="brand" href="/">
+                <span class="brand-mark">F</span>
+                <span class="brand-name">File<span>Vora</span></span>
+            </a>
+
+            <p>
+                Fast, simple online tools for everyday file tasks.
+            </p>
+
+        </div>
+
+
+        <div>
+            <h3>Company</h3>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/security">Security</a>
+        </div>
+
+
+        <div>
+            <h3>Resources</h3>
+            <a href="/blog">Blog</a>
+            <a href="/#tools">Tools</a>
+            <a href="/faq">FAQ</a>
+        </div>
+
+
+        <div>
+            <h3>Legal</h3>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+            <a href="/disclaimer">Disclaimer</a>
+        </div>
+
+
+        <div>
+            <h3>Contact</h3>
+            <a href="/contact">Email</a>
+            <a href="/contact">Facebook</a>
+            <a href="/contact">Instagram</a>
+        </div>
+
+    </div>
+
+
+    <div class="container footer-bottom">
+
+        <span>
+            © <span data-current-year></span>
+            FileVora. All rights reserved.
+        </span>
+
+        <span>
+            All in One Tool.
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script>
+    document
+        .querySelectorAll(
+            "[data-current-year]"
+        )
+        .forEach(
+            el =>
+                el.textContent =
+                    new Date().getFullYear()
+        );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

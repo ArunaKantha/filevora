@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Password Generator - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .password-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .password-action-row .convert-btn{
+            width:100% !important;
+            min-height:50px !important;
+            height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .password-reset-btn{
+            background:#ffffff !important;
+            color:#00bc8a !important;
+            border:1px solid #00bc8a !important;
+            box-shadow:none !important;
+        }
+
+        .password-reset-btn:hover{
+            background:#ecfdf8 !important;
+        }
+
+        @media (max-width:600px){
+            .password-action-row{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    PW
+                </div>
+
+                <h1>Password Generator</h1>
+
+                <p>
+                    Generate strong random passwords with customizable length and character types.
+                </p>
+
+            </div>
+
+
+            <div style="text-align:left;">
+
+                <label
+                    for="length"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Password Length:
+                    <span id="lengthValue">16</span>
+                </label>
+
+
+                <input
+                    type="range"
+                    id="length"
+                    min="8"
+                    max="64"
+                    value="16"
+                    style="width:100%;"
+                >
+
+
+                <div style="margin-top:24px;">
+
+                    <label
+                        style="
+                            display:block;
+                            margin-bottom:12px;
+                            font-weight:700;
+                            color:#111827;
+                        "
+                    >
+                        Character Types
+                    </label>
+
+
+                    <label
+                        style="
+                            display:block;
+                            margin-bottom:10px;
+                        "
+                    >
+                        <input
+                            type="checkbox"
+                            id="uppercase"
+                            checked
+                        >
+                        Uppercase Letters (A-Z)
+                    </label>
+
+
+                    <label
+                        style="
+                            display:block;
+                            margin-bottom:10px;
+                        "
+                    >
+                        <input
+                            type="checkbox"
+                            id="lowercase"
+                            checked
+                        >
+                        Lowercase Letters (a-z)
+                    </label>
+
+
+                    <label
+                        style="
+                            display:block;
+                            margin-bottom:10px;
+                        "
+                    >
+                        <input
+                            type="checkbox"
+                            id="numbers"
+                            checked
+                        >
+                        Numbers (0-9)
+                    </label>
+
+
+                    <label
+                        style="
+                            display:block;
+                        "
+                    >
+                        <input
+                            type="checkbox"
+                            id="symbols"
+                            checked
+                        >
+                        Symbols (!@#$...)
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <div class="password-action-row">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="generateBtn"
+                >
+                    Generate Password
+                </button>
+
+
+                <button
+                    type="button"
+                    class="convert-btn password-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2>
+                    Your Password
+                </h2>
+
+
+                <p id="resultInfo">
+                    Strong random password generated.
+                </p>
+
+
+                <div
+                    id="passwordBox"
+                    style="
+                        margin-top:18px;
+                        padding:18px;
+                        background:#ffffff;
+                        border:1px solid #d1d5db;
+                        border-radius:10px;
+                        font-family:monospace;
+                        font-size:18px;
+                        font-weight:700;
+                        word-break:break-all;
+                        text-align:left;
+                    "
+                ></div>
+
+
+                <button
+                    type="button"
+                    class="download-btn"
+                    id="copyBtn"
+                >
+                    Copy Password
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const lengthInput =
+    document.getElementById("length");
+
+const lengthValue =
+    document.getElementById("lengthValue");
+
+
+const uppercase =
+    document.getElementById("uppercase");
+
+const lowercase =
+    document.getElementById("lowercase");
+
+const numbers =
+    document.getElementById("numbers");
+
+const symbols =
+    document.getElementById("symbols");
+
+
+const generateBtn =
+    document.getElementById("generateBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultInfo =
+    document.getElementById("resultInfo");
+
+const passwordBox =
+    document.getElementById("passwordBox");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+
+const characterSets = {
+
+    uppercase:
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+
+    lowercase:
+        "abcdefghijklmnopqrstuvwxyz",
+
+    numbers:
+        "0123456789",
+
+    symbols:
+        "!@#$%^&*()_+-=[]{}|;:,.<>?"
+};
+
+
+/* =========================
+   LENGTH DISPLAY
+========================= */
+
+lengthInput.addEventListener(
+    "input",
+    function () {
+
+        lengthValue.textContent =
+            lengthInput.value;
+
+    }
+);
+
+
+/* =========================
+   SECURE RANDOM
+========================= */
+
+function secureRandom(max) {
+
+    const array =
+        new Uint32Array(1);
+
+
+    crypto.getRandomValues(
+        array
+    );
+
+
+    return array[0] % max;
+}
+
+
+/* =========================
+   GENERATE PASSWORD
+========================= */
+
+function generateSecurePassword(
+    length
+) {
+
+    let selectedChars =
+        "";
+
+
+    if (
+        uppercase.checked
+    ) {
+
+        selectedChars +=
+            characterSets.uppercase;
+    }
+
+
+    if (
+        lowercase.checked
+    ) {
+
+        selectedChars +=
+            characterSets.lowercase;
+    }
+
+
+    if (
+        numbers.checked
+    ) {
+
+        selectedChars +=
+            characterSets.numbers;
+    }
+
+
+    if (
+        symbols.checked
+    ) {
+
+        selectedChars +=
+            characterSets.symbols;
+    }
+
+
+    if (!selectedChars) {
+
+        return null;
+    }
+
+
+    let password =
+        "";
+
+
+    for (
+        let i = 0;
+        i < length;
+        i++
+    ) {
+
+        password +=
+            selectedChars[
+                secureRandom(
+                    selectedChars.length
+                )
+            ];
+    }
+
+
+    return password;
+}
+
+
+/* =========================
+   GENERATE BUTTON
+========================= */
+
+generateBtn.addEventListener(
+    "click",
+    function () {
+
+        const length =
+            parseInt(
+                lengthInput.value,
+                10
+            );
+
+
+        if (
+            !uppercase.checked &&
+            !lowercase.checked &&
+            !numbers.checked &&
+            !symbols.checked
+        ) {
+
+            alert(
+                "Please select at least one character type."
+            );
+
+            return;
+        }
+
+
+        const password =
+            generateSecurePassword(
+                length
+            );
+
+
+        if (!password) {
+
+            alert(
+                "Unable to generate password."
+            );
+
+            return;
+        }
+
+
+        passwordBox.textContent =
+            password;
+
+
+        resultInfo.textContent =
+            `Generated a ${length}-character secure random password.`;
+
+
+        result.style.display =
+            "block";
+
+
+        result.scrollIntoView({
+            behavior:"smooth",
+            block:"nearest"
+        });
+
+    }
+);
+
+
+/* =========================
+   COPY PASSWORD
+========================= */
+
+copyBtn.addEventListener(
+    "click",
+    async function () {
+
+        const password =
+            passwordBox.textContent;
+
+
+        if (!password) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                password
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy Password";
+
+                },
+                1500
+            );
+
+
+        } catch (error) {
+
+            const temp =
+                document.createElement(
+                    "textarea"
+                );
+
+
+            temp.value =
+                password;
+
+
+            document.body.appendChild(
+                temp
+            );
+
+
+            temp.select();
+
+
+            document.execCommand(
+                "copy"
+            );
+
+
+            temp.remove();
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy Password";
+
+                },
+                1500
+            );
+        }
+
+    }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        lengthInput.value =
+            "16";
+
+
+        lengthValue.textContent =
+            "16";
+
+
+        uppercase.checked =
+            true;
+
+
+        lowercase.checked =
+            true;
+
+
+        numbers.checked =
+            true;
+
+
+        symbols.checked =
+            true;
+
+
+        passwordBox.textContent =
+            "";
+
+
+        resultInfo.textContent =
+            "Strong random password generated.";
+
+
+        result.style.display =
+            "none";
+
+
+        copyBtn.textContent =
+            "Copy Password";
+
+    }
+);
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date().getFullYear();
+
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

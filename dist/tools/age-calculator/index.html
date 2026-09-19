@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Age Calculator - FileVora</title>
+    <meta name="description" content="Calculate your exact age in years, months and days with FileVora Age Calculator.">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .age-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .age-action-row .convert-btn{
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .age-reset-btn{
+            background:#ffffff !important;
+            color:#00bc8a !important;
+            border:1px solid #00bc8a !important;
+            box-shadow:none !important;
+        }
+
+        .age-reset-btn:hover{
+            background:#ecfdf8 !important;
+        }
+
+        @media (max-width:600px){
+            .age-action-row{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    AGE
+                </div>
+
+                <h1>Age Calculator</h1>
+
+                <p>
+                    Calculate your exact age from your date of birth.
+                </p>
+
+            </div>
+
+
+            <div
+                style="
+                    text-align:left;
+                    padding:20px;
+                    background:#f8fafc;
+                    border:1px solid #e2e8f0;
+                    border-radius:14px;
+                "
+            >
+
+                <label
+                    for="birthDate"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Date of Birth
+                </label>
+
+                <input
+                    type="date"
+                    id="birthDate"
+                    style="
+                        width:100%;
+                        padding:13px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        box-sizing:border-box;
+                        font-size:15px;
+                        background:#ffffff;
+                    "
+                >
+
+
+                <div class="age-action-row">
+
+                    <button
+                        class="convert-btn"
+                        id="calculateBtn"
+                        type="button"
+                    >
+                        Calculate Age
+                    </button>
+
+                    <button
+                        class="convert-btn age-reset-btn"
+                        id="resetBtn"
+                        type="button"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+                style="text-align:left; display:none;"
+            >
+
+                <h2>Your Age</h2>
+
+                <p
+                    id="ageResult"
+                    style="
+                        margin-top:12px;
+                        font-size:18px;
+                        font-weight:700;
+                        color:#166534;
+                    "
+                ></p>
+
+                <p
+                    id="nextBirthday"
+                    style="margin-top:10px;"
+                ></p>
+
+                <p
+                    id="birthDayInfo"
+                    style="margin-top:10px;"
+                ></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const birthDate =
+    document.getElementById("birthDate");
+
+const calculateBtn =
+    document.getElementById("calculateBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const result =
+    document.getElementById("result");
+
+const ageResult =
+    document.getElementById("ageResult");
+
+const nextBirthday =
+    document.getElementById("nextBirthday");
+
+const birthDayInfo =
+    document.getElementById("birthDayInfo");
+
+
+/* Prevent selecting a future date */
+
+const todayForInput =
+    new Date();
+
+const year =
+    todayForInput.getFullYear();
+
+const month =
+    String(
+        todayForInput.getMonth() + 1
+    ).padStart(2, "0");
+
+const day =
+    String(
+        todayForInput.getDate()
+    ).padStart(2, "0");
+
+birthDate.max =
+    `${year}-${month}-${day}`;
+
+
+/* =========================
+   CALCULATE AGE
+========================= */
+
+calculateBtn.addEventListener(
+    "click",
+    function () {
+
+        if (!birthDate.value) {
+
+            alert(
+                "Please select your date of birth."
+            );
+
+            return;
+        }
+
+
+        const dob =
+            new Date(
+                birthDate.value +
+                "T00:00:00"
+            );
+
+        const today =
+            new Date();
+
+
+        if (dob > today) {
+
+            alert(
+                "Date of birth cannot be in the future."
+            );
+
+            return;
+        }
+
+
+        let ageYears =
+            today.getFullYear() -
+            dob.getFullYear();
+
+        let ageMonths =
+            today.getMonth() -
+            dob.getMonth();
+
+        let ageDays =
+            today.getDate() -
+            dob.getDate();
+
+
+        if (ageDays < 0) {
+
+            ageMonths--;
+
+            const previousMonth =
+                new Date(
+                    today.getFullYear(),
+                    today.getMonth(),
+                    0
+                );
+
+            ageDays +=
+                previousMonth.getDate();
+        }
+
+
+        if (ageMonths < 0) {
+
+            ageYears--;
+
+            ageMonths += 12;
+        }
+
+
+        ageResult.textContent =
+            ageYears +
+            " years, " +
+            ageMonths +
+            " months, " +
+            ageDays +
+            " days";
+
+
+        /* Birthday information */
+
+        let nextYear =
+            today.getFullYear();
+
+        let birthday =
+            new Date(
+                nextYear,
+                dob.getMonth(),
+                dob.getDate()
+            );
+
+
+        if (birthday < today) {
+
+            nextYear++;
+
+            birthday =
+                new Date(
+                    nextYear,
+                    dob.getMonth(),
+                    dob.getDate()
+                );
+        }
+
+
+        const daysUntil =
+            Math.ceil(
+                (
+                    birthday - today
+                ) /
+                (1000 * 60 * 60 * 24)
+            );
+
+
+        if (daysUntil === 0) {
+
+            nextBirthday.textContent =
+                "🎉 Happy Birthday!";
+
+        } else {
+
+            nextBirthday.textContent =
+                "Next birthday: " +
+                daysUntil +
+                " day(s) from now.";
+        }
+
+
+        /* Day of birth */
+
+        const birthDayName =
+            dob.toLocaleDateString(
+                "en-US",
+                {
+                    weekday:"long"
+                }
+            );
+
+
+        birthDayInfo.textContent =
+            "You were born on a " +
+            birthDayName +
+            ".";
+
+
+        result.style.display =
+            "block";
+
+    }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        birthDate.value =
+            "";
+
+        ageResult.textContent =
+            "";
+
+        nextBirthday.textContent =
+            "";
+
+        birthDayInfo.textContent =
+            "";
+
+        result.style.display =
+            "none";
+
+        birthDate.focus();
+
+    }
+);
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+
+        element.textContent =
+            new Date().getFullYear();
+
+    });
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

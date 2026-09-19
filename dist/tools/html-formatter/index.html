@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HTML Formatter - FileVora</title>
+    <meta name="description" content="Format and beautify HTML code online with FileVora.">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .html-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .html-action-row .convert-btn{
+            width:100% !important;
+            min-height:50px !important;
+            height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .html-reset-btn{
+            background:#ffffff !important;
+            color:#00bc8a !important;
+            border:1px solid #00bc8a !important;
+            box-shadow:none !important;
+        }
+
+        .html-reset-btn:hover{
+            background:#ecfdf8 !important;
+        }
+
+        .html-result-actions{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:15px;
+        }
+
+        .html-result-actions .download-btn{
+            width:100% !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+            text-align:center !important;
+        }
+
+        .html-file-info{
+            display:none;
+            margin-top:12px;
+            padding:12px 14px;
+            border:1px solid #e2e8f0;
+            border-radius:10px;
+            background:#f8fafc;
+            text-align:left;
+        }
+
+        .html-file-info strong{
+            display:block;
+            color:#111827;
+            font-size:14px;
+        }
+
+        .html-file-info span{
+            display:block;
+            margin-top:4px;
+            color:#64748b;
+            font-size:13px;
+        }
+
+        @media (max-width:600px){
+            .html-action-row,
+            .html-result-actions{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    HTML
+                </div>
+
+                <h1>HTML Formatter</h1>
+
+                <p>
+                    Beautify and format HTML code with proper indentation.
+                </p>
+
+            </div>
+
+
+            <!-- FILE UPLOAD -->
+
+            <label
+                class="upload-area"
+                for="htmlFileInput"
+            >
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+                <strong>
+                    Choose an HTML file
+                </strong>
+
+                <span>
+                    Supports .html and .htm files
+                </span>
+
+            </label>
+
+
+            <input
+                type="file"
+                id="htmlFileInput"
+                accept=".html,.htm,text/html"
+            >
+
+
+            <div
+                class="html-file-info"
+                id="fileInfo"
+            >
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <!-- HTML INPUT -->
+
+            <div
+                style="
+                    text-align:left;
+                    margin-top:22px;
+                "
+            >
+
+                <label
+                    for="htmlInput"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    HTML Code
+                </label>
+
+
+                <textarea
+                    id="htmlInput"
+                    placeholder="Paste your HTML code here..."
+                    style="
+                        width:100%;
+                        min-height:320px;
+                        padding:16px;
+                        border:1px solid #cbd5e1;
+                        border-radius:12px;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                ></textarea>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="html-action-row">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="formatBtn"
+                >
+                    Format HTML
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn html-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <!-- ERROR -->
+
+            <div
+                id="errorMessage"
+                style="
+                    display:none;
+                    margin-top:18px;
+                    padding:14px 18px;
+                    background:#fef2f2;
+                    border:1px solid #fecaca;
+                    border-radius:10px;
+                    color:#b91c1c;
+                    text-align:left;
+                "
+            ></div>
+
+
+            <!-- RESULT -->
+
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2>
+                    HTML Formatted
+                </h2>
+
+                <p>
+                    Your HTML code has been successfully formatted.
+                </p>
+
+
+                <textarea
+                    id="output"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:320px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #bbf7d0;
+                        border-radius:10px;
+                        background:#ffffff;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        outline:none;
+                    "
+                ></textarea>
+
+
+                <div class="html-result-actions">
+
+                    <button
+                        type="button"
+                        class="download-btn"
+                        id="copyBtn"
+                    >
+                        Copy HTML
+                    </button>
+
+
+                    <a
+                        id="downloadBtn"
+                        class="download-btn"
+                        href="#"
+                        download="formatted.html"
+                    >
+                        Download HTML
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const htmlFileInput =
+    document.getElementById("htmlFileInput");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const htmlInput =
+    document.getElementById("htmlInput");
+
+const formatBtn =
+    document.getElementById("formatBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const result =
+    document.getElementById("result");
+
+const output =
+    document.getElementById("output");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let currentDownloadUrl =
+    null;
+
+
+/* =========================
+   FILE SELECT
+========================= */
+
+htmlFileInput.addEventListener(
+    "change",
+    async function () {
+
+        const file =
+            this.files[0];
+
+
+        if (!file) {
+
+            fileInfo.style.display =
+                "none";
+
+            return;
+        }
+
+
+        fileName.textContent =
+            file.name;
+
+
+        fileSize.textContent =
+            (
+                file.size /
+                1024
+            ).toFixed(2) +
+            " KB";
+
+
+        fileInfo.style.display =
+            "block";
+
+
+        try {
+
+            const text =
+                await file.text();
+
+
+            htmlInput.value =
+                text;
+
+
+            result.style.display =
+                "none";
+
+
+            output.value =
+                "";
+
+
+            errorMessage.style.display =
+                "none";
+
+
+        } catch (error) {
+
+            showError(
+                "Unable to read this HTML file."
+            );
+        }
+
+    }
+);
+
+
+/* =========================
+   FORMAT HTML
+========================= */
+
+function formatHTML() {
+
+    const input =
+        htmlInput.value.trim();
+
+
+    result.style.display =
+        "none";
+
+
+    errorMessage.style.display =
+        "none";
+
+
+    if (!input) {
+
+        showError(
+            "Please enter HTML code or upload an HTML file."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const formatted =
+            beautifyHTML(
+                input
+            );
+
+
+        output.value =
+            formatted;
+
+
+        const blob =
+            new Blob(
+                [formatted],
+                {
+                    type:
+                        "text/html;charset=utf-8;"
+                }
+            );
+
+
+        if (
+            currentDownloadUrl
+        ) {
+
+            URL.revokeObjectURL(
+                currentDownloadUrl
+            );
+        }
+
+
+        currentDownloadUrl =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        downloadBtn.href =
+            currentDownloadUrl;
+
+
+        result.style.display =
+            "block";
+
+
+        result.scrollIntoView({
+            behavior:"smooth",
+            block:"nearest"
+        });
+
+
+    } catch (error) {
+
+        showError(
+            "Unable to format the HTML code."
+        );
+    }
+
+}
+
+
+/* =========================
+   BEAUTIFY HTML
+========================= */
+
+function beautifyHTML(html) {
+
+    html =
+        html
+            .replace(
+                />\s*</g,
+                "><"
+            )
+            .trim();
+
+
+    const tokens =
+        html.split(
+            /(<[^>]+>)/g
+        );
+
+
+    let formatted =
+        "";
+
+    let indent =
+        0;
+
+
+    const voidTags = [
+        "area",
+        "base",
+        "br",
+        "col",
+        "embed",
+        "hr",
+        "img",
+        "input",
+        "link",
+        "meta",
+        "param",
+        "source",
+        "track",
+        "wbr"
+    ];
+
+
+    tokens.forEach(
+        function (token) {
+
+            token =
+                token.trim();
+
+
+            if (!token) {
+                return;
+            }
+
+
+            if (
+                token.startsWith(
+                    "<!--"
+                )
+            ) {
+
+                formatted +=
+                    getIndent(indent) +
+                    token +
+                    "\n";
+
+                return;
+            }
+
+
+            if (
+                token.startsWith(
+                    "</"
+                )
+            ) {
+
+                indent =
+                    Math.max(
+                        0,
+                        indent - 1
+                    );
+
+
+                formatted +=
+                    getIndent(indent) +
+                    token +
+                    "\n";
+
+                return;
+            }
+
+
+            if (
+                token.startsWith(
+                    "<"
+                )
+            ) {
+
+                const tagMatch =
+                    token.match(
+                        /^<\s*([a-zA-Z0-9-]+)/
+                    );
+
+
+                if (!tagMatch) {
+
+                    formatted +=
+                        getIndent(indent) +
+                        token +
+                        "\n";
+
+                    return;
+                }
+
+
+                const tagName =
+                    tagMatch[1]
+                        .toLowerCase();
+
+
+                formatted +=
+                    getIndent(indent) +
+                    token +
+                    "\n";
+
+
+                if (
+                    !voidTags.includes(
+                        tagName
+                    ) &&
+                    !token.startsWith(
+                        "<!"
+                    ) &&
+                    !token.startsWith(
+                        "<?"
+                    ) &&
+                    !token.endsWith(
+                        "/>"
+                    )
+                ) {
+
+                    indent++;
+                }
+
+
+            } else {
+
+                formatted +=
+                    getIndent(indent) +
+                    token +
+                    "\n";
+            }
+
+        }
+    );
+
+
+    return formatted.trim();
+}
+
+
+/* =========================
+   INDENT
+========================= */
+
+function getIndent(level) {
+
+    return "    ".repeat(
+        level
+    );
+}
+
+
+/* =========================
+   COPY
+========================= */
+
+copyBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (!output.value) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                output.value
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy HTML";
+
+                },
+                1500
+            );
+
+
+        } catch (error) {
+
+            output.select();
+
+
+            document.execCommand(
+                "copy"
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy HTML";
+
+                },
+                1500
+            );
+        }
+
+    }
+);
+
+
+/* =========================
+   ERROR
+========================= */
+
+function showError(message) {
+
+    errorMessage.textContent =
+        message;
+
+
+    errorMessage.style.display =
+        "block";
+
+
+    result.style.display =
+        "none";
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        htmlFileInput.value =
+            "";
+
+
+        fileName.textContent =
+            "";
+
+
+        fileSize.textContent =
+            "";
+
+
+        fileInfo.style.display =
+            "none";
+
+
+        htmlInput.value =
+            "";
+
+
+        output.value =
+            "";
+
+
+        errorMessage.textContent =
+            "";
+
+
+        errorMessage.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        copyBtn.textContent =
+            "Copy HTML";
+
+
+        if (
+            currentDownloadUrl
+        ) {
+
+            URL.revokeObjectURL(
+                currentDownloadUrl
+            );
+
+
+            currentDownloadUrl =
+                null;
+        }
+
+
+        downloadBtn.href =
+            "#";
+
+
+        htmlInput.focus();
+
+    }
+);
+
+
+/* =========================
+   EVENT
+========================= */
+
+formatBtn.addEventListener(
+    "click",
+    formatHTML
+);
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date().getFullYear();
+
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

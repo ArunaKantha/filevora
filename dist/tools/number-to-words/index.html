@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number to Words - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+<style>
+/* FileVora Text Tools batch standardization */
+.text-tool .converter-card textarea,
+.text-tool .converter-card input[type="text"],
+.text-tool .converter-card input[type="number"],
+.text-tool .converter-card select {
+    border-color:#cbd5e1 !important;
+}
+.text-tool .converter-card textarea:focus,
+.text-tool .converter-card input:focus,
+.text-tool .converter-card select:focus {
+    border-color:#00bc8a !important;
+    outline:none !important;
+}
+.text-tool .text-reset-btn {
+    background:#ffffff !important;
+    color:#00bc8a !important;
+    border:1px solid #00bc8a !important;
+    box-shadow:none !important;
+}
+.text-tool .text-reset-btn:hover {
+    background:#ecfdf8 !important;
+}
+.text-tool .text-action-row {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:18px;
+}
+.text-tool .text-action-row > .convert-btn,
+.text-tool .text-action-row > .download-btn,
+.text-tool .text-action-row > button,
+.text-tool .text-action-row > a {
+    margin-top:0 !important;
+    width:100% !important;
+    box-sizing:border-box !important;
+}
+@media (max-width:600px){
+    .text-tool .text-action-row{grid-template-columns:1fr;}
+}
+</style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body class="text-tool">
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">123</div>
+
+                <h1>Number to Words</h1>
+
+                <p>
+                    Convert numbers into words quickly and easily.
+                </p>
+
+            </div>
+
+
+            <!-- Input -->
+
+            <div style="text-align:left;">
+
+                <label
+                    for="numberInput"
+                    style="font-weight:700; color:#111827;"
+                >
+                    Enter Number
+                </label>
+
+                <input
+                    type="text"
+                    id="numberInput"
+                    placeholder="Example: 1250"
+                    inputmode="decimal"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        margin-top:8px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:15px;
+                        box-sizing:border-box;
+                    "
+                >
+
+            </div>
+
+
+            <!-- Convert -->
+
+            <div class="text-action-row">
+<button
+                type="button"
+                id="convertBtn"
+                class="convert-btn"
+            >
+                Convert to Words
+            </button>
+<button type="button" class="convert-btn text-reset-btn" id="resetBtn">Reset</button>
+</div>
+
+
+            <!-- Result -->
+
+            <div
+                id="result"
+                class="result"
+                style="display:none;"
+            >
+
+                <h2>Result</h2>
+
+                <p
+                    id="resultText"
+                    style="
+                        line-height:1.7;
+                        font-size:16px;
+                    "
+                ></p>
+
+                <button
+                    type="button"
+                    id="copyBtn"
+                    class="download-btn"
+                >
+                    Copy Words
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const numberInput =
+    document.getElementById("numberInput");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+
+let currentResult = "";
+
+
+/* --------------------------------
+   NUMBER WORDS
+-------------------------------- */
+
+const ones = [
+
+    "",
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Eleven",
+    "Twelve",
+    "Thirteen",
+    "Fourteen",
+    "Fifteen",
+    "Sixteen",
+    "Seventeen",
+    "Eighteen",
+    "Nineteen"
+
+];
+
+
+const tens = [
+
+    "",
+    "",
+    "Twenty",
+    "Thirty",
+    "Forty",
+    "Fifty",
+    "Sixty",
+    "Seventy",
+    "Eighty",
+    "Ninety"
+
+];
+
+
+const scales = [
+
+    "",
+    "Thousand",
+    "Million",
+    "Billion",
+    "Trillion",
+    "Quadrillion"
+
+];
+
+
+/* --------------------------------
+   UNDER 1000
+-------------------------------- */
+
+function underThousand(number) {
+
+    let words = "";
+
+
+    if (number >= 100) {
+
+        words +=
+            ones[Math.floor(number / 100)] +
+            " Hundred";
+
+        number %= 100;
+
+
+        if (number > 0) {
+
+            words += " ";
+
+        }
+
+    }
+
+
+    if (number >= 20) {
+
+        words +=
+            tens[Math.floor(number / 10)];
+
+        number %= 10;
+
+
+        if (number > 0) {
+
+            words +=
+                " " + ones[number];
+
+        }
+
+    }
+
+    else if (number > 0) {
+
+        words +=
+            ones[number];
+
+    }
+
+
+    return words;
+
+}
+
+
+/* --------------------------------
+   NUMBER → WORDS
+-------------------------------- */
+
+function numberToWords(number) {
+
+    if (number === 0) {
+
+        return "Zero";
+
+    }
+
+
+    let result = "";
+
+    let scaleIndex = 0;
+
+
+    while (number > 0) {
+
+        const chunk =
+            number % 1000;
+
+
+        if (chunk !== 0) {
+
+            const chunkWords =
+                underThousand(chunk);
+
+
+            const scale =
+                scales[scaleIndex];
+
+
+            if (result) {
+
+                result =
+                    chunkWords +
+                    (scale ? " " + scale : "") +
+                    " " +
+                    result;
+
+            }
+
+            else {
+
+                result =
+                    chunkWords +
+                    (scale ? " " + scale : "");
+
+            }
+
+        }
+
+
+        number =
+            Math.floor(number / 1000);
+
+        scaleIndex++;
+
+    }
+
+
+    return result;
+
+}
+
+
+/* --------------------------------
+   CONVERT
+-------------------------------- */
+
+convertBtn.addEventListener(
+    "click",
+    function() {
+
+        let input =
+            numberInput.value.trim();
+
+
+        if (!input) {
+
+            result.style.display =
+                "block";
+
+            resultText.textContent =
+                "Please enter a number.";
+
+            currentResult = "";
+
+            return;
+
+        }
+
+
+        /* Remove commas */
+
+        input =
+            input.replace(/,/g, "");
+
+
+        /* Validate */
+
+        if (
+            !/^\d+$/.test(input)
+        ) {
+
+            result.style.display =
+                "block";
+
+            resultText.textContent =
+                "Please enter a valid whole number.";
+
+            currentResult = "";
+
+            return;
+
+        }
+
+
+        const number =
+            Number(input);
+
+
+        if (
+            !Number.isSafeInteger(number)
+        ) {
+
+            result.style.display =
+                "block";
+
+            resultText.textContent =
+                "Number is too large. Please enter a smaller number.";
+
+            currentResult = "";
+
+            return;
+
+        }
+
+
+        if (number > 999999999999999) {
+
+            result.style.display =
+                "block";
+
+            resultText.textContent =
+                "Please enter a number up to 999,999,999,999,999.";
+
+            currentResult = "";
+
+            return;
+
+        }
+
+
+        currentResult =
+            numberToWords(number);
+
+
+        result.style.display =
+            "block";
+
+
+        resultText.innerHTML =
+            `<strong>${number.toLocaleString("en-US")}</strong><br><br>${currentResult}`;
+
+    }
+);
+
+
+/* --------------------------------
+   COPY
+-------------------------------- */
+
+copyBtn.addEventListener(
+    "click",
+    async function() {
+
+        if (!currentResult) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                currentResult
+            );
+
+            copyBtn.textContent =
+                "Copied!";
+
+        }
+
+        catch (error) {
+
+            copyBtn.textContent =
+                "Copy failed";
+
+        }
+
+
+        setTimeout(
+            function() {
+
+                copyBtn.textContent =
+                    "Copy Words";
+
+            },
+            1500
+        );
+
+    }
+);
+
+
+resetBtn.addEventListener("click", function () {
+    numberInput.value = "";
+    result.style.display = "none";
+    resultText.textContent = "";
+    numberInput.focus();
+});
+</script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>
+

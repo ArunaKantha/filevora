@@ -1,0 +1,189 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Image to Embed Code — FileVora</title><meta name="description" content="Convert an image into HTML, CSS or Markdown embed code in your browser."><link rel="stylesheet" href="/css/style.css">    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head><body>
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page"><div class="container"><div class="converter-card"><div class="converter-header"><div class="tool-icon">&lt;/&gt;</div><h1>Image to Embed Code</h1><p>Turn an image into self-contained HTML, CSS or Markdown embed code.</p></div><label class="upload-area" for="imageInput"><div class="upload-icon">🖼️</div><strong>Choose an image</strong><span>JPG, PNG, WebP or GIF</span></label><input id="imageInput" type="file" accept="image/*"><div class="file-info" id="fileInfo"><strong id="fileName"></strong><span id="fileSize"></span></div><div id="formatArea" style="display:none;">
+
+    <label for="format" style="display:block;margin-top:18px;font-weight:700">
+        Embed format
+    </label>
+
+    <select id="format" style="width:100%;margin-top:7px">
+        <option value="html">HTML &lt;img&gt;</option>
+        <option value="css">CSS background-image</option>
+        <option value="markdown">Markdown image</option>
+    </select>
+
+</div><div id="embedPreview" style="display:none;">
+    <img id="embedPreviewImage" alt="Image preview">
+</div>
+
+<div id="embedActions" style="display:none;">
+    <button class="convert-btn" id="convertBtn" type="button" disabled>
+        Generate Embed Code
+    </button>
+
+    <button type="button" id="embedResetBtn">
+        Reset
+    </button>
+</div><div id="embedResult" style="display:none;margin-top:20px"><textarea id="embedOutput" rows="8" style="width:100%;resize:vertical" readonly></textarea><button class="convert-btn" id="copyBtn" type="button">Copy Code</button></div></div></div></main>
+<footer class="site-footer"><div class="container footer-grid"><div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div><div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div><div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div><div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div><div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div></div><div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div></footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());const input=document.getElementById('imageInput'),btn=document.getElementById('convertBtn'),info=document.getElementById('fileInfo'),nameEl=document.getElementById('fileName'),sizeEl=document.getElementById('fileSize'),out=document.getElementById('embedOutput'),box=document.getElementById('embedResult');let dataUrl='';input.addEventListener('change',()=>{const f=input.files[0];if(!f)return;if(!f.type.startsWith('image/')){alert('Please choose an image file.');return}nameEl.textContent=f.name;sizeEl.textContent=(f.size/1024).toFixed(1)+' KB';info.style.display='block';const r=new FileReader();r.onload=()=>{
+    dataUrl=r.result;
+    document.getElementById('embedPreviewImage').src=dataUrl;
+    document.getElementById('embedPreview').style.display='block';
+    document.getElementById('formatArea').style.display='block';
+    document.getElementById('embedActions').style.display='grid';
+    btn.disabled=false;
+};r.readAsDataURL(f)});btn.addEventListener('click',()=>{if(!dataUrl)return;const type=document.getElementById('format').value;if(type==='css')out.value=`background-image: url("${dataUrl}");`;else if(type==='markdown')out.value=`![Image](${dataUrl})`;else out.value=`<img src="${dataUrl}" alt="Image">`;box.style.display='block'});document.getElementById('embedResetBtn').addEventListener('click',()=>{
+    window.location.reload();
+});document.getElementById('copyBtn').addEventListener('click',async function(){await navigator.clipboard.writeText(out.value);this.textContent='Copied!';setTimeout(()=>this.textContent='Copy Code',1200)});</script>
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body></html>

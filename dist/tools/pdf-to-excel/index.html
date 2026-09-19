@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Convert PDF files to Excel spreadsheets online for free with FileVora."
+    >
+
+    <title>PDF to Excel — FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <style>
+        #excelActions {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        #excelActions #convertBtn,
+        #excelActions #resetBtn {
+            width: 100% !important;
+            height: 50px !important;
+            min-height: 50px !important;
+            margin: 0 !important;
+            padding: 0 20px !important;
+            box-sizing: border-box !important;
+        }
+
+        #excelActions #resetBtn {
+            background: #ffffff !important;
+            color: #00bc8a !important;
+            border: 1px solid #00bc8a !important;
+            box-shadow: none !important;
+        }
+
+        #excelActions #resetBtn:hover {
+            background: #ecfdf8 !important;
+            color: #00bc8a !important;
+            border-color: #00bc8a !important;
+        }
+
+        #excelActions #convertBtn:disabled {
+            display: flex !important;
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body class="pdf-tool">
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    PDF
+                </div>
+
+                <h1>PDF to Excel</h1>
+
+                <p>
+                    Convert text and table data from PDF files into an Excel spreadsheet.
+                </p>
+
+            </div>
+
+
+            <label
+                class="upload-area"
+                for="pdfInput"
+            >
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+                <strong>
+                    Choose a PDF file
+                </strong>
+
+                <span>
+                    PDF files only
+                </span>
+
+            </label>
+
+
+            <input
+                id="pdfInput"
+                type="file"
+                accept="application/pdf,.pdf"
+            >
+
+
+            <div
+                class="file-info"
+                id="fileInfo"
+            >
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <div id="excelActions">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="convertBtn"
+                    disabled
+                >
+                    Convert to Excel
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>
+                    Excel File Ready
+                </h2>
+
+                <p>
+                    Your PDF data has been converted successfully.
+                </p>
+
+                <a
+                    id="downloadBtn"
+                    class="download-btn"
+                    href="#"
+                    download="filevora-data.xlsx"
+                >
+                    Download Excel
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+        <div class="footer-brand">
+
+            <a class="brand" href="/">
+                <span class="brand-mark">F</span>
+                <span class="brand-name">
+                    File<span>Vora</span>
+                </span>
+            </a>
+
+            <p>
+                Fast, simple online tools for everyday file tasks.
+            </p>
+
+        </div>
+
+        <div>
+            <h3>Company</h3>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/security">Security</a>
+        </div>
+
+        <div>
+            <h3>Resources</h3>
+            <a href="/blog">Blog</a>
+            <a href="/#tools">Tools</a>
+            <a href="/faq">FAQ</a>
+        </div>
+
+        <div>
+            <h3>Legal</h3>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+            <a href="/disclaimer">Disclaimer</a>
+        </div>
+
+        <div>
+            <h3>Contact</h3>
+            <a href="/contact">Email</a>
+            <a href="/contact">Facebook</a>
+            <a href="/contact">Instagram</a>
+        </div>
+
+    </div>
+
+    <div class="container footer-bottom">
+
+        <span>
+            © <span data-current-year></span> FileVora. All rights reserved.
+        </span>
+
+        <span>
+            All in One Tool.
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+        element.textContent =
+            new Date().getFullYear();
+    });
+</script>
+
+
+<script>
+
+const pdfInput =
+    document.getElementById("pdfInput");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const excelActions =
+    document.getElementById("excelActions");
+
+const result =
+    document.getElementById("result");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let downloadUrl = null;
+
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+pdfInput.addEventListener(
+    "change",
+    function () {
+
+        const file =
+            pdfInput.files[0];
+
+
+        if (!file) {
+
+            convertBtn.disabled = true;
+
+            fileInfo.style.display =
+                "none";
+
+            result.style.display =
+                "none";
+
+            excelActions.style.display =
+                "none";
+
+            return;
+        }
+
+
+        if (
+            file.type !==
+            "application/pdf"
+        ) {
+
+            alert(
+                "Please choose a PDF file."
+            );
+
+
+            pdfInput.value = "";
+
+
+            convertBtn.disabled =
+                true;
+
+
+            fileInfo.style.display =
+                "none";
+
+
+            result.style.display =
+                "none";
+
+
+            excelActions.style.display =
+                "none";
+
+
+            return;
+        }
+
+
+        fileName.textContent =
+            file.name;
+
+
+        const sizeMB =
+            file.size /
+            (1024 * 1024);
+
+
+        fileSize.textContent =
+            sizeMB >= 1
+                ? sizeMB.toFixed(2) + " MB"
+                : (file.size / 1024).toFixed(2) + " KB";
+
+
+        fileInfo.style.display =
+            "block";
+
+
+        result.style.display =
+            "none";
+
+
+        convertBtn.disabled =
+            false;
+
+
+        excelActions.style.display =
+            "grid";
+    }
+);
+
+
+convertBtn.addEventListener(
+    "click",
+    async function () {
+
+        const file =
+            pdfInput.files[0];
+
+
+        if (!file) {
+            return;
+        }
+
+
+        convertBtn.disabled =
+            true;
+
+
+        convertBtn.textContent =
+            "Reading PDF...";
+
+
+        result.style.display =
+            "none";
+
+
+        try {
+
+            if (
+                typeof pdfjsLib ===
+                "undefined"
+            ) {
+
+                throw new Error(
+                    "PDF.js library failed to load."
+                );
+            }
+
+
+            if (
+                typeof XLSX ===
+                "undefined"
+            ) {
+
+                throw new Error(
+                    "Excel library failed to load."
+                );
+            }
+
+
+            const arrayBuffer =
+                await file.arrayBuffer();
+
+
+            const pdf =
+                await pdfjsLib
+                    .getDocument({
+                        data: arrayBuffer
+                    })
+                    .promise;
+
+
+            const workbook =
+                XLSX.utils.book_new();
+
+
+            for (
+                let pageNumber = 1;
+                pageNumber <= pdf.numPages;
+                pageNumber++
+            ) {
+
+                convertBtn.textContent =
+                    `Reading page ${pageNumber} of ${pdf.numPages}...`;
+
+
+                const page =
+                    await pdf.getPage(
+                        pageNumber
+                    );
+
+
+                const textContent =
+                    await page.getTextContent();
+
+
+                const rows = [];
+
+                let currentRow = [];
+
+                let lastY = null;
+
+
+                textContent.items.forEach(
+                    function (item) {
+
+                        const text =
+                            item.str.trim();
+
+
+                        if (!text) {
+                            return;
+                        }
+
+
+                        const y =
+                            Math.round(
+                                item.transform[5]
+                            );
+
+
+                        if (
+                            lastY !== null &&
+                            Math.abs(
+                                y - lastY
+                            ) > 5
+                        ) {
+
+                            if (
+                                currentRow.length >
+                                0
+                            ) {
+
+                                rows.push(
+                                    currentRow
+                                );
+                            }
+
+
+                            currentRow = [];
+                        }
+
+
+                        currentRow.push(
+                            text
+                        );
+
+
+                        lastY = y;
+                    }
+                );
+
+
+                if (
+                    currentRow.length >
+                    0
+                ) {
+
+                    rows.push(
+                        currentRow
+                    );
+                }
+
+
+                if (
+                    rows.length === 0
+                ) {
+
+                    rows.push([
+                        "No readable text found on this page."
+                    ]);
+                }
+
+
+                const worksheet =
+                    XLSX.utils.aoa_to_sheet(
+                        rows
+                    );
+
+
+                let maxColumns = 1;
+
+
+                rows.forEach(
+                    function (row) {
+
+                        if (
+                            row.length >
+                            maxColumns
+                        ) {
+
+                            maxColumns =
+                                row.length;
+                        }
+                    }
+                );
+
+
+                worksheet["!cols"] =
+                    Array.from(
+                        {
+                            length:
+                                maxColumns
+                        },
+                        function () {
+                            return {
+                                wch: 22
+                            };
+                        }
+                    );
+
+
+                XLSX.utils.book_append_sheet(
+                    workbook,
+                    worksheet,
+                    `Page ${pageNumber}`
+                );
+            }
+
+
+            convertBtn.textContent =
+                "Creating Excel file...";
+
+
+            const excelBuffer =
+                XLSX.write(
+                    workbook,
+                    {
+                        bookType:
+                            "xlsx",
+                        type:
+                            "array"
+                    }
+                );
+
+
+            const blob =
+                new Blob(
+                    [excelBuffer],
+                    {
+                        type:
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    }
+                );
+
+
+            if (downloadUrl) {
+
+                URL.revokeObjectURL(
+                    downloadUrl
+                );
+            }
+
+
+            downloadUrl =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            downloadBtn.href =
+                downloadUrl;
+
+
+            downloadBtn.download =
+                "filevora-data.xlsx";
+
+
+            result.style.display =
+                "block";
+
+
+            convertBtn.disabled =
+                false;
+
+
+            convertBtn.textContent =
+                "Convert to Excel";
+
+
+        } catch (error) {
+
+            console.error(
+                "PDF TO EXCEL ERROR:",
+                error
+            );
+
+
+            alert(
+                "Something went wrong while converting the PDF.\n\n" +
+                error.message
+            );
+
+
+            convertBtn.disabled =
+                false;
+
+
+            convertBtn.textContent =
+                "Convert to Excel";
+        }
+    }
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        pdfInput.value = "";
+
+
+        fileName.textContent = "";
+        fileSize.textContent = "";
+
+
+        fileInfo.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        excelActions.style.display =
+            "none";
+
+
+        convertBtn.disabled =
+            true;
+
+
+        convertBtn.textContent =
+            "Convert to Excel";
+
+
+        downloadBtn.href =
+            "#";
+
+
+        if (downloadUrl) {
+
+            URL.revokeObjectURL(
+                downloadUrl
+            );
+
+            downloadUrl = null;
+        }
+    }
+);
+
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

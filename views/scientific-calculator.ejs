@@ -49,10 +49,10 @@
         }
 
         .mode-btn.active {
-            background: #ef1f2b;
-            border-color: #ef1f2b;
+            background: #00bc8a;
+            border-color: #00bc8a;
             color: #ffffff;
-            box-shadow: 0 8px 18px rgba(239,31,43,.18);
+            box-shadow: 0 8px 18px rgba(0,188,138,.18);
         }
 
         .mode-btn:hover {
@@ -60,7 +60,7 @@
         }
 
         .mode-btn.active:hover {
-            background: #dc1824;
+            background: #009a73;
         }
 
         .calculator-grid {
@@ -110,6 +110,10 @@
 
         .calc-btn.equal:hover {
             background: #1d4ed8;
+        }
+
+        .calc-btn.equal {
+            grid-column: span 2;
         }
 
         .calc-status {
@@ -296,7 +300,9 @@
                     n!
                 </button>
 
-                
+                <button class="calc-btn function" onclick="addValue('%')">
+                    %
+                </button>
 
 
                 <!-- Row 6 -->
@@ -312,12 +318,12 @@
                     3
                 </button>
 
-                <button class="calc-btn function" onclick="addValue('%')">
-                    %
-                </button>
-
                 <button class="calc-btn function" onclick="addFunction('square')">
                     x²
+                </button>
+
+                <button class="calc-btn function" onclick="addFunction('inverse')">
+                    1/x
                 </button>
 
 
@@ -326,16 +332,12 @@
                     0
                 </button>
 
-                <button class="calc-btn" onclick="addValue('.')">
-                    .
-                </button>
-
-                <button class="calc-btn function" onclick="addFunction('inverse')">
-                    1/x
-                </button>
-
                 <button class="calc-btn" onclick="addValue('00')">
                     00
+                </button>
+
+                <button class="calc-btn" onclick="addValue('.')">
+                    .
                 </button>
 
                 <button class="calc-btn equal" onclick="calculate()">

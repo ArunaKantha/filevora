@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roman Numeral Converter - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">🔢</div>
+
+                <h1>Roman Numeral Converter</h1>
+
+                <p>
+                    Convert numbers to Roman numerals and Roman numerals back to numbers.
+                </p>
+
+            </div>
+
+
+            <!-- Direction -->
+
+            <div style="text-align:left; margin-bottom:20px;">
+
+                <label
+                    for="mode"
+                    style="font-weight:700; color:#111827;"
+                >
+                    Conversion
+                </label>
+
+                <select
+                    id="mode"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        margin-top:8px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:15px;
+                        background:#ffffff;
+                    "
+                >
+                    <option value="numberToRoman">
+                        Number → Roman Numeral
+                    </option>
+
+                    <option value="romanToNumber">
+                        Roman Numeral → Number
+                    </option>
+                </select>
+
+            </div>
+
+
+            <!-- Input -->
+
+            <div style="text-align:left;">
+
+                <label
+                    id="inputLabel"
+                    for="inputValue"
+                    style="font-weight:700; color:#111827;"
+                >
+                    Enter Number
+                </label>
+
+                <input
+                    type="text"
+                    id="inputValue"
+                    placeholder="Example: 2026"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        margin-top:8px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:15px;
+                        box-sizing:border-box;
+                    "
+                >
+
+            </div>
+
+
+            <!-- Convert -->
+
+            <button
+                type="button"
+                id="convertBtn"
+                class="convert-btn"
+            >
+                Convert
+            </button>
+
+
+            <!-- Result -->
+
+            <div
+                id="result"
+                class="result"
+                style="display:none;"
+            >
+
+                <h2>Result</h2>
+
+                <p id="resultText"></p>
+
+                <button
+                    type="button"
+                    id="copyBtn"
+                    class="download-btn"
+                >
+                    Copy Result
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const mode =
+    document.getElementById("mode");
+
+const inputValue =
+    document.getElementById("inputValue");
+
+const inputLabel =
+    document.getElementById("inputLabel");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+
+let currentResult = "";
+
+
+/* --------------------------------
+   NUMBER → ROMAN
+-------------------------------- */
+
+function numberToRoman(number) {
+
+    const values = [
+
+        [1000, "M"],
+        [900, "CM"],
+        [500, "D"],
+        [400, "CD"],
+        [100, "C"],
+        [90, "XC"],
+        [50, "L"],
+        [40, "XL"],
+        [10, "X"],
+        [9, "IX"],
+        [5, "V"],
+        [4, "IV"],
+        [1, "I"]
+
+    ];
+
+
+    let result = "";
+
+    let remaining = number;
+
+
+    for (const [value, symbol] of values) {
+
+        while (remaining >= value) {
+
+            result += symbol;
+
+            remaining -= value;
+
+        }
+
+    }
+
+
+    return result;
+
+}
+
+
+/* --------------------------------
+   ROMAN → NUMBER
+-------------------------------- */
+
+function romanToNumber(roman) {
+
+    const values = {
+
+        I: 1,
+        V: 5,
+        X: 10,
+        L: 50,
+        C: 100,
+        D: 500,
+        M: 1000
+
+    };
+
+
+    let total = 0;
+
+
+    for (let i = 0; i < roman.length; i++) {
+
+        const current =
+            values[roman[i]];
+
+        const next =
+            values[roman[i + 1]];
+
+
+        if (
+            next &&
+            current < next
+        ) {
+
+            total -= current;
+
+        }
+
+        else {
+
+            total += current;
+
+        }
+
+    }
+
+
+    return total;
+
+}
+
+
+/* --------------------------------
+   VALIDATE ROMAN
+-------------------------------- */
+
+function isValidRoman(roman) {
+
+    const normalized =
+        roman.toUpperCase();
+
+
+    return /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/
+        .test(normalized);
+
+}
+
+
+/* --------------------------------
+   MODE CHANGE
+-------------------------------- */
+
+mode.addEventListener(
+    "change",
+    function() {
+
+        result.style.display =
+            "none";
+
+        inputValue.value = "";
+
+
+        if (mode.value === "numberToRoman") {
+
+            inputLabel.textContent =
+                "Enter Number";
+
+            inputValue.placeholder =
+                "Example: 2026";
+
+        }
+
+        else {
+
+            inputLabel.textContent =
+                "Enter Roman Numeral";
+
+            inputValue.placeholder =
+                "Example: MMXXVI";
+
+        }
+
+    }
+);
+
+
+/* --------------------------------
+   CONVERT
+-------------------------------- */
+
+convertBtn.addEventListener(
+    "click",
+    function() {
+
+        const input =
+            inputValue.value.trim();
+
+
+        if (!input) {
+
+            result.style.display =
+                "block";
+
+            resultText.textContent =
+                "Please enter a value.";
+
+            return;
+
+        }
+
+
+        try {
+
+            /* NUMBER → ROMAN */
+
+            if (
+                mode.value ===
+                "numberToRoman"
+            ) {
+
+                const number =
+                    Number(input);
+
+
+                if (
+                    !Number.isInteger(number) ||
+                    number < 1 ||
+                    number > 3999
+                ) {
+
+                    throw new Error(
+                        "Please enter a whole number from 1 to 3999."
+                    );
+
+                }
+
+
+                currentResult =
+                    numberToRoman(number);
+
+
+                resultText.innerHTML =
+                    `<strong>${number}</strong> = <strong>${currentResult}</strong>`;
+
+            }
+
+
+            /* ROMAN → NUMBER */
+
+            else {
+
+                const roman =
+                    input.toUpperCase();
+
+
+                if (
+                    !isValidRoman(roman)
+                ) {
+
+                    throw new Error(
+                        "Invalid Roman numeral. Example: MMXXVI"
+                    );
+
+                }
+
+
+                const number =
+                    romanToNumber(roman);
+
+
+                currentResult =
+                    String(number);
+
+
+                resultText.innerHTML =
+                    `<strong>${roman}</strong> = <strong>${number}</strong>`;
+
+            }
+
+
+            result.style.display =
+                "block";
+
+        }
+
+        catch (error) {
+
+            result.style.display =
+                "block";
+
+            resultText.textContent =
+                error.message;
+
+            currentResult = "";
+
+        }
+
+    }
+);
+
+
+/* --------------------------------
+   COPY
+-------------------------------- */
+
+copyBtn.addEventListener(
+    "click",
+    async function() {
+
+        if (!currentResult) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                currentResult
+            );
+
+            copyBtn.textContent =
+                "Copied!";
+
+        }
+
+        catch (error) {
+
+            copyBtn.textContent =
+                "Copy failed";
+
+        }
+
+
+        setTimeout(
+            function() {
+
+                copyBtn.textContent =
+                    "Copy Result";
+
+            },
+            1500
+        );
+
+    }
+);
+
+</script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>
+

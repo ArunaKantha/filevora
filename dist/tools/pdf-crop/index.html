@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PDF Crop - FileVora</title>
+
+    <meta
+        name="description"
+        content="Crop PDF pages online with FileVora. Adjust PDF margins quickly and easily."
+    >
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        #cropControls {
+            display: none;
+            margin-top: 22px;
+        }
+
+        .crop-options {
+            text-align: left;
+        }
+
+        .crop-options label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .crop-options select,
+        .custom-input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            background: #fff;
+            color: #111827;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .crop-options select:focus,
+        .custom-input:focus {
+            border-color: #00bc8a;
+        }
+
+        .custom-fields {
+            display: none;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .custom-field span {
+            display: block;
+            margin-bottom: 6px;
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .custom-input {
+            box-sizing: border-box;
+        }
+
+        .crop-note {
+            margin-top: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        #cropActions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        #cropActions #cropBtn,
+        #cropActions #resetBtn {
+            width: 100% !important;
+            height: 50px !important;
+            min-height: 50px !important;
+            margin: 0 !important;
+            padding: 0 20px !important;
+            box-sizing: border-box !important;
+        }
+
+        #cropActions #resetBtn {
+            background: #ffffff !important;
+            color: #00bc8a !important;
+            border: 1px solid #00bc8a !important;
+            box-shadow: none !important;
+        }
+
+        #cropActions #resetBtn:hover {
+            background: #ecfdf8 !important;
+            color: #00bc8a !important;
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 18px;
+            padding: 13px 15px;
+            border-radius: 10px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .progress-message {
+            display: none;
+            margin-top: 18px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .custom-fields {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            #cropActions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body class="pdf-tool">
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    PDF
+                </div>
+
+                <h1>PDF Crop</h1>
+
+                <p>
+                    Crop PDF pages by removing unwanted margins and empty space.
+                </p>
+
+            </div>
+
+
+            <label class="upload-area" for="pdfInput">
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+                <strong>
+                    Click to upload PDF
+                </strong>
+
+                <span>
+                    Choose one PDF file
+                </span>
+
+            </label>
+
+
+            <input
+                type="file"
+                id="pdfInput"
+                accept="application/pdf,.pdf"
+                style="display:none;"
+            >
+
+
+            <div class="file-info" id="fileInfo">
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <div id="cropControls">
+
+                <div class="crop-options">
+
+                    <label for="cropPreset">
+                        Crop Amount
+                    </label>
+
+                    <select id="cropPreset">
+                        <option value="5">Trim 5%</option>
+                        <option value="10" selected>Trim 10%</option>
+                        <option value="15">Trim 15%</option>
+                        <option value="20">Trim 20%</option>
+                        <option value="custom">Custom Margins</option>
+                    </select>
+
+
+                    <div
+                        class="custom-fields"
+                        id="customFields"
+                    >
+
+                        <div class="custom-field">
+
+                            <span>Top %</span>
+
+                            <input
+                                class="custom-input"
+                                type="number"
+                                id="topMargin"
+                                value="10"
+                                min="0"
+                                max="45"
+                            >
+
+                        </div>
+
+
+                        <div class="custom-field">
+
+                            <span>Right %</span>
+
+                            <input
+                                class="custom-input"
+                                type="number"
+                                id="rightMargin"
+                                value="10"
+                                min="0"
+                                max="45"
+                            >
+
+                        </div>
+
+
+                        <div class="custom-field">
+
+                            <span>Bottom %</span>
+
+                            <input
+                                class="custom-input"
+                                type="number"
+                                id="bottomMargin"
+                                value="10"
+                                min="0"
+                                max="45"
+                            >
+
+                        </div>
+
+
+                        <div class="custom-field">
+
+                            <span>Left %</span>
+
+                            <input
+                                class="custom-input"
+                                type="number"
+                                id="leftMargin"
+                                value="10"
+                                min="0"
+                                max="45"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="crop-note">
+                        The selected percentage is removed from each side of every PDF page.
+                    </div>
+
+                </div>
+
+
+                <div id="cropActions">
+
+                    <button
+                        class="convert-btn"
+                        id="cropBtn"
+                        type="button"
+                        disabled
+                    >
+                        Crop PDF
+                    </button>
+
+                    <button
+                        class="convert-btn reset-btn"
+                        id="resetBtn"
+                        type="button"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="progress-message"
+                id="progressMessage"
+            >
+                Cropping PDF...
+            </div>
+
+
+            <div
+                class="error-message"
+                id="errorMessage"
+            ></div>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>
+                    PDF Cropped Successfully
+                </h2>
+
+                <p id="resultText">
+                    Your cropped PDF is ready.
+                </p>
+
+                <a
+                    class="download-btn"
+                    id="downloadBtn"
+                    href="#"
+                    download="filevora-cropped.pdf"
+                >
+                    Download Cropped PDF
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+        <div class="footer-brand">
+
+            <a class="brand" href="/">
+                <span class="brand-mark">F</span>
+                <span class="brand-name">
+                    File<span>Vora</span>
+                </span>
+            </a>
+
+            <p>
+                Fast, simple online tools for everyday file tasks.
+            </p>
+
+        </div>
+
+        <div>
+            <h3>Company</h3>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/security">Security</a>
+        </div>
+
+        <div>
+            <h3>Resources</h3>
+            <a href="/blog">Blog</a>
+            <a href="/#tools">Tools</a>
+            <a href="/faq">FAQ</a>
+        </div>
+
+        <div>
+            <h3>Legal</h3>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+            <a href="/disclaimer">Disclaimer</a>
+        </div>
+
+        <div>
+            <h3>Contact</h3>
+            <a href="/contact">Email</a>
+            <a href="/contact">Facebook</a>
+            <a href="/contact">Instagram</a>
+        </div>
+
+    </div>
+
+    <div class="container footer-bottom">
+
+        <span>
+            © <span data-current-year></span> FileVora. All rights reserved.
+        </span>
+
+        <span>
+            All in One Tool.
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+        element.textContent =
+            new Date().getFullYear();
+    });
+</script>
+
+
+<script>
+
+const pdfInput =
+    document.getElementById("pdfInput");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const cropControls =
+    document.getElementById("cropControls");
+
+const cropPreset =
+    document.getElementById("cropPreset");
+
+const customFields =
+    document.getElementById("customFields");
+
+const topMargin =
+    document.getElementById("topMargin");
+
+const rightMargin =
+    document.getElementById("rightMargin");
+
+const bottomMargin =
+    document.getElementById("bottomMargin");
+
+const leftMargin =
+    document.getElementById("leftMargin");
+
+const cropBtn =
+    document.getElementById("cropBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const progressMessage =
+    document.getElementById("progressMessage");
+
+
+let selectedFile = null;
+let downloadUrl = null;
+
+
+function formatBytes(bytes) {
+
+    if (bytes === 0) {
+        return "0 Bytes";
+    }
+
+
+    const units = [
+        "Bytes",
+        "KB",
+        "MB",
+        "GB"
+    ];
+
+
+    const i =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+
+    return (
+        parseFloat(
+            (
+                bytes /
+                Math.pow(1024, i)
+            ).toFixed(2)
+        ) +
+        " " +
+        units[i]
+    );
+}
+
+
+function showError(message) {
+
+    errorMessage.textContent =
+        message;
+
+    errorMessage.style.display =
+        "block";
+}
+
+
+function hideError() {
+
+    errorMessage.style.display =
+        "none";
+
+    errorMessage.textContent =
+        "";
+}
+
+
+function getMargins() {
+
+    if (
+        cropPreset.value !==
+        "custom"
+    ) {
+
+        const value =
+            Number(
+                cropPreset.value
+            );
+
+
+        return {
+            top: value,
+            right: value,
+            bottom: value,
+            left: value
+        };
+    }
+
+
+    return {
+        top:
+            Number(
+                topMargin.value
+            ) || 0,
+
+        right:
+            Number(
+                rightMargin.value
+            ) || 0,
+
+        bottom:
+            Number(
+                bottomMargin.value
+            ) || 0,
+
+        left:
+            Number(
+                leftMargin.value
+            ) || 0
+    };
+}
+
+
+cropPreset.addEventListener(
+    "change",
+    function () {
+
+        if (
+            cropPreset.value ===
+            "custom"
+        ) {
+
+            customFields.style.display =
+                "grid";
+
+        } else {
+
+            customFields.style.display =
+                "none";
+        }
+    }
+);
+
+
+pdfInput.addEventListener(
+    "change",
+    function () {
+
+        hideError();
+
+
+        result.style.display =
+            "none";
+
+
+        selectedFile =
+            pdfInput.files[0];
+
+
+        if (!selectedFile) {
+
+            cropBtn.disabled =
+                true;
+
+
+            fileInfo.style.display =
+                "none";
+
+
+            cropControls.style.display =
+                "none";
+
+
+            return;
+        }
+
+
+        if (
+            selectedFile.type !==
+                "application/pdf" &&
+            !selectedFile.name
+                .toLowerCase()
+                .endsWith(".pdf")
+        ) {
+
+            showError(
+                "Please select a valid PDF file."
+            );
+
+
+            pdfInput.value =
+                "";
+
+
+            selectedFile =
+                null;
+
+
+            cropBtn.disabled =
+                true;
+
+
+            fileInfo.style.display =
+                "none";
+
+
+            cropControls.style.display =
+                "none";
+
+
+            return;
+        }
+
+
+        fileName.textContent =
+            selectedFile.name;
+
+
+        fileSize.textContent =
+            formatBytes(
+                selectedFile.size
+            );
+
+
+        fileInfo.style.display =
+            "block";
+
+
+        cropControls.style.display =
+            "block";
+
+
+        cropBtn.disabled =
+            false;
+    }
+);
+
+
+cropBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (!selectedFile) {
+
+            showError(
+                "Please select a PDF file first."
+            );
+
+            return;
+        }
+
+
+        hideError();
+
+
+        result.style.display =
+            "none";
+
+
+        cropBtn.disabled =
+            true;
+
+
+        progressMessage.style.display =
+            "block";
+
+
+        progressMessage.textContent =
+            "Cropping PDF...";
+
+
+        try {
+
+            if (
+                typeof PDFLib ===
+                    "undefined" ||
+                !PDFLib.PDFDocument
+            ) {
+
+                throw new Error(
+                    "PDF library failed to load. Please refresh the page and try again."
+                );
+            }
+
+
+            const margins =
+                getMargins();
+
+
+            const values = [
+                margins.top,
+                margins.right,
+                margins.bottom,
+                margins.left
+            ];
+
+
+            for (
+                const value
+                of values
+            ) {
+
+                if (
+                    !Number.isFinite(value) ||
+                    value < 0 ||
+                    value > 45
+                ) {
+
+                    throw new Error(
+                        "Margins must be between 0% and 45%."
+                    );
+                }
+            }
+
+
+            if (
+                margins.top +
+                    margins.bottom >=
+                    100 ||
+                margins.left +
+                    margins.right >=
+                    100
+            ) {
+
+                throw new Error(
+                    "The selected margins are too large."
+                );
+            }
+
+
+            const inputBytes =
+                await selectedFile.arrayBuffer();
+
+
+            const pdfDoc =
+                await PDFLib.PDFDocument.load(
+                    inputBytes
+                );
+
+
+            const pages =
+                pdfDoc.getPages();
+
+
+            for (
+                const page
+                of pages
+            ) {
+
+                const width =
+                    page.getWidth();
+
+
+                const height =
+                    page.getHeight();
+
+
+                const cropLeft =
+                    width *
+                    (
+                        margins.left /
+                        100
+                    );
+
+
+                const cropRight =
+                    width *
+                    (
+                        margins.right /
+                        100
+                    );
+
+
+                const cropTop =
+                    height *
+                    (
+                        margins.top /
+                        100
+                    );
+
+
+                const cropBottom =
+                    height *
+                    (
+                        margins.bottom /
+                        100
+                    );
+
+
+                const newWidth =
+                    width -
+                    cropLeft -
+                    cropRight;
+
+
+                const newHeight =
+                    height -
+                    cropTop -
+                    cropBottom;
+
+
+                if (
+                    newWidth <= 1 ||
+                    newHeight <= 1
+                ) {
+
+                    throw new Error(
+                        "Crop area is too small."
+                    );
+                }
+
+
+                page.setCropBox(
+                    cropLeft,
+                    cropBottom,
+                    newWidth,
+                    newHeight
+                );
+            }
+
+
+            const outputBytes =
+                await pdfDoc.save();
+
+
+            const blob =
+                new Blob(
+                    [outputBytes],
+                    {
+                        type:
+                            "application/pdf"
+                    }
+                );
+
+
+            if (downloadUrl) {
+
+                URL.revokeObjectURL(
+                    downloadUrl
+                );
+            }
+
+
+            downloadUrl =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            downloadBtn.href =
+                downloadUrl;
+
+
+            resultText.textContent =
+                `${pages.length} page${pages.length === 1 ? "" : "s"} cropped successfully.`;
+
+
+            result.style.display =
+                "block";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            showError(
+                error.message ||
+                "PDF cropping failed. Please try again."
+            );
+
+
+        } finally {
+
+            cropBtn.disabled =
+                false;
+
+
+            progressMessage.style.display =
+                "none";
+        }
+    }
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        pdfInput.value =
+            "";
+
+
+        selectedFile =
+            null;
+
+
+        fileName.textContent =
+            "";
+
+
+        fileSize.textContent =
+            "";
+
+
+        fileInfo.style.display =
+            "none";
+
+
+        cropControls.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        progressMessage.style.display =
+            "none";
+
+
+        hideError();
+
+
+        cropBtn.disabled =
+            true;
+
+
+        cropPreset.value =
+            "10";
+
+
+        customFields.style.display =
+            "none";
+
+
+        topMargin.value =
+            "10";
+
+
+        rightMargin.value =
+            "10";
+
+
+        bottomMargin.value =
+            "10";
+
+
+        leftMargin.value =
+            "10";
+
+
+        downloadBtn.href =
+            "#";
+
+
+        if (downloadUrl) {
+
+            URL.revokeObjectURL(
+                downloadUrl
+            );
+
+
+            downloadUrl =
+                null;
+        }
+    }
+);
+
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

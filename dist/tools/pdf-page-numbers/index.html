@@ -1,0 +1,988 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Page Numbers to PDF - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .number-options {
+            margin-top: 22px;
+            text-align: left;
+        }
+
+        .option-title {
+            display: block;
+            margin-bottom: 10px;
+            color: #111827;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .position-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .position-btn {
+            padding: 12px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .position-btn:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .position-btn.active {
+            border-color: #2563eb;
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .number-settings {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .setting-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .setting-group input,
+        .setting-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #334155;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .setting-group input:focus,
+        .setting-group select:focus {
+            border-color: #2563eb;
+        }
+
+        .status-message {
+            margin-top: 16px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 10px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .position-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .number-settings {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body class="pdf-tool">
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">#</div>
+
+                <h1>Add Page Numbers to PDF</h1>
+
+                <p>
+                    Add page numbers to every page of your PDF without covering existing content.
+                </p>
+
+            </div>
+
+
+            <label class="upload-area" for="pdfInput">
+
+                <div class="upload-icon">ðŸ“„</div>
+
+                <strong>Choose a PDF file</strong>
+
+                <span>Click here to select your PDF</span>
+
+                <input
+                    type="file"
+                    id="pdfInput"
+                    accept="application/pdf"
+                >
+
+            </label>
+
+
+            <div class="file-info" id="fileInfo">
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <div class="number-options">
+
+                <span class="option-title">
+                    Page Number Position
+                </span>
+
+
+                <div class="position-grid">
+
+                    <button
+                        type="button"
+                        class="position-btn"
+                        data-position="top-left"
+                    >
+                        Top Left
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="position-btn"
+                        data-position="top-center"
+                    >
+                        Top Center
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="position-btn"
+                        data-position="top-right"
+                    >
+                        Top Right
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="position-btn"
+                        data-position="bottom-left"
+                    >
+                        Bottom Left
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="position-btn active"
+                        data-position="footer-center"
+                    >
+                        Footer Center
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="position-btn"
+                        data-position="bottom-right"
+                    >
+                        Bottom Right
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="number-settings">
+
+                <div class="setting-group">
+
+                    <label for="startNumber">
+                        Starting Number
+                    </label>
+
+                    <input
+                        type="number"
+                        id="startNumber"
+                        value="1"
+                        min="1"
+                    >
+
+                </div>
+
+
+                <div class="setting-group">
+
+                    <label for="fontSize">
+                        Font Size
+                    </label>
+
+                    <select id="fontSize">
+
+                        <option value="9">
+                            Small
+                        </option>
+
+                        <option value="12" selected>
+                            Medium
+                        </option>
+
+                        <option value="16">
+                            Large
+                        </option>
+
+                        <option value="20">
+                            Extra Large
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="convert-btn"
+                id="numberBtn"
+                disabled
+            >
+                Add Page Numbers
+            </button>
+
+
+            <div
+                class="status-message"
+                id="statusMessage"
+            ></div>
+
+
+            <div
+                class="error-message"
+                id="errorMessage"
+            ></div>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>
+                    Page Numbers Added Successfully
+                </h2>
+
+                <p>
+                    Your numbered PDF is ready to download.
+                </p>
+
+
+                <a
+                    href="#"
+                    id="downloadBtn"
+                    class="download-btn"
+                    download="filevora-numbered.pdf"
+                >
+                    â†“ Download Numbered PDF
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+
+<script>
+
+    const pdfInput =
+        document.getElementById("pdfInput");
+
+    const fileInfo =
+        document.getElementById("fileInfo");
+
+    const fileName =
+        document.getElementById("fileName");
+
+    const fileSize =
+        document.getElementById("fileSize");
+
+    const numberBtn =
+        document.getElementById("numberBtn");
+
+    const downloadBtn =
+        document.getElementById("downloadBtn");
+
+    const result =
+        document.getElementById("result");
+
+    const errorMessage =
+        document.getElementById("errorMessage");
+
+    const statusMessage =
+        document.getElementById("statusMessage");
+
+    const positionButtons =
+        document.querySelectorAll(".position-btn");
+
+    const startNumber =
+        document.getElementById("startNumber");
+
+    const fontSize =
+        document.getElementById("fontSize");
+
+
+    let selectedFile = null;
+
+    let selectedPosition = "footer-center";
+
+    let downloadUrl = null;
+
+
+    positionButtons.forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            positionButtons.forEach(item => {
+                item.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            selectedPosition =
+                button.dataset.position;
+
+        });
+
+    });
+
+
+    pdfInput.addEventListener("change", () => {
+
+        selectedFile =
+            pdfInput.files[0];
+
+        result.style.display = "none";
+
+        errorMessage.style.display = "none";
+
+        statusMessage.textContent = "";
+
+
+        if (!selectedFile) {
+
+            numberBtn.disabled = true;
+
+            fileInfo.style.display = "none";
+
+            return;
+        }
+
+
+        if (selectedFile.type !== "application/pdf") {
+
+            errorMessage.textContent =
+                "Please select a valid PDF file.";
+
+            errorMessage.style.display = "block";
+
+            numberBtn.disabled = true;
+
+            fileInfo.style.display = "none";
+
+            return;
+        }
+
+
+        fileName.textContent =
+            selectedFile.name;
+
+        fileSize.textContent =
+            formatFileSize(selectedFile.size);
+
+        fileInfo.style.display = "block";
+
+        numberBtn.disabled = false;
+
+    });
+
+
+    numberBtn.addEventListener("click", async () => {
+
+        if (!selectedFile) {
+            return;
+        }
+
+
+        try {
+
+            numberBtn.disabled = true;
+
+            result.style.display = "none";
+
+            errorMessage.style.display = "none";
+
+            statusMessage.textContent =
+                "Adding page numbers... Please wait.";
+
+
+            const arrayBuffer =
+                await selectedFile.arrayBuffer();
+
+
+            const pdfDoc =
+                await PDFLib.PDFDocument.load(
+                    arrayBuffer
+                );
+
+
+            const pages =
+                pdfDoc.getPages();
+
+
+            const font =
+                await pdfDoc.embedFont(
+                    PDFLib.StandardFonts.Helvetica
+                );
+
+
+            let number =
+                parseInt(
+                    startNumber.value,
+                    10
+                );
+
+
+            if (
+                !Number.isFinite(number) ||
+                number < 1
+            ) {
+                number = 1;
+            }
+
+
+            const size =
+                parseInt(
+                    fontSize.value,
+                    10
+                );
+
+
+            /*
+             * FOOTER SETTINGS
+             *
+             * The original page content is moved upward
+             * slightly and a new footer strip is created.
+             *
+             * This means the page number is NOT placed
+             * over the original PDF content.
+             */
+
+            const footerHeight = 42;
+
+
+            pages.forEach(page => {
+
+                const originalWidth =
+                    page.getWidth();
+
+                const originalHeight =
+                    page.getHeight();
+
+
+                const originalPageHeight =
+                    originalHeight;
+
+
+                /*
+                 * Only Footer Center creates a new footer area.
+                 */
+
+                if (
+                    selectedPosition === "footer-center"
+                ) {
+
+                    /*
+                     * Increase page height.
+                     *
+                     * Existing PDF content remains at
+                     * its original position.
+                     */
+
+                    page.setSize(
+                        originalWidth,
+                        originalPageHeight +
+                        footerHeight
+                    );
+
+
+                    /*
+                     * Move original content upward.
+                     *
+                     * This creates empty space at
+                     * the bottom for the footer.
+                     */
+
+                    page.translateContent(
+                        0,
+                        footerHeight
+                    );
+
+
+                    const text =
+                        String(number);
+
+
+                    const textWidth =
+                        font.widthOfTextAtSize(
+                            text,
+                            size
+                        );
+
+
+                    const x =
+                        (
+                            originalWidth -
+                            textWidth
+                        ) / 2;
+
+
+                    /*
+                     * Center inside the new footer area.
+                     */
+
+                    const y =
+                        15;
+
+
+                    page.drawText(
+                        text,
+                        {
+                            x: x,
+                            y: y,
+                            size: size,
+                            font: font,
+
+                            color:
+                                PDFLib.rgb(
+                                    0.25,
+                                    0.25,
+                                    0.25
+                                )
+                        }
+                    );
+
+
+                    number++;
+
+                    return;
+                }
+
+
+                /*
+                 * Other positions remain inside
+                 * the original page.
+                 */
+
+                const text =
+                    String(number);
+
+
+                const textWidth =
+                    font.widthOfTextAtSize(
+                        text,
+                        size
+                    );
+
+
+                const margin = 40;
+
+
+                let x = margin;
+
+                let y = margin;
+
+
+                switch (selectedPosition) {
+
+                    case "top-left":
+
+                        x = margin;
+
+                        y =
+                            originalHeight -
+                            margin -
+                            size;
+
+                        break;
+
+
+                    case "top-center":
+
+                        x =
+                            (
+                                originalWidth -
+                                textWidth
+                            ) / 2;
+
+                        y =
+                            originalHeight -
+                            margin -
+                            size;
+
+                        break;
+
+
+                    case "top-right":
+
+                        x =
+                            originalWidth -
+                            textWidth -
+                            margin;
+
+                        y =
+                            originalHeight -
+                            margin -
+                            size;
+
+                        break;
+
+
+                    case "bottom-left":
+
+                        x = margin;
+
+                        y = margin;
+
+                        break;
+
+
+                    case "bottom-right":
+
+                        x =
+                            originalWidth -
+                            textWidth -
+                            margin;
+
+                        y = margin;
+
+                        break;
+
+                }
+
+
+                page.drawText(
+                    text,
+                    {
+                        x: x,
+                        y: y,
+                        size: size,
+                        font: font,
+
+                        color:
+                            PDFLib.rgb(
+                                0.25,
+                                0.25,
+                                0.25
+                            )
+                    }
+                );
+
+
+                number++;
+
+            });
+
+
+            const pdfBytes =
+                await pdfDoc.save();
+
+
+            const blob =
+                new Blob(
+                    [pdfBytes],
+                    {
+                        type:
+                            "application/pdf"
+                    }
+                );
+
+
+            if (downloadUrl) {
+
+                URL.revokeObjectURL(
+                    downloadUrl
+                );
+
+            }
+
+
+            downloadUrl =
+                URL.createObjectURL(blob);
+
+
+            downloadBtn.href =
+                downloadUrl;
+
+
+            result.style.display =
+                "block";
+
+
+            statusMessage.textContent = "";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            errorMessage.textContent =
+                "Page numbers could not be added. Please make sure the PDF is valid and not password protected.";
+
+            errorMessage.style.display =
+                "block";
+
+            statusMessage.textContent = "";
+
+        } finally {
+
+            numberBtn.disabled = false;
+
+        }
+
+    });
+
+
+    function formatFileSize(bytes) {
+
+        if (bytes < 1024) {
+
+            return bytes + " Bytes";
+
+        }
+
+
+        if (bytes < 1024 * 1024) {
+
+            return (
+                bytes / 1024
+            ).toFixed(1) + " KB";
+
+        }
+
+
+        return (
+            bytes /
+            (1024 * 1024)
+        ).toFixed(2) + " MB";
+
+    }
+
+</script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>Â© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>
+

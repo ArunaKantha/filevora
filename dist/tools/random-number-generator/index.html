@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Random Number Generator - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        #randomActions {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            width:100%;
+            margin-top:18px;
+        }
+
+        #randomActions #generateBtn,
+        #randomActions #resetBtn {
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        #randomActions #resetBtn {
+            background:#ffffff !important;
+            color:#00bc8a !important;
+            border:1px solid #00bc8a !important;
+            box-shadow:none !important;
+        }
+
+        #randomActions #resetBtn:hover {
+            background:#ecfdf8 !important;
+        }
+
+        @media (max-width:600px) {
+            #randomActions {
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<div class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    #
+                </div>
+
+                <h1>Random Number Generator</h1>
+
+                <p>
+                    Generate random numbers within any range instantly.
+                </p>
+
+            </div>
+
+
+            <div style="text-align:left;">
+
+                <label
+                    for="minNumber"
+                    style="display:block; margin-bottom:8px; font-weight:700; color:#111827;"
+                >
+                    Minimum Number
+                </label>
+
+                <input
+                    type="number"
+                    id="minNumber"
+                    value="1"
+                    step="any"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                    "
+                >
+
+
+                <label
+                    for="maxNumber"
+                    style="
+                        display:block;
+                        margin-top:18px;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Maximum Number
+                </label>
+
+                <input
+                    type="number"
+                    id="maxNumber"
+                    value="100"
+                    step="any"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                    "
+                >
+
+
+                <label
+                    for="count"
+                    style="
+                        display:block;
+                        margin-top:18px;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    How Many Numbers?
+                </label>
+
+                <input
+                    type="number"
+                    id="count"
+                    value="1"
+                    min="1"
+                    max="100"
+                    step="1"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:16px;
+                        box-sizing:border-box;
+                    "
+                >
+
+
+                <label
+                    style="
+                        display:flex;
+                        align-items:center;
+                        gap:10px;
+                        margin-top:18px;
+                        color:#374151;
+                        font-size:14px;
+                        cursor:pointer;
+                    "
+                >
+
+                    <input
+                        type="checkbox"
+                        id="uniqueNumbers"
+                        style="width:18px; height:18px;"
+                    >
+
+                    Generate unique numbers only
+
+                </label>
+
+
+                <div id="randomActions">
+
+                    <button
+                        type="button"
+                        class="convert-btn"
+                        id="generateBtn"
+                    >
+                        Generate Random Numbers
+                    </button>
+
+                    <button
+                        type="button"
+                        class="convert-btn"
+                        id="resetBtn"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>Generated Numbers</h2>
+
+                <p
+                    id="numbers"
+                    style="
+                        margin-top:15px;
+                        font-size:22px;
+                        font-weight:700;
+                        color:#166534;
+                        word-break:break-word;
+                        line-height:1.7;
+                    "
+                ></p>
+
+                <button
+                    type="button"
+                    class="download-btn"
+                    id="copyBtn"
+                >
+                    Copy Numbers
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const minInput =
+    document.getElementById("minNumber");
+
+const maxInput =
+    document.getElementById("maxNumber");
+
+const countInput =
+    document.getElementById("count");
+
+const uniqueCheckbox =
+    document.getElementById("uniqueNumbers");
+
+const generateBtn =
+    document.getElementById("generateBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const result =
+    document.getElementById("result");
+
+const numbersOutput =
+    document.getElementById("numbers");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+
+function generateRandomNumber(min, max) {
+
+    return Math.floor(
+        Math.random() * (max - min + 1)
+    ) + min;
+
+}
+
+
+generateBtn.addEventListener("click", function () {
+
+    const min =
+        Number(minInput.value);
+
+    const max =
+        Number(maxInput.value);
+
+    const count =
+        Number(countInput.value);
+
+
+    if (
+        !Number.isFinite(min) ||
+        !Number.isFinite(max)
+    ) {
+
+        alert(
+            "Please enter valid minimum and maximum numbers."
+        );
+
+        return;
+    }
+
+
+    if (min > max) {
+
+        alert(
+            "Minimum number cannot be greater than maximum number."
+        );
+
+        return;
+    }
+
+
+    if (
+        !Number.isInteger(min) ||
+        !Number.isInteger(max)
+    ) {
+
+        alert(
+            "Please use whole numbers for the minimum and maximum values."
+        );
+
+        return;
+    }
+
+
+    if (
+        !Number.isInteger(count) ||
+        count < 1 ||
+        count > 100
+    ) {
+
+        alert(
+            "Number of results must be between 1 and 100."
+        );
+
+        return;
+    }
+
+
+    const possibleNumbers =
+        max - min + 1;
+
+
+    if (
+        uniqueCheckbox.checked &&
+        count > possibleNumbers
+    ) {
+
+        alert(
+            `Only ${possibleNumbers} unique numbers are available in this range.`
+        );
+
+        return;
+    }
+
+
+    const numbers =
+        [];
+
+
+    if (
+        uniqueCheckbox.checked
+    ) {
+
+        const used =
+            new Set();
+
+
+        while (
+            numbers.length < count
+        ) {
+
+            const randomNumber =
+                generateRandomNumber(
+                    min,
+                    max
+                );
+
+
+            if (
+                !used.has(
+                    randomNumber
+                )
+            ) {
+
+                used.add(
+                    randomNumber
+                );
+
+
+                numbers.push(
+                    randomNumber
+                );
+            }
+        }
+
+    } else {
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            numbers.push(
+                generateRandomNumber(
+                    min,
+                    max
+                )
+            );
+        }
+    }
+
+
+    numbersOutput.textContent =
+        numbers.join(" , ");
+
+
+    result.style.display =
+        "block";
+
+
+    copyBtn.textContent =
+        "Copy Numbers";
+
+});
+
+
+copyBtn.addEventListener(
+    "click",
+    async function () {
+
+        const text =
+            numbersOutput.textContent;
+
+
+        if (!text) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                text
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy Numbers";
+
+                },
+                1500
+            );
+
+
+        } catch (error) {
+
+            alert(
+                "Unable to copy the numbers."
+            );
+        }
+    }
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        minInput.value =
+            "1";
+
+
+        maxInput.value =
+            "100";
+
+
+        countInput.value =
+            "1";
+
+
+        uniqueCheckbox.checked =
+            false;
+
+
+        numbersOutput.textContent =
+            "";
+
+
+        result.style.display =
+            "none";
+
+
+        copyBtn.textContent =
+            "Copy Numbers";
+
+
+        minInput.focus();
+    }
+);
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date()
+                    .getFullYear();
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

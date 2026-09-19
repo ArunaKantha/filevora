@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Text - FileVora</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+<style>
+/* FileVora Text Tools batch standardization */
+.text-tool .converter-card textarea,
+.text-tool .converter-card input[type="text"],
+.text-tool .converter-card input[type="number"],
+.text-tool .converter-card select {
+    border-color:#cbd5e1 !important;
+}
+.text-tool .converter-card textarea:focus,
+.text-tool .converter-card input:focus,
+.text-tool .converter-card select:focus {
+    border-color:#00bc8a !important;
+    outline:none !important;
+}
+.text-tool .text-reset-btn {
+    background:#ffffff !important;
+    color:#00bc8a !important;
+    border:1px solid #00bc8a !important;
+    box-shadow:none !important;
+}
+.text-tool .text-reset-btn:hover {
+    background:#ecfdf8 !important;
+}
+.text-tool .text-action-row {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:18px;
+}
+.text-tool .text-action-row > .convert-btn,
+.text-tool .text-action-row > .download-btn,
+.text-tool .text-action-row > button,
+.text-tool .text-action-row > a {
+    margin-top:0 !important;
+    width:100% !important;
+    box-sizing:border-box !important;
+}
+@media (max-width:600px){
+    .text-tool .text-action-row{grid-template-columns:1fr;}
+}
+</style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body class="text-tool">
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">STT</div>
+
+                <h1>Speech to Text</h1>
+
+                <p>
+                    Convert your speech into text directly in your browser.
+                </p>
+
+            </div>
+
+
+            <!-- Language -->
+
+            <div style="text-align:left; margin-bottom:20px;">
+
+                <label
+                    for="languageSelect"
+                    style="font-weight:700; color:#111827;"
+                >
+                    Language
+                </label>
+
+                <select
+                    id="languageSelect"
+                    style="
+                        width:100%;
+                        padding:14px;
+                        margin-top:8px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:15px;
+                        background:#ffffff;
+                    "
+                >
+                    <option value="en-US">English (US)</option>
+                    <option value="en-GB">English (UK)</option>
+                    <option value="si-LK">Sinhala</option>
+                    <option value="ta-LK">Tamil</option>
+                    <option value="hi-IN">Hindi</option>
+                    <option value="fr-FR">French</option>
+                    <option value="de-DE">German</option>
+                    <option value="es-ES">Spanish</option>
+                    <option value="it-IT">Italian</option>
+                    <option value="ja-JP">Japanese</option>
+                    <option value="ko-KR">Korean</option>
+                    <option value="zh-CN">Chinese</option>
+                </select>
+
+            </div>
+
+
+            <!-- Status -->
+
+            <div
+                id="status"
+                style="
+                    padding:14px;
+                    border-radius:10px;
+                    background:#f1f5f9;
+                    color:#475569;
+                    font-size:14px;
+                    margin-bottom:18px;
+                    text-align:center;
+                "
+            >
+                Ready to listen
+            </div>
+
+
+            <!-- Text -->
+
+            <div style="text-align:left;">
+
+                <label
+                    for="textOutput"
+                    style="font-weight:700; color:#111827;"
+                >
+                    Transcribed Text
+                </label>
+
+                <textarea
+                    id="textOutput"
+                    placeholder="Your speech will appear here..."
+                    style="
+                        width:100%;
+                        min-height:220px;
+                        margin-top:8px;
+                        padding:14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        font-size:15px;
+                        line-height:1.6;
+                        resize:vertical;
+                        box-sizing:border-box;
+                        font-family:inherit;
+                    "
+                ></textarea>
+
+            </div>
+
+
+            <!-- Buttons -->
+
+            <div
+                style="
+                    display:grid;
+                    grid-template-columns:1fr 1fr;
+                    gap:12px;
+                    margin-top:22px;
+                "
+            >
+
+                <button
+                    type="button"
+                    id="startBtn"
+                    class="convert-btn"
+                    style="margin-top:0;"
+                >
+                    Start Listening
+                </button>
+
+                <button
+                    type="button"
+                    id="stopBtn"
+                    class="convert-btn"
+                    style="
+                        margin-top:0;
+                        background:#ef4444;
+                    "
+                    disabled
+                >
+                    Stop
+                </button>
+<button type="button" class="convert-btn text-reset-btn" id="resetBtn" style="margin-top:0;">Reset</button>
+
+            </div>
+
+
+            <!-- Result -->
+
+            <div
+                id="result"
+                class="result"
+                style="display:none;"
+            >
+
+                <h2>Text Ready</h2>
+
+                <p id="resultText"></p>
+
+                <button
+                    type="button"
+                    id="copyBtn"
+                    class="download-btn"
+                >
+                    Copy Text
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+const languageSelect =
+    document.getElementById("languageSelect");
+
+const textOutput =
+    document.getElementById("textOutput");
+
+const startBtn =
+    document.getElementById("startBtn");
+
+const stopBtn =
+    document.getElementById("stopBtn");
+
+const status =
+    document.getElementById("status");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+
+let recognition = null;
+
+let isListening = false;
+
+
+/* --------------------------------
+   BROWSER SUPPORT
+-------------------------------- */
+
+if (!SpeechRecognition) {
+
+    startBtn.disabled = true;
+
+    status.textContent =
+        "Speech recognition is not supported in this browser.";
+
+    status.style.background =
+        "#fef2f2";
+
+    status.style.color =
+        "#991b1b";
+
+}
+
+
+/* --------------------------------
+   CREATE RECOGNITION
+-------------------------------- */
+
+if (SpeechRecognition) {
+
+    recognition =
+        new SpeechRecognition();
+
+
+    recognition.continuous =
+        true;
+
+    recognition.interimResults =
+        true;
+
+    recognition.lang =
+        languageSelect.value;
+
+
+    recognition.onstart =
+        function() {
+
+            isListening = true;
+
+            startBtn.disabled =
+                true;
+
+            stopBtn.disabled =
+                false;
+
+            status.textContent =
+                "Listening... Speak now.";
+
+            status.style.background =
+                "#eff6ff";
+
+            status.style.color =
+                "#1d4ed8";
+
+        };
+
+
+    recognition.onresult =
+        function(event) {
+
+            let finalText = "";
+
+            let interimText = "";
+
+
+            for (
+                let i = event.resultIndex;
+                i < event.results.length;
+                i++
+            ) {
+
+                const transcript =
+                    event.results[i][0].transcript;
+
+
+                if (
+                    event.results[i].isFinal
+                ) {
+
+                    finalText +=
+                        transcript + " ";
+
+                }
+
+                else {
+
+                    interimText +=
+                        transcript;
+
+                }
+
+            }
+
+
+            if (finalText) {
+
+                textOutput.value +=
+                    finalText;
+
+            }
+
+
+            if (interimText) {
+
+                status.textContent =
+                    "" + interimText;
+
+            }
+
+        };
+
+
+    recognition.onerror =
+        function(event) {
+
+            status.textContent =
+                "Error: " + event.error;
+
+            status.style.background =
+                "#fef2f2";
+
+            status.style.color =
+                "#991b1b";
+
+            isListening = false;
+
+            startBtn.disabled =
+                false;
+
+            stopBtn.disabled =
+                true;
+
+        };
+
+
+    recognition.onend =
+        function() {
+
+            isListening = false;
+
+            startBtn.disabled =
+                false;
+
+            stopBtn.disabled =
+                true;
+
+            status.textContent =
+                "Ready to listen";
+
+            status.style.background =
+                "#f1f5f9";
+
+            status.style.color =
+                "#475569";
+
+
+            if (textOutput.value.trim()) {
+
+                result.style.display =
+                    "block";
+
+                resultText.textContent =
+                    "Speech successfully converted to text.";
+
+            }
+
+        };
+
+}
+
+
+/* --------------------------------
+   LANGUAGE CHANGE
+-------------------------------- */
+
+languageSelect.addEventListener(
+    "change",
+    function() {
+
+        if (recognition) {
+
+            recognition.lang =
+                languageSelect.value;
+
+        }
+
+    }
+);
+
+
+/* --------------------------------
+   START
+-------------------------------- */
+
+startBtn.addEventListener(
+    "click",
+    function() {
+
+        if (!recognition) {
+            return;
+        }
+
+
+        if (isListening) {
+            return;
+        }
+
+
+        recognition.lang =
+            languageSelect.value;
+
+
+        try {
+
+            recognition.start();
+
+        }
+
+        catch (error) {
+
+            console.log(error);
+
+        }
+
+    }
+);
+
+
+/* --------------------------------
+   STOP
+-------------------------------- */
+
+stopBtn.addEventListener(
+    "click",
+    function() {
+
+        if (recognition && isListening) {
+
+            recognition.stop();
+
+        }
+
+    }
+);
+
+
+/* --------------------------------
+   COPY
+-------------------------------- */
+
+copyBtn.addEventListener(
+    "click",
+    async function() {
+
+        const text =
+            textOutput.value.trim();
+
+
+        if (!text) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                text
+            );
+
+            copyBtn.textContent =
+                "Copied!";
+
+        }
+
+        catch (error) {
+
+            copyBtn.textContent =
+                "Copy failed";
+
+        }
+
+
+        setTimeout(
+            function() {
+
+                copyBtn.textContent =
+                    "Copy Text";
+
+            },
+            1500
+        );
+
+    }
+);
+
+
+resetBtn.addEventListener("click", function () {
+    try { if (recognition) recognition.stop(); } catch (error) {}
+    textOutput.value = "";
+    result.style.display = "none";
+    resultText.textContent = "";
+    status.textContent = "Ready";
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+});
+</script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>
+

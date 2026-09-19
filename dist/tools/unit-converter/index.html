@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Unit Converter - FileVora</title>
+
+    <meta
+        name="description"
+        content="Convert length, weight and temperature units quickly with FileVora Unit Converter."
+    >
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        #unitActions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 18px;
+        }
+
+        #unitActions #convertBtn,
+        #unitActions #resetBtn {
+            width: 100% !important;
+            height: 50px !important;
+            min-height: 50px !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
+        }
+
+        #unitActions #resetBtn {
+            background: #ffffff !important;
+            color: #00bc8a !important;
+            border: 1px solid #00bc8a !important;
+            box-shadow: none !important;
+        }
+
+        #unitActions #resetBtn:hover {
+            background: #ecfdf8 !important;
+        }
+
+        @media (max-width: 600px) {
+            #unitActions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    ↔
+                </div>
+
+                <h1>
+                    Unit Converter
+                </h1>
+
+                <p>
+                    Convert length, weight and temperature units instantly.
+                </p>
+
+            </div>
+
+
+            <div style="display:grid; gap:16px; text-align:left;">
+
+                <div>
+
+                    <label
+                        style="
+                            display:block;
+                            margin-bottom:7px;
+                            font-weight:700;
+                            color:#111827;
+                        "
+                    >
+                        Category
+                    </label>
+
+                    <select
+                        id="category"
+                        style="
+                            width:100%;
+                            padding:13px 14px;
+                            border:1px solid #cbd5e1;
+                            border-radius:10px;
+                            font-size:15px;
+                            background:#fff;
+                        "
+                    >
+                        <option value="length">
+                            Length
+                        </option>
+
+                        <option value="weight">
+                            Weight
+                        </option>
+
+                        <option value="temperature">
+                            Temperature
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        style="
+                            display:block;
+                            margin-bottom:7px;
+                            font-weight:700;
+                            color:#111827;
+                        "
+                    >
+                        From
+                    </label>
+
+                    <select
+                        id="fromUnit"
+                        style="
+                            width:100%;
+                            padding:13px 14px;
+                            border:1px solid #cbd5e1;
+                            border-radius:10px;
+                            font-size:15px;
+                            background:#fff;
+                        "
+                    ></select>
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        style="
+                            display:block;
+                            margin-bottom:7px;
+                            font-weight:700;
+                            color:#111827;
+                        "
+                    >
+                        Value
+                    </label>
+
+                    <input
+                        type="number"
+                        id="value"
+                        placeholder="Enter value"
+                        step="any"
+                        style="
+                            width:100%;
+                            box-sizing:border-box;
+                            padding:13px 14px;
+                            border:1px solid #cbd5e1;
+                            border-radius:10px;
+                            font-size:15px;
+                        "
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        style="
+                            display:block;
+                            margin-bottom:7px;
+                            font-weight:700;
+                            color:#111827;
+                        "
+                    >
+                        To
+                    </label>
+
+                    <select
+                        id="toUnit"
+                        style="
+                            width:100%;
+                            padding:13px 14px;
+                            border:1px solid #cbd5e1;
+                            border-radius:10px;
+                            font-size:15px;
+                            background:#fff;
+                        "
+                    ></select>
+
+                </div>
+
+            </div>
+
+
+            <div id="unitActions">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="convertBtn"
+                >
+                    Convert
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>
+                    Conversion Result
+                </h2>
+
+                <p id="resultText"></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const category =
+    document.getElementById("category");
+
+const fromUnit =
+    document.getElementById("fromUnit");
+
+const toUnit =
+    document.getElementById("toUnit");
+
+const valueInput =
+    document.getElementById("value");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+
+const units = {
+
+    length: {
+
+        meter: {
+            name: "Meter",
+            factor: 1
+        },
+
+        kilometer: {
+            name: "Kilometer",
+            factor: 1000
+        },
+
+        centimeter: {
+            name: "Centimeter",
+            factor: 0.01
+        },
+
+        millimeter: {
+            name: "Millimeter",
+            factor: 0.001
+        },
+
+        mile: {
+            name: "Mile",
+            factor: 1609.344
+        },
+
+        yard: {
+            name: "Yard",
+            factor: 0.9144
+        },
+
+        foot: {
+            name: "Foot",
+            factor: 0.3048
+        },
+
+        inch: {
+            name: "Inch",
+            factor: 0.0254
+        }
+
+    },
+
+
+    weight: {
+
+        kilogram: {
+            name: "Kilogram",
+            factor: 1
+        },
+
+        gram: {
+            name: "Gram",
+            factor: 0.001
+        },
+
+        milligram: {
+            name: "Milligram",
+            factor: 0.000001
+        },
+
+        pound: {
+            name: "Pound",
+            factor: 0.45359237
+        },
+
+        ounce: {
+            name: "Ounce",
+            factor: 0.028349523125
+        },
+
+        stone: {
+            name: "Stone",
+            factor: 6.35029318
+        }
+
+    },
+
+
+    temperature: {
+
+        celsius: {
+            name: "Celsius"
+        },
+
+        fahrenheit: {
+            name: "Fahrenheit"
+        },
+
+        kelvin: {
+            name: "Kelvin"
+        }
+
+    }
+
+};
+
+
+function loadUnits() {
+
+    const selectedCategory =
+        category.value;
+
+    const categoryUnits =
+        units[selectedCategory];
+
+
+    fromUnit.innerHTML =
+        "";
+
+    toUnit.innerHTML =
+        "";
+
+
+    Object.keys(
+        categoryUnits
+    ).forEach(function (key) {
+
+        const option1 =
+            document.createElement(
+                "option"
+            );
+
+        option1.value =
+            key;
+
+        option1.textContent =
+            categoryUnits[key].name;
+
+
+        const option2 =
+            document.createElement(
+                "option"
+            );
+
+        option2.value =
+            key;
+
+        option2.textContent =
+            categoryUnits[key].name;
+
+
+        fromUnit.appendChild(
+            option1
+        );
+
+        toUnit.appendChild(
+            option2
+        );
+
+    });
+
+
+    if (
+        Object.keys(
+            categoryUnits
+        ).length > 1
+    ) {
+
+        toUnit.selectedIndex =
+            1;
+    }
+
+
+    result.style.display =
+        "none";
+
+    resultText.textContent =
+        "";
+}
+
+
+function convertTemperature(
+    value,
+    from,
+    to
+) {
+
+    let celsius;
+
+
+    if (
+        from ===
+        "celsius"
+    ) {
+
+        celsius =
+            value;
+
+    } else if (
+        from ===
+        "fahrenheit"
+    ) {
+
+        celsius =
+            (value - 32) *
+            5 / 9;
+
+    } else if (
+        from ===
+        "kelvin"
+    ) {
+
+        celsius =
+            value - 273.15;
+    }
+
+
+    if (
+        to ===
+        "celsius"
+    ) {
+
+        return celsius;
+    }
+
+
+    if (
+        to ===
+        "fahrenheit"
+    ) {
+
+        return (
+            celsius *
+            9 / 5
+        ) + 32;
+    }
+
+
+    if (
+        to ===
+        "kelvin"
+    ) {
+
+        return (
+            celsius +
+            273.15
+        );
+    }
+
+}
+
+
+function formatNumber(number) {
+
+    if (
+        !Number.isFinite(
+            number
+        )
+    ) {
+
+        return "Invalid result";
+    }
+
+
+    return Number(
+        number.toFixed(10)
+    ).toLocaleString(
+        "en-US",
+        {
+            maximumFractionDigits:
+                10
+        }
+    );
+
+}
+
+
+category.addEventListener(
+    "change",
+    loadUnits
+);
+
+
+convertBtn.addEventListener(
+    "click",
+    function () {
+
+        const value =
+            parseFloat(
+                valueInput.value
+            );
+
+
+        if (
+            isNaN(value)
+        ) {
+
+            alert(
+                "Please enter a valid number."
+            );
+
+            return;
+        }
+
+
+        const selectedCategory =
+            category.value;
+
+        const from =
+            fromUnit.value;
+
+        const to =
+            toUnit.value;
+
+
+        let convertedValue;
+
+
+        if (
+            selectedCategory ===
+            "temperature"
+        ) {
+
+            convertedValue =
+                convertTemperature(
+                    value,
+                    from,
+                    to
+                );
+
+        } else {
+
+            const fromFactor =
+                units[
+                    selectedCategory
+                ][from].factor;
+
+
+            const toFactor =
+                units[
+                    selectedCategory
+                ][to].factor;
+
+
+            const baseValue =
+                value *
+                fromFactor;
+
+
+            convertedValue =
+                baseValue /
+                toFactor;
+        }
+
+
+        const fromName =
+            units[
+                selectedCategory
+            ][from].name;
+
+
+        const toName =
+            units[
+                selectedCategory
+            ][to].name;
+
+
+        resultText.textContent =
+            `${formatNumber(value)} ${fromName} = ${formatNumber(convertedValue)} ${toName}`;
+
+
+        result.style.display =
+            "block";
+
+    }
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        category.value =
+            "length";
+
+
+        loadUnits();
+
+
+        fromUnit.value =
+            "meter";
+
+
+        toUnit.value =
+            "kilometer";
+
+
+        valueInput.value =
+            "";
+
+
+        resultText.textContent =
+            "";
+
+
+        result.style.display =
+            "none";
+
+
+        valueInput.focus();
+
+    }
+);
+
+
+valueInput.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key ===
+            "Enter"
+        ) {
+
+            convertBtn.click();
+        }
+
+    }
+);
+
+
+loadUnits();
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date()
+                    .getFullYear();
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

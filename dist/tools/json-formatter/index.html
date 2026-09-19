@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JSON Formatter - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .json-action-row {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .json-action-row .convert-btn {
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .json-reset-btn {
+            background:#ffffff !important;
+            color:#00bc8a !important;
+            border:1px solid #00bc8a !important;
+            box-shadow:none !important;
+        }
+
+        .json-reset-btn:hover {
+            background:#ecfdf8 !important;
+        }
+
+        .json-result-actions {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:15px;
+        }
+
+        .json-result-actions .download-btn {
+            width:100% !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        @media (max-width:600px) {
+            .json-action-row,
+            .json-result-actions {
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    JF
+                </div>
+
+                <h1>JSON Formatter</h1>
+
+                <p>
+                    Format and beautify JSON data instantly with proper indentation.
+                </p>
+
+            </div>
+
+
+            <textarea
+                id="jsonInput"
+                placeholder='Paste your JSON here...&#10;&#10;Example: {"name":"FileVora","tools":30}'
+                style="
+                    width:100%;
+                    min-height:260px;
+                    padding:18px;
+                    border:2px solid #e5e7eb;
+                    border-radius:14px;
+                    resize:vertical;
+                    font-size:15px;
+                    line-height:1.6;
+                    outline:none;
+                    font-family:monospace;
+                    box-sizing:border-box;
+                "
+            ></textarea>
+
+
+            <div
+                style="
+                    display:flex;
+                    gap:12px;
+                    margin-top:18px;
+                    text-align:left;
+                    align-items:center;
+                "
+            >
+
+                <label
+                    style="
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Indentation:
+                </label>
+
+
+                <select
+                    id="indentSize"
+                    style="
+                        padding:10px 14px;
+                        border:1px solid #cbd5e1;
+                        border-radius:8px;
+                        font-size:14px;
+                        background:#fff;
+                    "
+                >
+
+                    <option value="2">
+                        2 spaces
+                    </option>
+
+                    <option value="4">
+                        4 spaces
+                    </option>
+
+                    <option value="8">
+                        8 spaces
+                    </option>
+
+                    <option value="tab">
+                        Tab
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="json-action-row">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="formatBtn"
+                >
+                    Format JSON
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn json-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2 id="resultTitle">
+                    JSON Formatted Successfully
+                </h2>
+
+                <p id="resultInfo"></p>
+
+
+                <textarea
+                    id="outputText"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:280px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #d1d5db;
+                        border-radius:10px;
+                        resize:vertical;
+                        font-size:14px;
+                        line-height:1.6;
+                        font-family:monospace;
+                        box-sizing:border-box;
+                        background:#ffffff;
+                    "
+                ></textarea>
+
+
+                <div class="json-result-actions">
+
+                    <button
+                        type="button"
+                        class="download-btn"
+                        id="copyBtn"
+                    >
+                        Copy JSON
+                    </button>
+
+                    <button
+                        type="button"
+                        class="download-btn"
+                        id="downloadBtn"
+                    >
+                        Download JSON
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const jsonInput =
+    document.getElementById("jsonInput");
+
+const formatBtn =
+    document.getElementById("formatBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const indentSize =
+    document.getElementById("indentSize");
+
+const result =
+    document.getElementById("result");
+
+const resultTitle =
+    document.getElementById("resultTitle");
+
+const resultInfo =
+    document.getElementById("resultInfo");
+
+const outputText =
+    document.getElementById("outputText");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+/* =========================
+   FORMAT JSON
+========================= */
+
+formatBtn.addEventListener(
+    "click",
+    function () {
+
+        const input =
+            jsonInput.value.trim();
+
+
+        if (!input) {
+
+            alert(
+                "Please paste some JSON first."
+            );
+
+            return;
+        }
+
+
+        try {
+
+            const parsed =
+                JSON.parse(input);
+
+
+            let indentation =
+                2;
+
+
+            if (
+                indentSize.value ===
+                "tab"
+            ) {
+
+                indentation =
+                    "\t";
+
+            } else {
+
+                indentation =
+                    parseInt(
+                        indentSize.value,
+                        10
+                    );
+            }
+
+
+            const formatted =
+                JSON.stringify(
+                    parsed,
+                    null,
+                    indentation
+                );
+
+
+            outputText.value =
+                formatted;
+
+
+            const lines =
+                formatted
+                    .split("\n")
+                    .length;
+
+
+            resultTitle.textContent =
+                "JSON Formatted Successfully";
+
+
+            resultInfo.textContent =
+                `Valid JSON • ${lines} lines`;
+
+
+            result.style.display =
+                "block";
+
+
+            result.scrollIntoView({
+                behavior:"smooth",
+                block:"nearest"
+            });
+
+
+        } catch (error) {
+
+            outputText.value =
+                "";
+
+
+            resultTitle.textContent =
+                "Invalid JSON";
+
+
+            resultInfo.textContent =
+                "Please check your JSON syntax and try again.";
+
+
+            result.style.display =
+                "block";
+
+
+            result.scrollIntoView({
+                behavior:"smooth",
+                block:"nearest"
+            });
+        }
+
+    }
+);
+
+
+/* =========================
+   COPY JSON
+========================= */
+
+copyBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (
+            !outputText.value
+        ) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                outputText.value
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy JSON";
+
+                },
+                1500
+            );
+
+
+        } catch (error) {
+
+            outputText.select();
+
+            document.execCommand(
+                "copy"
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy JSON";
+
+                },
+                1500
+            );
+        }
+
+    }
+);
+
+
+/* =========================
+   DOWNLOAD JSON
+========================= */
+
+downloadBtn.addEventListener(
+    "click",
+    function () {
+
+        if (
+            !outputText.value
+        ) {
+
+            alert(
+                "Please format JSON first."
+            );
+
+            return;
+        }
+
+
+        const blob =
+            new Blob(
+                [outputText.value],
+                {
+                    type:
+                        "application/json;charset=utf-8;"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.href =
+            url;
+
+
+        link.download =
+            "filevora-formatted.json";
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        document.body.removeChild(
+            link
+        );
+
+
+        URL.revokeObjectURL(
+            url
+        );
+
+    }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        jsonInput.value =
+            "";
+
+
+        indentSize.value =
+            "2";
+
+
+        outputText.value =
+            "";
+
+
+        resultTitle.textContent =
+            "JSON Formatted Successfully";
+
+
+        resultInfo.textContent =
+            "";
+
+
+        result.style.display =
+            "none";
+
+
+        copyBtn.textContent =
+            "Copy JSON";
+
+
+        downloadBtn.textContent =
+            "Download JSON";
+
+
+        jsonInput.focus();
+
+    }
+);
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date()
+                    .getFullYear();
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Watermark to PDF - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .watermark-settings {
+            margin-top: 22px;
+            text-align: left;
+        }
+
+        .setting-title {
+            display: block;
+            margin-bottom: 8px;
+            color: #111827;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .watermark-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            outline: none;
+            font-size: 15px;
+            color: #111827;
+        }
+
+        .watermark-input:focus {
+            border-color: #00bc8a;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .setting-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .setting-group select,
+        .setting-group input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #334155;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .setting-group select:focus,
+        .setting-group input:focus {
+            border-color: #00bc8a;
+        }
+
+        .watermark-actions {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .reset-btn {
+            background: #ffffff !important;
+            color: #00bc8a !important;
+            border: 1px solid #00bc8a !important;
+            box-shadow: none !important;
+        }
+
+        .reset-btn:hover {
+            background: #ecfdf8 !important;
+        }
+
+        .status-message {
+            margin-top: 16px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 10px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .settings-grid,
+            .watermark-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body class="pdf-tool">
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">W</div>
+
+                <h1>Add Watermark to PDF</h1>
+
+                <p>
+                    Add a custom text watermark to every page of your PDF.
+                </p>
+
+            </div>
+
+
+            <label class="upload-area" for="pdfInput">
+
+                <div class="upload-icon">↑</div>
+
+                <strong>Choose a PDF file</strong>
+
+                <span>Click here to select your PDF</span>
+
+                <input
+                    type="file"
+                    id="pdfInput"
+                    accept="application/pdf"
+                >
+
+            </label>
+
+
+            <div class="file-info" id="fileInfo">
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <div
+                class="watermark-settings"
+                id="watermarkSettings"
+                style="display:none;"
+            >
+
+                <label
+                    class="setting-title"
+                    for="watermarkText"
+                >
+                    Watermark Text
+                </label>
+
+                <input
+                    type="text"
+                    id="watermarkText"
+                    class="watermark-input"
+                    value="CONFIDENTIAL"
+                    placeholder="Enter watermark text"
+                    maxlength="80"
+                >
+
+
+                <div class="settings-grid">
+
+                    <div class="setting-group">
+
+                        <label for="watermarkPosition">
+                            Position
+                        </label>
+
+                        <select id="watermarkPosition">
+
+                            <option value="center" selected>
+                                Center
+                            </option>
+
+                            <option value="top-left">
+                                Top Left
+                            </option>
+
+                            <option value="top-right">
+                                Top Right
+                            </option>
+
+                            <option value="bottom-left">
+                                Bottom Left
+                            </option>
+
+                            <option value="bottom-right">
+                                Bottom Right
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="setting-group">
+
+                        <label for="watermarkSize">
+                            Font Size
+                        </label>
+
+                        <select id="watermarkSize">
+
+                            <option value="30">
+                                Small
+                            </option>
+
+                            <option value="50" selected>
+                                Medium
+                            </option>
+
+                            <option value="70">
+                                Large
+                            </option>
+
+                            <option value="90">
+                                Extra Large
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="setting-group">
+
+                        <label for="watermarkOpacity">
+                            Opacity
+                        </label>
+
+                        <select id="watermarkOpacity">
+
+                            <option value="0.15">
+                                Very Light
+                            </option>
+
+                            <option value="0.25" selected>
+                                Light
+                            </option>
+
+                            <option value="0.40">
+                                Medium
+                            </option>
+
+                            <option value="0.60">
+                                Strong
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="setting-group">
+
+                        <label for="watermarkAngle">
+                            Angle
+                        </label>
+
+                        <select id="watermarkAngle">
+
+                            <option value="0">
+                                Horizontal
+                            </option>
+
+                            <option value="45" selected>
+                                Diagonal 45°
+                            </option>
+
+                            <option value="90">
+                                Vertical 90°
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="watermark-actions"
+                id="watermarkActions"
+            >
+
+                <button
+                    class="convert-btn"
+                    id="watermarkBtn"
+                    type="button"
+                    disabled
+                >
+                    Add Watermark
+                </button>
+
+                <button
+                    class="convert-btn reset-btn"
+                    id="resetBtn"
+                    type="button"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                class="status-message"
+                id="statusMessage"
+            ></div>
+
+
+            <div
+                class="error-message"
+                id="errorMessage"
+            ></div>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>
+                    Watermark Added Successfully
+                </h2>
+
+                <p>
+                    Your watermarked PDF is ready to download.
+                </p>
+
+                <a
+                    href="#"
+                    id="downloadBtn"
+                    class="download-btn"
+                    download="filevora-watermarked.pdf"
+                >
+                    Download Watermarked PDF
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+
+<script>
+
+    const pdfInput =
+        document.getElementById("pdfInput");
+
+    const fileInfo =
+        document.getElementById("fileInfo");
+
+    const fileName =
+        document.getElementById("fileName");
+
+    const fileSize =
+        document.getElementById("fileSize");
+
+    const watermarkText =
+        document.getElementById("watermarkText");
+
+    const watermarkPosition =
+        document.getElementById("watermarkPosition");
+
+    const watermarkSize =
+        document.getElementById("watermarkSize");
+
+    const watermarkOpacity =
+        document.getElementById("watermarkOpacity");
+
+    const watermarkAngle =
+        document.getElementById("watermarkAngle");
+
+    const watermarkBtn =
+        document.getElementById("watermarkBtn");
+
+    const resetBtn =
+        document.getElementById("resetBtn");
+
+    const watermarkSettings =
+        document.getElementById("watermarkSettings");
+
+    const watermarkActions =
+        document.getElementById("watermarkActions");
+
+    const downloadBtn =
+        document.getElementById("downloadBtn");
+
+    const result =
+        document.getElementById("result");
+
+    const errorMessage =
+        document.getElementById("errorMessage");
+
+    const statusMessage =
+        document.getElementById("statusMessage");
+
+
+    let selectedFile = null;
+
+    let downloadUrl = null;
+
+
+    pdfInput.addEventListener("change", () => {
+
+        selectedFile =
+            pdfInput.files[0];
+
+        result.style.display =
+            "none";
+
+        errorMessage.style.display =
+            "none";
+
+        errorMessage.textContent =
+            "";
+
+        statusMessage.textContent =
+            "";
+
+
+        if (downloadUrl) {
+
+            URL.revokeObjectURL(
+                downloadUrl
+            );
+
+            downloadUrl =
+                null;
+
+            downloadBtn.href =
+                "#";
+
+        }
+
+
+        if (!selectedFile) {
+
+            watermarkBtn.disabled =
+                true;
+
+            fileInfo.style.display =
+                "none";
+
+            watermarkSettings.style.display =
+                "none";
+
+            watermarkActions.style.display =
+                "none";
+
+            return;
+
+        }
+
+
+        if (
+            selectedFile.type !==
+            "application/pdf"
+        ) {
+
+            errorMessage.textContent =
+                "Please select a valid PDF file.";
+
+            errorMessage.style.display =
+                "block";
+
+            watermarkBtn.disabled =
+                true;
+
+            fileInfo.style.display =
+                "none";
+
+            watermarkSettings.style.display =
+                "none";
+
+            watermarkActions.style.display =
+                "none";
+
+            selectedFile =
+                null;
+
+            pdfInput.value =
+                "";
+
+            return;
+
+        }
+
+
+        fileName.textContent =
+            selectedFile.name;
+
+        fileSize.textContent =
+            formatFileSize(
+                selectedFile.size
+            );
+
+        fileInfo.style.display =
+            "block";
+
+        watermarkSettings.style.display =
+            "block";
+
+        watermarkActions.style.display =
+            "grid";
+
+        watermarkBtn.disabled =
+            false;
+
+    });
+
+
+    watermarkBtn.addEventListener(
+        "click",
+        async () => {
+
+            if (!selectedFile) {
+                return;
+            }
+
+
+            try {
+
+                watermarkBtn.disabled =
+                    true;
+
+                result.style.display =
+                    "none";
+
+                errorMessage.style.display =
+                    "none";
+
+                errorMessage.textContent =
+                    "";
+
+
+                const text =
+                    watermarkText.value.trim();
+
+
+                if (!text) {
+
+                    throw new Error(
+                        "Please enter watermark text."
+                    );
+
+                }
+
+
+                statusMessage.textContent =
+                    "Adding watermark... Please wait.";
+
+
+                const arrayBuffer =
+                    await selectedFile.arrayBuffer();
+
+
+                const pdfDoc =
+                    await PDFLib.PDFDocument.load(
+                        arrayBuffer
+                    );
+
+
+                const pages =
+                    pdfDoc.getPages();
+
+
+                const font =
+                    await pdfDoc.embedFont(
+                        PDFLib.StandardFonts.HelveticaBold
+                    );
+
+
+                const size =
+                    parseInt(
+                        watermarkSize.value,
+                        10
+                    );
+
+
+                const opacity =
+                    parseFloat(
+                        watermarkOpacity.value
+                    );
+
+
+                const angle =
+                    parseInt(
+                        watermarkAngle.value,
+                        10
+                    );
+
+
+                const position =
+                    watermarkPosition.value;
+
+
+                pages.forEach(page => {
+
+                    const width =
+                        page.getWidth();
+
+                    const height =
+                        page.getHeight();
+
+
+                    const textWidth =
+                        font.widthOfTextAtSize(
+                            text,
+                            size
+                        );
+
+
+                    const textHeight =
+                        font.heightAtSize(
+                            size
+                        );
+
+
+                    const localCenterX =
+                        textWidth / 2;
+
+                    const localCenterY =
+                        textHeight / 2;
+
+
+                    const radians =
+                        angle *
+                        Math.PI /
+                        180;
+
+
+                    const cos =
+                        Math.cos(radians);
+
+                    const sin =
+                        Math.sin(radians);
+
+
+                    const rotatedCenterOffsetX =
+                        (
+                            localCenterX *
+                            cos
+                        ) -
+                        (
+                            localCenterY *
+                            sin
+                        );
+
+
+                    const rotatedCenterOffsetY =
+                        (
+                            localCenterX *
+                            sin
+                        ) +
+                        (
+                            localCenterY *
+                            cos
+                        );
+
+
+                    let targetCenterX;
+
+                    let targetCenterY;
+
+
+                    const margin =
+                        35;
+
+
+                    const absCos =
+                        Math.abs(cos);
+
+                    const absSin =
+                        Math.abs(sin);
+
+
+                    const rotatedWidth =
+                        (
+                            textWidth *
+                            absCos
+                        ) +
+                        (
+                            textHeight *
+                            absSin
+                        );
+
+
+                    const rotatedHeight =
+                        (
+                            textWidth *
+                            absSin
+                        ) +
+                        (
+                            textHeight *
+                            absCos
+                        );
+
+
+                    if (
+                        position ===
+                        "center"
+                    ) {
+
+                        targetCenterX =
+                            width / 2;
+
+                        targetCenterY =
+                            height / 2;
+
+                    }
+
+                    else if (
+                        position ===
+                        "top-left"
+                    ) {
+
+                        targetCenterX =
+                            margin +
+                            rotatedWidth / 2;
+
+                        targetCenterY =
+                            height -
+                            margin -
+                            rotatedHeight / 2;
+
+                    }
+
+                    else if (
+                        position ===
+                        "top-right"
+                    ) {
+
+                        targetCenterX =
+                            width -
+                            margin -
+                            rotatedWidth / 2;
+
+                        targetCenterY =
+                            height -
+                            margin -
+                            rotatedHeight / 2;
+
+                    }
+
+                    else if (
+                        position ===
+                        "bottom-left"
+                    ) {
+
+                        targetCenterX =
+                            margin +
+                            rotatedWidth / 2;
+
+                        targetCenterY =
+                            margin +
+                            rotatedHeight / 2;
+
+                    }
+
+                    else if (
+                        position ===
+                        "bottom-right"
+                    ) {
+
+                        targetCenterX =
+                            width -
+                            margin -
+                            rotatedWidth / 2;
+
+                        targetCenterY =
+                            margin +
+                            rotatedHeight / 2;
+
+                    }
+
+
+                    const x =
+                        targetCenterX -
+                        rotatedCenterOffsetX;
+
+
+                    const y =
+                        targetCenterY -
+                        rotatedCenterOffsetY;
+
+
+                    page.drawText(
+                        text,
+                        {
+                            x: x,
+                            y: y,
+
+                            size: size,
+
+                            font: font,
+
+                            color:
+                                PDFLib.rgb(
+                                    0.35,
+                                    0.35,
+                                    0.35
+                                ),
+
+                            opacity:
+                                opacity,
+
+                            rotate:
+                                PDFLib.degrees(
+                                    angle
+                                )
+                        }
+                    );
+
+                });
+
+
+                const pdfBytes =
+                    await pdfDoc.save();
+
+
+                const blob =
+                    new Blob(
+                        [pdfBytes],
+                        {
+                            type:
+                                "application/pdf"
+                        }
+                    );
+
+
+                if (downloadUrl) {
+
+                    URL.revokeObjectURL(
+                        downloadUrl
+                    );
+
+                }
+
+
+                downloadUrl =
+                    URL.createObjectURL(
+                        blob
+                    );
+
+
+                downloadBtn.href =
+                    downloadUrl;
+
+
+                result.style.display =
+                    "block";
+
+                statusMessage.textContent =
+                    "";
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                errorMessage.textContent =
+                    error.message ||
+                    "Watermark could not be added.";
+
+                errorMessage.style.display =
+                    "block";
+
+                statusMessage.textContent =
+                    "";
+
+
+            } finally {
+
+                watermarkBtn.disabled =
+                    false;
+
+            }
+
+        }
+    );
+
+
+    resetBtn.addEventListener(
+        "click",
+        () => {
+
+            pdfInput.value =
+                "";
+
+            selectedFile =
+                null;
+
+
+            if (downloadUrl) {
+
+                URL.revokeObjectURL(
+                    downloadUrl
+                );
+
+                downloadUrl =
+                    null;
+
+            }
+
+
+            fileName.textContent =
+                "";
+
+            fileSize.textContent =
+                "";
+
+
+            fileInfo.style.display =
+                "none";
+
+            watermarkSettings.style.display =
+                "none";
+
+            watermarkActions.style.display =
+                "none";
+
+
+            watermarkText.value =
+                "CONFIDENTIAL";
+
+            watermarkPosition.value =
+                "center";
+
+            watermarkSize.value =
+                "50";
+
+            watermarkOpacity.value =
+                "0.25";
+
+            watermarkAngle.value =
+                "45";
+
+
+            watermarkBtn.disabled =
+                true;
+
+
+            result.style.display =
+                "none";
+
+            errorMessage.style.display =
+                "none";
+
+            errorMessage.textContent =
+                "";
+
+            statusMessage.textContent =
+                "";
+
+
+            downloadBtn.href =
+                "#";
+
+        }
+    );
+
+
+    function formatFileSize(bytes) {
+
+        if (bytes < 1024) {
+
+            return bytes +
+                " Bytes";
+
+        }
+
+
+        if (
+            bytes <
+            1024 * 1024
+        ) {
+
+            return (
+                bytes /
+                1024
+            ).toFixed(1) +
+                " KB";
+
+        }
+
+
+        return (
+            bytes /
+            (
+                1024 *
+                1024
+            )
+        ).toFixed(2) +
+            " MB";
+
+    }
+
+</script>
+
+
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+        <div class="footer-brand">
+
+            <a class="brand" href="/">
+
+                <span class="brand-mark">F</span>
+
+                <span class="brand-name">
+                    File<span>Vora</span>
+                </span>
+
+            </a>
+
+            <p>
+                Fast, simple online tools for everyday file tasks.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <h3>Company</h3>
+
+            <a href="/about">About Us</a>
+
+            <a href="/contact">Contact Us</a>
+
+            <a href="/security">Security</a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Resources</h3>
+
+            <a href="/blog">Blog</a>
+
+            <a href="/#tools">Tools</a>
+
+            <a href="/faq">FAQ</a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Legal</h3>
+
+            <a href="/privacy">
+                Privacy Policy
+            </a>
+
+            <a href="/terms">
+                Terms of Service
+            </a>
+
+            <a href="/disclaimer">
+                Disclaimer
+            </a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Contact</h3>
+
+            <a href="/contact">Email</a>
+
+            <a href="/contact">Facebook</a>
+
+            <a href="/contact">Instagram</a>
+
+        </div>
+
+    </div>
+
+
+    <div class="container footer-bottom">
+
+        <span>
+            ©
+            <span data-current-year></span>
+            FileVora. All rights reserved.
+        </span>
+
+        <span>
+            All in One Tool.
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script>
+    document
+        .querySelectorAll(
+            "[data-current-year]"
+        )
+        .forEach(
+            el =>
+                el.textContent =
+                    new Date().getFullYear()
+        );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

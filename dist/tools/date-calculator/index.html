@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Date Calculator - FileVora</title>
+    <meta name="description" content="Calculate the difference between dates and add or subtract days with FileVora Date Calculator.">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .date-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .date-action-row .convert-btn{
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .date-reset-btn{
+            background:#ffffff !important;
+            color:#00bc8a !important;
+            border:1px solid #00bc8a !important;
+            box-shadow:none !important;
+        }
+
+        .date-reset-btn:hover{
+            background:#ecfdf8 !important;
+        }
+
+        @media (max-width:600px){
+            .date-action-row{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">DATE</div>
+
+                <h1>Date Calculator</h1>
+
+                <p>
+                    Calculate date differences and add or subtract days easily.
+                </p>
+
+            </div>
+
+
+            <!-- Date Difference -->
+
+            <div style="text-align:left;">
+
+                <h2 style="font-size:20px; color:#111827; margin:0 0 18px;">
+                    Date Difference
+                </h2>
+
+
+                <div style="display:grid; gap:16px;">
+
+                    <div>
+
+                        <label style="display:block; margin-bottom:7px; font-weight:700; color:#111827;">
+                            Start Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="startDate"
+                            style="
+                                width:100%;
+                                box-sizing:border-box;
+                                padding:13px 14px;
+                                border:1px solid #cbd5e1;
+                                border-radius:10px;
+                                font-size:15px;
+                            "
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label style="display:block; margin-bottom:7px; font-weight:700; color:#111827;">
+                            End Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="endDate"
+                            style="
+                                width:100%;
+                                box-sizing:border-box;
+                                padding:13px 14px;
+                                border:1px solid #cbd5e1;
+                                border-radius:10px;
+                                font-size:15px;
+                            "
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="date-action-row">
+
+                    <button
+                        type="button"
+                        class="convert-btn"
+                        id="differenceBtn"
+                    >
+                        Calculate Difference
+                    </button>
+
+                    <button
+                        type="button"
+                        class="convert-btn date-reset-btn"
+                        id="resetDifferenceBtn"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="differenceResult"
+                    class="result"
+                >
+
+                    <h2>Result</h2>
+
+                    <p id="differenceText"></p>
+
+                </div>
+
+            </div>
+
+
+            <hr style="margin:35px 0; border:0; border-top:1px solid #e5e7eb;">
+
+
+            <!-- Add / Subtract -->
+
+            <div style="text-align:left;">
+
+                <h2 style="font-size:20px; color:#111827; margin:0 0 18px;">
+                    Add / Subtract Days
+                </h2>
+
+
+                <div style="display:grid; gap:16px;">
+
+                    <div>
+
+                        <label style="display:block; margin-bottom:7px; font-weight:700; color:#111827;">
+                            Starting Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="baseDate"
+                            style="
+                                width:100%;
+                                box-sizing:border-box;
+                                padding:13px 14px;
+                                border:1px solid #cbd5e1;
+                                border-radius:10px;
+                                font-size:15px;
+                            "
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label style="display:block; margin-bottom:7px; font-weight:700; color:#111827;">
+                            Number of Days
+                        </label>
+
+                        <input
+                            type="number"
+                            id="days"
+                            placeholder="Enter number of days"
+                            min="0"
+                            step="1"
+                            style="
+                                width:100%;
+                                box-sizing:border-box;
+                                padding:13px 14px;
+                                border:1px solid #cbd5e1;
+                                border-radius:10px;
+                                font-size:15px;
+                            "
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label style="display:block; margin-bottom:7px; font-weight:700; color:#111827;">
+                            Operation
+                        </label>
+
+                        <select
+                            id="operation"
+                            style="
+                                width:100%;
+                                padding:13px 14px;
+                                border:1px solid #cbd5e1;
+                                border-radius:10px;
+                                font-size:15px;
+                                background:#fff;
+                            "
+                        >
+                            <option value="add">Add Days</option>
+                            <option value="subtract">Subtract Days</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="date-action-row">
+
+                    <button
+                        type="button"
+                        class="convert-btn"
+                        id="calculateDateBtn"
+                    >
+                        Calculate Date
+                    </button>
+
+                    <button
+                        type="button"
+                        class="convert-btn date-reset-btn"
+                        id="resetDateBtn"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="dateResult"
+                    class="result"
+                >
+
+                    <h2>Result</h2>
+
+                    <p id="dateText"></p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const startDate =
+    document.getElementById("startDate");
+
+const endDate =
+    document.getElementById("endDate");
+
+const differenceBtn =
+    document.getElementById("differenceBtn");
+
+const resetDifferenceBtn =
+    document.getElementById("resetDifferenceBtn");
+
+const differenceResult =
+    document.getElementById("differenceResult");
+
+const differenceText =
+    document.getElementById("differenceText");
+
+
+const baseDate =
+    document.getElementById("baseDate");
+
+const daysInput =
+    document.getElementById("days");
+
+const operation =
+    document.getElementById("operation");
+
+const calculateDateBtn =
+    document.getElementById("calculateDateBtn");
+
+const resetDateBtn =
+    document.getElementById("resetDateBtn");
+
+const dateResult =
+    document.getElementById("dateResult");
+
+const dateText =
+    document.getElementById("dateText");
+
+
+function parseDate(value) {
+
+    const parts =
+        value.split("-");
+
+    return new Date(
+        Number(parts[0]),
+        Number(parts[1]) - 1,
+        Number(parts[2])
+    );
+}
+
+
+function formatDate(date) {
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            year:"numeric",
+            month:"long",
+            day:"numeric"
+        }
+    );
+}
+
+
+/* =========================
+   DATE DIFFERENCE
+========================= */
+
+differenceBtn.addEventListener(
+    "click",
+    function () {
+
+        if (
+            !startDate.value ||
+            !endDate.value
+        ) {
+
+            alert(
+                "Please select both dates."
+            );
+
+            return;
+        }
+
+
+        let start =
+            parseDate(
+                startDate.value
+            );
+
+        let end =
+            parseDate(
+                endDate.value
+            );
+
+
+        if (start > end) {
+
+            [start, end] =
+                [end, start];
+        }
+
+
+        let years =
+            end.getFullYear() -
+            start.getFullYear();
+
+        let months =
+            end.getMonth() -
+            start.getMonth();
+
+        let days =
+            end.getDate() -
+            start.getDate();
+
+
+        if (days < 0) {
+
+            months--;
+
+            const previousMonth =
+                new Date(
+                    end.getFullYear(),
+                    end.getMonth(),
+                    0
+                );
+
+            days +=
+                previousMonth.getDate();
+        }
+
+
+        if (months < 0) {
+
+            years--;
+
+            months += 12;
+        }
+
+
+        const totalMilliseconds =
+            end.getTime() -
+            start.getTime();
+
+
+        const totalDays =
+            Math.round(
+                totalMilliseconds /
+                (1000 * 60 * 60 * 24)
+            );
+
+
+        const totalWeeks =
+            Math.floor(
+                totalDays / 7
+            );
+
+
+        const weekDays =
+            totalDays % 7;
+
+
+        differenceText.innerHTML = `
+            <strong>${years}</strong> Years,
+            <strong>${months}</strong> Months,
+            <strong>${days}</strong> Days
+
+            <br><br>
+
+            Total:
+            <strong>${totalDays.toLocaleString()}</strong> Days
+
+            <br>
+
+            <strong>${totalWeeks.toLocaleString()}</strong> Weeks,
+            <strong>${weekDays}</strong> Days
+        `;
+
+
+        differenceResult.style.display =
+            "block";
+
+    }
+);
+
+
+/* =========================
+   RESET DATE DIFFERENCE
+========================= */
+
+resetDifferenceBtn.addEventListener(
+    "click",
+    function () {
+
+        startDate.value =
+            "";
+
+        endDate.value =
+            "";
+
+        differenceText.innerHTML =
+            "";
+
+        differenceResult.style.display =
+            "none";
+
+        startDate.focus();
+
+    }
+);
+
+
+/* =========================
+   ADD / SUBTRACT DAYS
+========================= */
+
+calculateDateBtn.addEventListener(
+    "click",
+    function () {
+
+        if (!baseDate.value) {
+
+            alert(
+                "Please select a starting date."
+            );
+
+            return;
+        }
+
+
+        const days =
+            parseInt(
+                daysInput.value,
+                10
+            );
+
+
+        if (
+            isNaN(days) ||
+            days < 0
+        ) {
+
+            alert(
+                "Please enter a valid number of days."
+            );
+
+            return;
+        }
+
+
+        const date =
+            parseDate(
+                baseDate.value
+            );
+
+
+        if (
+            operation.value ===
+            "add"
+        ) {
+
+            date.setDate(
+                date.getDate() +
+                days
+            );
+
+        } else {
+
+            date.setDate(
+                date.getDate() -
+                days
+            );
+        }
+
+
+        const operationText =
+            operation.value === "add"
+                ? "after adding"
+                : "after subtracting";
+
+
+        dateText.innerHTML = `
+            The resulting date is:
+
+            <br><br>
+
+            <strong>${formatDate(date)}</strong>
+
+            <br><br>
+
+            ${days.toLocaleString()} days ${operationText}.
+        `;
+
+
+        dateResult.style.display =
+            "block";
+
+    }
+);
+
+
+/* =========================
+   RESET ADD / SUBTRACT
+========================= */
+
+resetDateBtn.addEventListener(
+    "click",
+    function () {
+
+        baseDate.value =
+            "";
+
+        daysInput.value =
+            "";
+
+        operation.value =
+            "add";
+
+        dateText.innerHTML =
+            "";
+
+        dateResult.style.display =
+            "none";
+
+        baseDate.focus();
+
+    }
+);
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+
+        element.textContent =
+            new Date().getFullYear();
+
+    });
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Cropper - FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+      .fv-cropper-page{max-width:none;margin:0;padding:64px 0 84px}
+      .fv-cropper-editor{display:none;margin-top:26px;text-align:center}
+      .fv-cropper-canvas-box{position:relative;display:inline-block;max-width:100%;max-height:460px;line-height:0;overflow:hidden;border:1px solid #e5e7eb;border-radius:12px;background:#f8fafc}
+      #fvCropCanvas{display:block;max-width:100%;max-height:460px;width:auto;height:auto;cursor:crosshair;user-select:none;-webkit-user-select:none}
+      #fvCropSelection{position:absolute;display:none;border:2px solid #fff;box-sizing:border-box;pointer-events:none;box-shadow:0 0 0 99999px rgba(0,0,0,.45)}
+      .fv-cropper-help{margin-top:12px;color:#64748b;font-size:14px}
+      .fv-cropper-controls{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}
+      .fv-cropper-format{grid-column:1/-1;text-align:left}
+      .fv-cropper-format label{display:block;font-weight:700;margin-bottom:8px;color:#111827}
+      .fv-secondary-btn{width:100%;min-height:50px;border:1px solid #d8dde5;border-radius:10px;background:#fff;color:#111827;font-weight:800;cursor:pointer}
+      .fv-secondary-btn:hover{border-color:#00bc8a;color:#00bc8a}
+      .fv-cropper-result{display:none}
+      .fv-cropper-result img{display:block;width:auto;height:auto;max-width:100%;max-height:420px;object-fit:contain;margin:16px auto;border-radius:12px;border:1px solid #e5e7eb;background:#f8fafc}
+      @media(max-width:760px){.fv-cropper-page{padding:38px 0 58px}.fv-cropper-controls{grid-template-columns:1fr}}
+    </style>
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page fv-cropper-page">
+  <div class="container">
+    <section class="converter-card">
+      <div class="converter-header">
+        <div class="tool-icon">CROP</div>
+        <h1>Image Cropper</h1>
+        <p>Crop your image and download the selected area.</p>
+      </div>
+
+      <label class="upload-area fv-cropper-upload" id="fvCropUploadBox" for="fvCropInput">
+        <span class="upload-icon" aria-hidden="true"></span>
+        <strong>Click to upload an image</strong>
+        <span>JPG, PNG, WEBP and other common image formats</span>
+      </label>
+      <input type="file" id="fvCropInput" accept="image/*" hidden>
+
+      <div class="fv-cropper-editor" id="fvCropEditor">
+        <div class="fv-cropper-canvas-box" id="fvCropCanvasBox">
+          <canvas id="fvCropCanvas"></canvas>
+          <div id="fvCropSelection"></div>
+        </div>
+        <div class="fv-cropper-help">Click and drag on the image to select the area you want to crop.</div>
+        <div class="fv-cropper-controls">
+          <div class="fv-cropper-format">
+            <label for="fvCropFormat">Output format</label>
+            <select id="fvCropFormat">
+              <option value="image/jpeg">JPG</option>
+              <option value="image/png">PNG</option>
+              <option value="image/webp">WEBP</option>
+            </select>
+          </div>
+          <button type="button" id="fvCropButton" class="convert-btn">Crop Image</button>
+          <button type="button" id="fvCropReset" class="fv-secondary-btn">Reset</button>
+        </div>
+      </div>
+
+      <div class="fv-cropper-result result" id="fvCropResult">
+        <h2>Cropped Image</h2>
+        <img id="fvCropResultImage" alt="Cropped image">
+        <a id="fvCropDownload" class="download-btn" href="#" download>Download Cropped Image</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+    const cropInput = document.getElementById("fvCropInput");
+    const uploadBox = document.getElementById("fvCropUploadBox");
+    const editor = document.getElementById("fvCropEditor");
+
+    const canvas = document.getElementById("fvCropCanvas");
+    const canvasBox = document.getElementById("fvCropCanvasBox");
+    const selection = document.getElementById("fvCropSelection");
+
+    const cropButton = document.getElementById("fvCropButton");
+    const resetButton = document.getElementById("fvCropReset");
+
+    const formatSelect = document.getElementById("fvCropFormat");
+
+    const result = document.getElementById("fvCropResult");
+    const resultImage = document.getElementById("fvCropResultImage");
+    const downloadButton = document.getElementById("fvCropDownload");
+
+    const ctx = canvas.getContext("2d");
+
+    let image = null;
+
+    let selecting = false;
+
+    let startX = 0;
+    let startY = 0;
+
+    let endX = 0;
+    let endY = 0;
+
+    let selectionReady = false;
+
+
+    /*
+     * Upload image
+     */
+
+    cropInput.addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+
+            const img = new Image();
+
+            img.onload = function () {
+
+                image = img;
+
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+
+                ctx.clearRect(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                ctx.drawImage(
+                    img,
+                    0,
+                    0
+                );
+
+                uploadBox.style.display = "none";
+                editor.style.display = "block";
+
+                result.style.display = "none";
+
+                selection.style.display = "none";
+
+                selectionReady = false;
+
+                startX = 0;
+                startY = 0;
+                endX = 0;
+                endY = 0;
+            };
+
+            img.src = event.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+
+    /*
+     * Get coordinates correctly even when
+     * the image is displayed smaller than
+     * its original size.
+     */
+
+    function getPosition(event) {
+
+        const rect = canvas.getBoundingClientRect();
+
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        let x = (event.clientX - rect.left) * scaleX;
+        let y = (event.clientY - rect.top) * scaleY;
+
+        x = Math.max(0, Math.min(x, canvas.width));
+        y = Math.max(0, Math.min(y, canvas.height));
+
+        return {
+            x: x,
+            y: y
+        };
+    }
+
+
+    /*
+     * Start selection
+     */
+
+    canvas.addEventListener("mousedown", function (event) {
+
+        if (!image) {
+            return;
+        }
+
+        const pos = getPosition(event);
+
+        startX = pos.x;
+        startY = pos.y;
+
+        endX = pos.x;
+        endY = pos.y;
+
+        selecting = true;
+        selectionReady = false;
+
+        selection.style.display = "block";
+
+        updateSelection();
+    });
+
+
+    /*
+     * Move selection
+     */
+
+    canvas.addEventListener("mousemove", function (event) {
+
+        if (!selecting) {
+            return;
+        }
+
+        const pos = getPosition(event);
+
+        endX = pos.x;
+        endY = pos.y;
+
+        updateSelection();
+    });
+
+
+    /*
+     * Finish selection
+     */
+
+    window.addEventListener("mouseup", function () {
+
+        if (!selecting) {
+            return;
+        }
+
+        selecting = false;
+
+        const width = Math.abs(endX - startX);
+        const height = Math.abs(endY - startY);
+
+        if (width >= 5 && height >= 5) {
+            selectionReady = true;
+        } else {
+            selectionReady = false;
+            selection.style.display = "none";
+        }
+    });
+
+
+    /*
+     * Update visual selection box
+     */
+
+    function updateSelection() {
+
+        const rect = canvas.getBoundingClientRect();
+
+        const displayScaleX = rect.width / canvas.width;
+        const displayScaleY = rect.height / canvas.height;
+
+        const x = Math.min(startX, endX);
+        const y = Math.min(startY, endY);
+
+        const width = Math.abs(endX - startX);
+        const height = Math.abs(endY - startY);
+
+        selection.style.left =
+            (x * displayScaleX) + "px";
+
+        selection.style.top =
+            (y * displayScaleY) + "px";
+
+        selection.style.width =
+            (width * displayScaleX) + "px";
+
+        selection.style.height =
+            (height * displayScaleY) + "px";
+    }
+
+
+    /*
+     * Crop
+     */
+
+    cropButton.addEventListener("click", function () {
+
+        if (!image) {
+            alert("Please upload an image first.");
+            return;
+        }
+
+        if (!selectionReady) {
+            alert("Please select an area to crop.");
+            return;
+        }
+
+        const x = Math.min(startX, endX);
+        const y = Math.min(startY, endY);
+
+        const width = Math.abs(endX - startX);
+        const height = Math.abs(endY - startY);
+
+        if (width < 5 || height < 5) {
+            alert("Please select a larger area.");
+            return;
+        }
+
+
+        const outputCanvas =
+            document.createElement("canvas");
+
+        outputCanvas.width = Math.round(width);
+        outputCanvas.height = Math.round(height);
+
+        const outputCtx =
+            outputCanvas.getContext("2d");
+
+
+        /*
+         * PNG transparency support
+         */
+
+        if (formatSelect.value === "image/jpeg") {
+
+            outputCtx.fillStyle = "#ffffff";
+
+            outputCtx.fillRect(
+                0,
+                0,
+                outputCanvas.width,
+                outputCanvas.height
+            );
+        }
+
+
+        outputCtx.drawImage(
+            canvas,
+            x,
+            y,
+            width,
+            height,
+            0,
+            0,
+            outputCanvas.width,
+            outputCanvas.height
+        );
+
+
+        const format = formatSelect.value;
+
+        const quality =
+            format === "image/png" ? 1 : 0.92;
+
+
+        outputCanvas.toBlob(
+            function (blob) {
+
+                if (!blob) {
+                    alert("Could not create the cropped image.");
+                    return;
+                }
+
+                const url =
+                    URL.createObjectURL(blob);
+
+                resultImage.src = url;
+
+                let extension = "jpg";
+
+                if (format === "image/png") {
+                    extension = "png";
+                }
+
+                if (format === "image/webp") {
+                    extension = "webp";
+                }
+
+
+                downloadButton.href = url;
+
+                downloadButton.download =
+                    "filevora-cropped-image." + extension;
+
+                downloadButton.style.display =
+                    "inline-block";
+
+                result.style.display = "block";
+
+                result.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+            },
+            format,
+            quality
+        );
+    });
+
+
+    /*
+     * Reset
+     */
+
+    resetButton.addEventListener("click", function () {
+
+        cropInput.value = "";
+
+        image = null;
+
+        selecting = false;
+        selectionReady = false;
+
+        ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+        selection.style.display = "none";
+
+        editor.style.display = "none";
+
+        result.style.display = "none";
+
+        uploadBox.style.display = "block";
+    });
+</script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>
+

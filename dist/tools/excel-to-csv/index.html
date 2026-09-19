@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Excel to CSV Converter - FileVora</title>
+    <meta name="description" content="Convert Excel XLSX and XLS files to CSV format quickly and easily with FileVora.">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .excel-csv-action-row{
+            display:none;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .excel-csv-action-row .convert-btn{
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .excel-csv-reset-btn{
+            background:#ffffff !important;
+            color:#00bc8a !important;
+            border:1px solid #00bc8a !important;
+            box-shadow:none !important;
+        }
+
+        .excel-csv-reset-btn:hover{
+            background:#ecfdf8 !important;
+        }
+
+        .csv-result-actions{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:15px;
+        }
+
+        .csv-result-actions .download-btn{
+            width:100% !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+            text-align:center !important;
+        }
+
+        @media (max-width:600px){
+            .excel-csv-action-row,
+            .csv-result-actions{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+      <span class="brand-mark">F</span>
+      <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalToolsBtn"
+      >
+        Tools
+      </button>
+
+      <button
+        type="button"
+        class="header-nav-btn"
+        id="globalCategoriesBtn"
+      >
+        Categories
+      </button>
+
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">
+      Contact
+    </a>
+
+  </div>
+</header>
+
+
+<div
+  class="global-tool-panel"
+  id="globalToolPanel"
+>
+  <div class="global-tool-inner">
+
+    <input
+      type="text"
+      class="global-tool-search"
+      id="globalToolSearch"
+      placeholder="Search a tool..."
+      autocomplete="off"
+    >
+
+    <div
+      class="global-tool-results"
+      id="globalToolResults"
+    ></div>
+
+  </div>
+</div>
+
+
+<div
+  class="global-category-panel"
+  id="globalCategoryPanel"
+>
+
+  <div class="global-category-grid">
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Image Tools"
+    >
+      Image Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="PDF Tools"
+    >
+      PDF Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Text Tools"
+    >
+      Text Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Calculators & Utilities"
+    >
+      Calculators & Utilities
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Developer Tools"
+    >
+      Developer Tools
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Security & Utility"
+    >
+      Security & Utility
+    </button>
+
+    <button
+      type="button"
+      class="global-category-btn"
+      data-category="Audio & Voice"
+    >
+      Audio & Voice
+    </button>
+
+  </div>
+
+  <div
+    class="category-tools-box"
+    id="categoryToolsBox"
+  >
+
+    <h3
+      class="category-tools-title"
+      id="categoryToolsTitle"
+    ></h3>
+
+    <div
+      class="category-tools-grid"
+      id="categoryToolsGrid"
+    ></div>
+
+  </div>
+
+</div>
+
+<main class="converter-page">
+
+    <div class="container">
+
+        <div class="converter-card">
+
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    XLS
+                </div>
+
+                <h1>Excel to CSV Converter</h1>
+
+                <p>
+                    Convert Excel XLSX or XLS files into CSV format quickly and easily.
+                </p>
+
+            </div>
+
+
+            <label
+                class="upload-area"
+                for="excelInput"
+            >
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+                <strong>
+                    Click to upload Excel file
+                </strong>
+
+                <span>
+                    Supports .xlsx and .xls files
+                </span>
+
+            </label>
+
+
+            <input
+                type="file"
+                id="excelInput"
+                accept=".xlsx,.xls"
+            >
+
+
+            <div
+                class="file-info"
+                id="fileInfo"
+                style="display:none;"
+            >
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <div
+                class="excel-csv-action-row"
+                id="actionRow"
+            >
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="convertBtn"
+                >
+                    Convert to CSV
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn excel-csv-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2>
+                    Conversion Complete
+                </h2>
+
+                <p id="resultInfo">
+                    Your Excel file has been converted to CSV successfully.
+                </p>
+
+
+                <textarea
+                    id="csvOutput"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:220px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        background:#ffffff;
+                    "
+                ></textarea>
+
+
+                <div class="csv-result-actions">
+
+                    <button
+                        type="button"
+                        class="download-btn"
+                        id="copyBtn"
+                    >
+                        Copy CSV
+                    </button>
+
+                    <a
+                        href="#"
+                        class="download-btn"
+                        id="downloadBtn"
+                    >
+                        Download CSV
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const excelInput =
+    document.getElementById("excelInput");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const actionRow =
+    document.getElementById("actionRow");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultInfo =
+    document.getElementById("resultInfo");
+
+const csvOutput =
+    document.getElementById("csvOutput");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let selectedFile =
+    null;
+
+let currentDownloadUrl =
+    null;
+
+
+/* =========================
+   FILE SELECT
+========================= */
+
+excelInput.addEventListener(
+    "change",
+    function () {
+
+        selectedFile =
+            this.files[0];
+
+
+        if (!selectedFile) {
+
+            fileInfo.style.display =
+                "none";
+
+            actionRow.style.display =
+                "none";
+
+            result.style.display =
+                "none";
+
+            return;
+        }
+
+
+        fileName.textContent =
+            selectedFile.name;
+
+
+        fileSize.textContent =
+            (
+                selectedFile.size /
+                1024
+            ).toFixed(2) +
+            " KB";
+
+
+        fileInfo.style.display =
+            "block";
+
+
+        actionRow.style.display =
+            "grid";
+
+
+        convertBtn.disabled =
+            false;
+
+
+        convertBtn.textContent =
+            "Convert to CSV";
+
+
+        result.style.display =
+            "none";
+
+
+        csvOutput.value =
+            "";
+
+    }
+);
+
+
+/* =========================
+   CONVERT TO CSV
+========================= */
+
+convertBtn.addEventListener(
+    "click",
+    function () {
+
+        if (!selectedFile) {
+
+            alert(
+                "Please select an Excel file first."
+            );
+
+            return;
+        }
+
+
+        convertBtn.disabled =
+            true;
+
+
+        convertBtn.textContent =
+            "Converting...";
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            function (event) {
+
+                try {
+
+                    const data =
+                        new Uint8Array(
+                            event.target.result
+                        );
+
+
+                    const workbook =
+                        XLSX.read(
+                            data,
+                            {
+                                type:"array"
+                            }
+                        );
+
+
+                    if (
+                        !workbook.SheetNames.length
+                    ) {
+
+                        throw new Error(
+                            "No worksheet found in this Excel file."
+                        );
+                    }
+
+
+                    const firstSheetName =
+                        workbook.SheetNames[0];
+
+
+                    const worksheet =
+                        workbook.Sheets[
+                            firstSheetName
+                        ];
+
+
+                    const csv =
+                        XLSX.utils.sheet_to_csv(
+                            worksheet
+                        );
+
+
+                    if (
+                        !csv.trim()
+                    ) {
+
+                        throw new Error(
+                            "No data found in the first worksheet."
+                        );
+                    }
+
+
+                    csvOutput.value =
+                        csv;
+
+
+                    const blob =
+                        new Blob(
+                            [csv],
+                            {
+                                type:
+                                    "text/csv;charset=utf-8;"
+                            }
+                        );
+
+
+                    if (
+                        currentDownloadUrl
+                    ) {
+
+                        URL.revokeObjectURL(
+                            currentDownloadUrl
+                        );
+                    }
+
+
+                    currentDownloadUrl =
+                        URL.createObjectURL(
+                            blob
+                        );
+
+
+                    downloadBtn.href =
+                        currentDownloadUrl;
+
+
+                    downloadBtn.download =
+                        selectedFile.name.replace(
+                            /\.(xlsx|xls)$/i,
+                            ""
+                        ) +
+                        ".csv";
+
+
+                    const rowCount =
+                        csv
+                            .trim()
+                            .split(/\r?\n/)
+                            .length;
+
+
+                    resultInfo.textContent =
+                        `Successfully converted ${rowCount} rows to CSV.`;
+
+
+                    result.style.display =
+                        "block";
+
+
+                    result.scrollIntoView({
+                        behavior:"smooth",
+                        block:"nearest"
+                    });
+
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+
+                    alert(
+                        "Unable to convert this Excel file. " +
+                        error.message
+                    );
+
+
+                    result.style.display =
+                        "none";
+
+
+                    csvOutput.value =
+                        "";
+
+                } finally {
+
+                    convertBtn.disabled =
+                        false;
+
+
+                    convertBtn.textContent =
+                        "Convert to CSV";
+                }
+
+            };
+
+
+        reader.onerror =
+            function () {
+
+                alert(
+                    "Unable to read this Excel file."
+                );
+
+
+                convertBtn.disabled =
+                    false;
+
+
+                convertBtn.textContent =
+                    "Convert to CSV";
+            };
+
+
+        reader.readAsArrayBuffer(
+            selectedFile
+        );
+
+    }
+);
+
+
+/* =========================
+   COPY CSV
+========================= */
+
+copyBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (!csvOutput.value) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                csvOutput.value
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy CSV";
+
+                },
+                1500
+            );
+
+
+        } catch (error) {
+
+            csvOutput.select();
+
+
+            document.execCommand(
+                "copy"
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy CSV";
+
+                },
+                1500
+            );
+        }
+
+    }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        excelInput.value =
+            "";
+
+
+        selectedFile =
+            null;
+
+
+        fileName.textContent =
+            "";
+
+
+        fileSize.textContent =
+            "";
+
+
+        fileInfo.style.display =
+            "none";
+
+
+        actionRow.style.display =
+            "none";
+
+
+        csvOutput.value =
+            "";
+
+
+        result.style.display =
+            "none";
+
+
+        resultInfo.textContent =
+            "Your Excel file has been converted to CSV successfully.";
+
+
+        copyBtn.textContent =
+            "Copy CSV";
+
+
+        convertBtn.disabled =
+            false;
+
+
+        convertBtn.textContent =
+            "Convert to CSV";
+
+
+        if (
+            currentDownloadUrl
+        ) {
+
+            URL.revokeObjectURL(
+                currentDownloadUrl
+            );
+
+
+            currentDownloadUrl =
+                null;
+        }
+
+
+        downloadBtn.href =
+            "#";
+
+
+        downloadBtn.removeAttribute(
+            "download"
+        );
+
+    }
+);
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date().getFullYear();
+
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+</body>
+</html>
