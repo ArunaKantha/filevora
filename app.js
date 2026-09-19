@@ -4,6 +4,7 @@ require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const SITE_URL = "https://filevora-olive.vercel.app";
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -52,9 +53,15 @@ app.use((req, res, next) => {
                 typeof html === "string" &&
                 html.includes("</head>")
             ) {
+                const canonicalPath = req.path === "/"
+                    ? "/"
+                    : req.path.replace(/\/+$/, "");
+                const canonicalUrl = SITE_URL + canonicalPath;
+
                 html = html.replace(
     "</head>",
-    `<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+    `<link rel="canonical" href="${canonicalUrl}">
+<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
 </head>`
 );
             }

@@ -8,6 +8,7 @@ const publicDir = path.join(root, "public");
 const outputDir = path.join(root, "dist");
 const appSource = fs.readFileSync(path.join(root, "app.js"), "utf8");
 const adTag = '<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>';
+const siteUrl = "https://filevora-olive.vercel.app";
 
 function routeForView(view) {
     if (view === "index") return "/";
@@ -51,6 +52,10 @@ async function main() {
         if (!route) continue;
 
         let html = await ejs.renderFile(path.join(viewsDir, file), {});
+        const canonicalTag = `<link rel="canonical" href="${siteUrl}${route}">`;
+        if (html.includes("</head>") && !html.includes('rel="canonical"')) {
+            html = html.replace("</head>", `${canonicalTag}\n</head>`);
+        }
         if (html.includes("</head>") && !html.includes("quge5.com/88/tag.min.js")) {
             html = html.replace("</head>", `${adTag}\n</head>`);
         }
