@@ -90,6 +90,7 @@
                     class="convert-btn"
                     id="encodeBtn"
                     style="margin-top:0;"
+                    aria-pressed="true"
                 >
                     Encode URL
                 </button>
@@ -99,8 +100,9 @@
                     id="decodeBtn"
                     style="
                         margin-top:0;
-                        background:#475569;
+                        background:#64748b !important;
                     "
+                    aria-pressed="false"
                 >
                     Decode URL
                 </button>
@@ -154,6 +156,15 @@ const outputText = document.getElementById("outputText");
 const copyBtn = document.getElementById("copyBtn");
 const resetBtn = document.getElementById("resetBtn");
 
+function setActiveOperation(operation) {
+    const isEncode = operation === "encode";
+
+    encodeBtn.style.setProperty("background", isEncode ? "#ef1f2b" : "#64748b", "important");
+    decodeBtn.style.setProperty("background", isEncode ? "#64748b" : "#ef1f2b", "important");
+    encodeBtn.setAttribute("aria-pressed", String(isEncode));
+    decodeBtn.setAttribute("aria-pressed", String(!isEncode));
+}
+
 function showResult(title, info, value) {
 
     resultTitle.textContent = title;
@@ -176,6 +187,8 @@ encodeBtn.addEventListener("click", () => {
         alert("Please enter some text or a URL first.");
         return;
     }
+
+    setActiveOperation("encode");
 
     try {
 
@@ -205,6 +218,8 @@ decodeBtn.addEventListener("click", () => {
         alert("Please enter encoded text first.");
         return;
     }
+
+    setActiveOperation("decode");
 
     try {
 
@@ -259,6 +274,7 @@ resetBtn.addEventListener("click", () => {
     resultTitle.textContent = "Result";
     resultInfo.textContent = "";
     result.style.display = "none";
+    setActiveOperation("encode");
     textInput.focus();
 });
 </script>
@@ -280,4 +296,3 @@ resetBtn.addEventListener("click", () => {
 
 </body>
 </html>
-
