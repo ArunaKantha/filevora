@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -34,7 +34,7 @@
         }
 
         .watermark-input:focus {
-            border-color: #2563eb;
+            border-color: #ef1f2b;
         }
 
         .settings-grid {
@@ -67,7 +67,25 @@
 
         .setting-group select:focus,
         .setting-group input:focus {
-            border-color: #2563eb;
+            border-color: #ef1f2b;
+        }
+
+        .watermark-actions {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .reset-btn {
+            background: #ffffff !important;
+            color: #ef1f2b !important;
+            border: 1px solid #ef1f2b !important;
+            box-shadow: none !important;
+        }
+
+        .reset-btn:hover {
+            background: #fff5f5 !important;
         }
 
         .status-message {
@@ -88,14 +106,20 @@
         }
 
         @media (max-width: 600px) {
-            .settings-grid {
+            .settings-grid,
+            .watermark-actions {
                 grid-template-columns: 1fr;
             }
         }
     </style>
+
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
 </head>
 
-<body>
+<body class="pdf-tool">
+
+<%- include("partials/tool-header") %>
 
 <main class="converter-page">
 
@@ -118,7 +142,7 @@
 
             <label class="upload-area" for="pdfInput">
 
-                <div class="upload-icon">📄</div>
+                <div class="upload-icon">↑</div>
 
                 <strong>Choose a PDF file</strong>
 
@@ -142,7 +166,11 @@
             </div>
 
 
-            <div class="watermark-settings">
+            <div
+                class="watermark-settings"
+                id="watermarkSettings"
+                style="display:none;"
+            >
 
                 <label
                     class="setting-title"
@@ -283,13 +311,29 @@
             </div>
 
 
-            <button
-                class="convert-btn"
-                id="watermarkBtn"
-                disabled
+            <div
+                class="watermark-actions"
+                id="watermarkActions"
             >
-                Add Watermark
-            </button>
+
+                <button
+                    class="convert-btn"
+                    id="watermarkBtn"
+                    type="button"
+                    disabled
+                >
+                    Add Watermark
+                </button>
+
+                <button
+                    class="convert-btn reset-btn"
+                    id="resetBtn"
+                    type="button"
+                >
+                    Reset
+                </button>
+
+            </div>
 
 
             <div
@@ -317,14 +361,13 @@
                     Your watermarked PDF is ready to download.
                 </p>
 
-
                 <a
                     href="#"
                     id="downloadBtn"
                     class="download-btn"
                     download="filevora-watermarked.pdf"
                 >
-                    ↓ Download Watermarked PDF
+                    Download Watermarked PDF
                 </a>
 
             </div>
@@ -371,6 +414,15 @@
     const watermarkBtn =
         document.getElementById("watermarkBtn");
 
+    const resetBtn =
+        document.getElementById("resetBtn");
+
+    const watermarkSettings =
+        document.getElementById("watermarkSettings");
+
+    const watermarkActions =
+        document.getElementById("watermarkActions");
+
     const downloadBtn =
         document.getElementById("downloadBtn");
 
@@ -394,24 +446,57 @@
         selectedFile =
             pdfInput.files[0];
 
-        result.style.display = "none";
+        result.style.display =
+            "none";
 
-        errorMessage.style.display = "none";
+        errorMessage.style.display =
+            "none";
 
-        statusMessage.textContent = "";
+        errorMessage.textContent =
+            "";
+
+        statusMessage.textContent =
+            "";
+
+
+        if (downloadUrl) {
+
+            URL.revokeObjectURL(
+                downloadUrl
+            );
+
+            downloadUrl =
+                null;
+
+            downloadBtn.href =
+                "#";
+
+        }
 
 
         if (!selectedFile) {
 
-            watermarkBtn.disabled = true;
+            watermarkBtn.disabled =
+                true;
 
-            fileInfo.style.display = "none";
+            fileInfo.style.display =
+                "none";
+
+            watermarkSettings.style.display =
+                "none";
+
+            watermarkActions.style.display =
+                "none";
 
             return;
+
         }
 
 
-        if (selectedFile.type !== "application/pdf") {
+        if (
+            selectedFile.type !==
+            "application/pdf"
+        ) {
 
             errorMessage.textContent =
                 "Please select a valid PDF file.";
@@ -419,11 +504,26 @@
             errorMessage.style.display =
                 "block";
 
-            watermarkBtn.disabled = true;
+            watermarkBtn.disabled =
+                true;
 
-            fileInfo.style.display = "none";
+            fileInfo.style.display =
+                "none";
+
+            watermarkSettings.style.display =
+                "none";
+
+            watermarkActions.style.display =
+                "none";
+
+            selectedFile =
+                null;
+
+            pdfInput.value =
+                "";
 
             return;
+
         }
 
 
@@ -437,6 +537,12 @@
 
         fileInfo.style.display =
             "block";
+
+        watermarkSettings.style.display =
+            "block";
+
+        watermarkActions.style.display =
+            "grid";
 
         watermarkBtn.disabled =
             false;
@@ -463,6 +569,9 @@
 
                 errorMessage.style.display =
                     "none";
+
+                errorMessage.textContent =
+                    "";
 
 
                 const text =
@@ -526,9 +635,6 @@
                     watermarkPosition.value;
 
 
-                /*
-                 * Process every PDF page.
-                 */
                 pages.forEach(page => {
 
                     const width =
@@ -538,9 +644,6 @@
                         page.getHeight();
 
 
-                    /*
-                     * Exact text dimensions.
-                     */
                     const textWidth =
                         font.widthOfTextAtSize(
                             text,
@@ -548,22 +651,12 @@
                         );
 
 
-                    /*
-                     * PDF font height.
-                     */
                     const textHeight =
                         font.heightAtSize(
                             size
                         );
 
 
-                    /*
-                     * Text center relative to
-                     * drawText() origin.
-                     *
-                     * drawText() origin is the
-                     * lower-left text position.
-                     */
                     const localCenterX =
                         textWidth / 2;
 
@@ -571,9 +664,6 @@
                         textHeight / 2;
 
 
-                    /*
-                     * Rotation.
-                     */
                     const radians =
                         angle *
                         Math.PI /
@@ -587,44 +677,37 @@
                         Math.sin(radians);
 
 
-                    /*
-                     * Calculate the position of
-                     * the text center after rotation.
-                     *
-                     * This is the important part.
-                     */
                     const rotatedCenterOffsetX =
                         (
-                            localCenterX * cos
+                            localCenterX *
+                            cos
                         ) -
                         (
-                            localCenterY * sin
+                            localCenterY *
+                            sin
                         );
 
 
                     const rotatedCenterOffsetY =
                         (
-                            localCenterX * sin
+                            localCenterX *
+                            sin
                         ) +
                         (
-                            localCenterY * cos
+                            localCenterY *
+                            cos
                         );
 
 
-                    /*
-                     * Decide where the CENTER of
-                     * the watermark should be.
-                     */
                     let targetCenterX;
+
                     let targetCenterY;
 
 
-                    const margin = 35;
+                    const margin =
+                        35;
 
 
-                    /*
-                     * Rotated bounding dimensions.
-                     */
                     const absCos =
                         Math.abs(cos);
 
@@ -634,27 +717,29 @@
 
                     const rotatedWidth =
                         (
-                            textWidth * absCos
+                            textWidth *
+                            absCos
                         ) +
                         (
-                            textHeight * absSin
+                            textHeight *
+                            absSin
                         );
 
 
                     const rotatedHeight =
                         (
-                            textWidth * absSin
+                            textWidth *
+                            absSin
                         ) +
                         (
-                            textHeight * absCos
+                            textHeight *
+                            absCos
                         );
 
 
-                    /*
-                     * CENTER
-                     */
                     if (
-                        position === "center"
+                        position ===
+                        "center"
                     ) {
 
                         targetCenterX =
@@ -665,15 +750,9 @@
 
                     }
 
-
-                    /*
-                     * TOP LEFT
-                     *
-                     * The entire rotated watermark
-                     * stays inside the page.
-                     */
                     else if (
-                        position === "top-left"
+                        position ===
+                        "top-left"
                     ) {
 
                         targetCenterX =
@@ -687,12 +766,9 @@
 
                     }
 
-
-                    /*
-                     * TOP RIGHT
-                     */
                     else if (
-                        position === "top-right"
+                        position ===
+                        "top-right"
                     ) {
 
                         targetCenterX =
@@ -707,12 +783,9 @@
 
                     }
 
-
-                    /*
-                     * BOTTOM LEFT
-                     */
                     else if (
-                        position === "bottom-left"
+                        position ===
+                        "bottom-left"
                     ) {
 
                         targetCenterX =
@@ -725,12 +798,9 @@
 
                     }
 
-
-                    /*
-                     * BOTTOM RIGHT
-                     */
                     else if (
-                        position === "bottom-right"
+                        position ===
+                        "bottom-right"
                     ) {
 
                         targetCenterX =
@@ -745,11 +815,6 @@
                     }
 
 
-                    /*
-                     * Convert the desired CENTER
-                     * into the x/y origin required
-                     * by pdf-lib drawText().
-                     */
                     const x =
                         targetCenterX -
                         rotatedCenterOffsetX;
@@ -760,9 +825,6 @@
                         rotatedCenterOffsetY;
 
 
-                    /*
-                     * Draw watermark.
-                     */
                     page.drawText(
                         text,
                         {
@@ -780,7 +842,8 @@
                                     0.35
                                 ),
 
-                            opacity: opacity,
+                            opacity:
+                                opacity,
 
                             rotate:
                                 PDFLib.degrees(
@@ -792,9 +855,6 @@
                 });
 
 
-                /*
-                 * Save PDF.
-                 */
                 const pdfBytes =
                     await pdfDoc.save();
 
@@ -809,9 +869,6 @@
                     );
 
 
-                /*
-                 * Remove old download URL.
-                 */
                 if (downloadUrl) {
 
                     URL.revokeObjectURL(
@@ -852,12 +909,93 @@
                 statusMessage.textContent =
                     "";
 
+
             } finally {
 
                 watermarkBtn.disabled =
                     false;
 
             }
+
+        }
+    );
+
+
+    resetBtn.addEventListener(
+        "click",
+        () => {
+
+            pdfInput.value =
+                "";
+
+            selectedFile =
+                null;
+
+
+            if (downloadUrl) {
+
+                URL.revokeObjectURL(
+                    downloadUrl
+                );
+
+                downloadUrl =
+                    null;
+
+            }
+
+
+            fileName.textContent =
+                "";
+
+            fileSize.textContent =
+                "";
+
+
+            fileInfo.style.display =
+                "none";
+
+            watermarkSettings.style.display =
+                "none";
+
+            watermarkActions.style.display =
+                "none";
+
+
+            watermarkText.value =
+                "CONFIDENTIAL";
+
+            watermarkPosition.value =
+                "center";
+
+            watermarkSize.value =
+                "50";
+
+            watermarkOpacity.value =
+                "0.25";
+
+            watermarkAngle.value =
+                "45";
+
+
+            watermarkBtn.disabled =
+                true;
+
+
+            result.style.display =
+                "none";
+
+            errorMessage.style.display =
+                "none";
+
+            errorMessage.textContent =
+                "";
+
+            statusMessage.textContent =
+                "";
+
+
+            downloadBtn.href =
+                "#";
 
         }
     );
@@ -873,10 +1011,14 @@
         }
 
 
-        if (bytes < 1024 * 1024) {
+        if (
+            bytes <
+            1024 * 1024
+        ) {
 
             return (
-                bytes / 1024
+                bytes /
+                1024
             ).toFixed(1) +
                 " KB";
 
@@ -885,13 +1027,133 @@
 
         return (
             bytes /
-            (1024 * 1024)
+            (
+                1024 *
+                1024
+            )
         ).toFixed(2) +
             " MB";
 
     }
 
 </script>
+
+
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+        <div class="footer-brand">
+
+            <a class="brand" href="/">
+
+                <span class="brand-mark">F</span>
+
+                <span class="brand-name">
+                    File<span>Vora</span>
+                </span>
+
+            </a>
+
+            <p>
+                Fast, simple online tools for everyday file tasks.
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <h3>Company</h3>
+
+            <a href="/about">About Us</a>
+
+            <a href="/contact">Contact Us</a>
+
+            <a href="/security">Security</a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Resources</h3>
+
+            <a href="/blog">Blog</a>
+
+            <a href="/#tools">Tools</a>
+
+            <a href="/faq">FAQ</a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Legal</h3>
+
+            <a href="/privacy">
+                Privacy Policy
+            </a>
+
+            <a href="/terms">
+                Terms of Service
+            </a>
+
+            <a href="/disclaimer">
+                Disclaimer
+            </a>
+
+        </div>
+
+
+        <div>
+
+            <h3>Contact</h3>
+
+            <a href="/contact">Email</a>
+
+            <a href="/contact">Facebook</a>
+
+            <a href="/contact">Instagram</a>
+
+        </div>
+
+    </div>
+
+
+    <div class="container footer-bottom">
+
+        <span>
+            ©
+            <span data-current-year></span>
+            FileVora. All rights reserved.
+        </span>
+
+        <span>
+            All in One Tool.
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script>
+    document
+        .querySelectorAll(
+            "[data-current-year]"
+        )
+        .forEach(
+            el =>
+                el.textContent =
+                    new Date().getFullYear()
+        );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

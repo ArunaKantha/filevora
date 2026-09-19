@@ -1,37 +1,103 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="description" content="Protect PDF files with a password online for free with FileVora.">
+    <meta
+        name="description"
+        content="Protect PDF files with a password online for free with FileVora."
+    >
 
     <title>Protect PDF — FileVora</title>
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
 
+    <!-- pdf-lib must load first -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+    <!-- Real PDF encryption -->
+    <script src="/vendor/pdf-encrypt/pdf-encrypt.umd.js"></script>
+
+    <style>
+        #protectControls {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        #protectControls label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        #protectControls input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        #protectControls input:focus {
+            border-color: #ef233c;
+        }
+
+        #confirmLabel {
+            margin-top: 16px;
+        }
+
+        #protectActions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        #protectActions #protectBtn,
+        #protectActions #resetBtn {
+            width: 100% !important;
+            height: 50px !important;
+            min-height: 50px !important;
+            margin: 0 !important;
+            padding: 0 20px !important;
+            box-sizing: border-box !important;
+        }
+
+        #protectActions #resetBtn {
+            background: #ffffff !important;
+            color: #ef233c !important;
+            border: 1px solid #ef233c !important;
+            box-shadow: none !important;
+        }
+
+        #protectActions #resetBtn:hover {
+            background: #fff5f6 !important;
+            color: #ef233c !important;
+        }
+
+        #protectActions #protectBtn:disabled {
+            display: flex !important;
+        }
+
+        @media (max-width: 600px) {
+            #protectActions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
-<body>
+<body class="pdf-tool">
 
-<header class="site-header">
-    <div class="container nav">
-
-        <a class="brand" href="/">
-            <span class="brand-mark">F</span>
-            <span>File<span>Vora</span></span>
-        </a>
-
-        <nav class="nav-links">
-            <a href="/">Home</a>
-            <a href="/#tools">Tools</a>
-            <a href="/#categories">Categories</a>
-        </nav>
-
-    </div>
-</header>
-
+<%- include("partials/tool-header") %>
 
 <main class="converter-page">
 
@@ -41,7 +107,9 @@
 
             <div class="converter-header">
 
-                <div class="tool-icon">PDF</div>
+                <div class="tool-icon">
+                    PDF
+                </div>
 
                 <h1>Protect PDF</h1>
 
@@ -52,13 +120,22 @@
             </div>
 
 
-            <label class="upload-area" for="pdfInput">
+            <label
+                class="upload-area"
+                for="pdfInput"
+            >
 
-                <div class="upload-icon">🔒</div>
+                <div class="upload-icon">
+                    ↑
+                </div>
 
-                <strong>Choose a PDF file</strong>
+                <strong>
+                    Choose a PDF file
+                </strong>
 
-                <span>PDF files only</span>
+                <span>
+                    PDF files only
+                </span>
 
             </label>
 
@@ -70,7 +147,10 @@
             >
 
 
-            <div class="file-info" id="fileInfo">
+            <div
+                class="file-info"
+                id="fileInfo"
+            >
 
                 <strong id="fileName"></strong>
 
@@ -79,15 +159,9 @@
             </div>
 
 
-            <div
-                id="passwordBox"
-                style="display:none; margin-top:20px; text-align:left;"
-            >
+            <div id="protectControls">
 
-                <label
-                    for="passwordInput"
-                    style="display:block; margin-bottom:8px; font-weight:700; color:#111827;"
-                >
+                <label for="passwordInput">
                     Enter Password
                 </label>
 
@@ -96,12 +170,12 @@
                     type="password"
                     placeholder="Enter PDF password"
                     autocomplete="new-password"
-                    style="width:100%; box-sizing:border-box; padding:13px 14px; border:1px solid #cbd5e1; border-radius:10px; font-size:15px;"
                 >
 
+
                 <label
+                    id="confirmLabel"
                     for="confirmPasswordInput"
-                    style="display:block; margin:16px 0 8px; font-weight:700; color:#111827;"
                 >
                     Confirm Password
                 </label>
@@ -111,24 +185,40 @@
                     type="password"
                     placeholder="Confirm PDF password"
                     autocomplete="new-password"
-                    style="width:100%; box-sizing:border-box; padding:13px 14px; border:1px solid #cbd5e1; border-radius:10px; font-size:15px;"
                 >
+
+
+                <div id="protectActions">
+
+                    <button
+                        class="convert-btn"
+                        id="protectBtn"
+                        type="button"
+                    >
+                        Protect PDF
+                    </button>
+
+                    <button
+                        class="convert-btn reset-btn"
+                        id="resetBtn"
+                        type="button"
+                    >
+                        Reset
+                    </button>
+
+                </div>
 
             </div>
 
 
-            <button
-                class="convert-btn"
-                id="protectBtn"
-                disabled
+            <div
+                class="result"
+                id="result"
             >
-                Protect PDF
-            </button>
 
-
-            <div class="result" id="result">
-
-                <h2>Protected PDF Ready</h2>
+                <h2>
+                    Protected PDF Ready
+                </h2>
 
                 <p>
                     Your PDF has been protected successfully.
@@ -137,9 +227,10 @@
                 <a
                     id="downloadBtn"
                     class="download-btn"
+                    href="#"
                     download="filevora-protected.pdf"
                 >
-                    ↓ Download Protected PDF
+                    Download Protected PDF
                 </a>
 
             </div>
@@ -151,22 +242,78 @@
 </main>
 
 
-<footer>
+<footer class="site-footer">
 
-    <div class="container footer-inner">
+    <div class="container footer-grid">
 
-        <a class="brand" href="/">
-            <span class="brand-mark">F</span>
-            <span>File<span>Vora</span></span>
-        </a>
+        <div class="footer-brand">
 
-        <p>
-            © <span id="year"></span> FILEVORA. All rights reserved.
-        </p>
+            <a class="brand" href="/">
+                <span class="brand-mark">F</span>
+                <span class="brand-name">
+                    File<span>Vora</span>
+                </span>
+            </a>
+
+            <p>
+                Fast, simple online tools for everyday file tasks.
+            </p>
+
+        </div>
+
+        <div>
+            <h3>Company</h3>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/security">Security</a>
+        </div>
+
+        <div>
+            <h3>Resources</h3>
+            <a href="/blog">Blog</a>
+            <a href="/#tools">Tools</a>
+            <a href="/faq">FAQ</a>
+        </div>
+
+        <div>
+            <h3>Legal</h3>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+            <a href="/disclaimer">Disclaimer</a>
+        </div>
+
+        <div>
+            <h3>Contact</h3>
+            <a href="/contact">Email</a>
+            <a href="/contact">Facebook</a>
+            <a href="/contact">Instagram</a>
+        </div>
+
+    </div>
+
+    <div class="container footer-bottom">
+
+        <span>
+            © <span data-current-year></span> FileVora. All rights reserved.
+        </span>
+
+        <span>
+            All in One Tool.
+        </span>
 
     </div>
 
 </footer>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+        element.textContent =
+            new Date().getFullYear();
+    });
+</script>
 
 
 <script>
@@ -183,8 +330,8 @@ const fileName =
 const fileSize =
     document.getElementById("fileSize");
 
-const passwordBox =
-    document.getElementById("passwordBox");
+const protectControls =
+    document.getElementById("protectControls");
 
 const passwordInput =
     document.getElementById("passwordInput");
@@ -195,6 +342,9 @@ const confirmPasswordInput =
 const protectBtn =
     document.getElementById("protectBtn");
 
+const resetBtn =
+    document.getElementById("resetBtn");
+
 const result =
     document.getElementById("result");
 
@@ -202,182 +352,325 @@ const downloadBtn =
     document.getElementById("downloadBtn");
 
 
-pdfInput.addEventListener("change", () => {
-
-    const file =
-        pdfInput.files[0];
+let selectedFile = null;
+let downloadUrl = null;
 
 
-    if (!file) {
+function formatFileSize(bytes) {
 
-        protectBtn.disabled = true;
-
-        fileInfo.style.display = "none";
-
-        passwordBox.style.display = "none";
-
-        result.style.display = "none";
-
-        return;
+    if (bytes < 1024) {
+        return bytes + " B";
     }
 
-
-    if (file.type !== "application/pdf") {
-
-        alert("Please choose a PDF file.");
-
-        pdfInput.value = "";
-
-        return;
+    if (bytes < 1024 * 1024) {
+        return (
+            bytes / 1024
+        ).toFixed(2) + " KB";
     }
 
-
-    fileName.textContent =
-        file.name;
-
-
-    const sizeMB =
-        file.size / (1024 * 1024);
+    return (
+        bytes /
+        (1024 * 1024)
+    ).toFixed(2) + " MB";
+}
 
 
-    fileSize.textContent =
-        sizeMB >= 1
-            ? sizeMB.toFixed(2) + " MB"
-            : (file.size / 1024).toFixed(2) + " KB";
+pdfInput.addEventListener(
+    "change",
+    function () {
+
+        selectedFile =
+            pdfInput.files[0];
 
 
-    fileInfo.style.display =
-        "block";
+        result.style.display =
+            "none";
 
 
-    passwordBox.style.display =
-        "block";
+        if (!selectedFile) {
 
+            fileInfo.style.display =
+                "none";
 
-    protectBtn.disabled =
-        false;
+            protectControls.style.display =
+                "none";
 
-
-    result.style.display =
-        "none";
-
-});
-
-
-protectBtn.addEventListener("click", async () => {
-
-    const file =
-        pdfInput.files[0];
-
-
-    if (!file) return;
-
-
-    const password =
-        passwordInput.value;
-
-
-    const confirmPassword =
-        confirmPasswordInput.value;
-
-
-    if (!password) {
-
-        alert("Please enter a password.");
-
-        passwordInput.focus();
-
-        return;
-    }
-
-
-    if (password.length < 4) {
-
-        alert(
-            "Password must be at least 4 characters long."
-        );
-
-        passwordInput.focus();
-
-        return;
-    }
-
-
-    if (password !== confirmPassword) {
-
-        alert(
-            "Passwords do not match."
-        );
-
-        confirmPasswordInput.focus();
-
-        return;
-    }
-
-
-    protectBtn.disabled =
-        true;
-
-
-    protectBtn.textContent =
-        "Protecting PDF...";
-
-
-    try {
-
-        if (
-            typeof PDFLib === "undefined"
-        ) {
-
-            throw new Error(
-                "PDF library failed to load."
-            );
-
+            return;
         }
 
 
-        const {
-            PDFDocument
-        } = PDFLib;
+        if (
+            selectedFile.type !== "application/pdf" &&
+            !selectedFile.name
+                .toLowerCase()
+                .endsWith(".pdf")
+        ) {
 
-
-        const existingPdfBytes =
-            await file.arrayBuffer();
-
-
-        const pdfDoc =
-            await PDFDocument.load(
-                existingPdfBytes
+            alert(
+                "Please choose a PDF file."
             );
 
 
-        /*
-         * pdf-lib itself does not provide
-         * native PDF encryption/password
-         * support.
-         *
-         * This check prevents us from
-         * generating a falsely "protected"
-         * PDF.
-         */
-
-        throw new Error(
-            "True PDF password encryption is not supported by the browser version of pdf-lib."
-        );
+            pdfInput.value =
+                "";
 
 
-    } catch (error) {
-
-        console.error(
-            "PDF PROTECT ERROR:",
-            error
-        );
+            selectedFile =
+                null;
 
 
-        alert(
-            "PDF protection could not be completed.\n\n" +
-            error.message
-        );
+            fileInfo.style.display =
+                "none";
+
+
+            protectControls.style.display =
+                "none";
+
+
+            return;
+        }
+
+
+        fileName.textContent =
+            selectedFile.name;
+
+
+        fileSize.textContent =
+            formatFileSize(
+                selectedFile.size
+            );
+
+
+        fileInfo.style.display =
+            "block";
+
+
+        protectControls.style.display =
+            "block";
+
+
+        passwordInput.value =
+            "";
+
+
+        confirmPasswordInput.value =
+            "";
+
+
+        result.style.display =
+            "none";
+    }
+);
+
+
+protectBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (!selectedFile) {
+            return;
+        }
+
+
+        const password =
+            passwordInput.value;
+
+
+        const confirmPassword =
+            confirmPasswordInput.value;
+
+
+        if (!password) {
+
+            alert(
+                "Please enter a password."
+            );
+
+            passwordInput.focus();
+
+            return;
+        }
+
+
+        if (
+            password.length < 4
+        ) {
+
+            alert(
+                "Password must be at least 4 characters long."
+            );
+
+            passwordInput.focus();
+
+            return;
+        }
+
+
+        if (
+            password !==
+            confirmPassword
+        ) {
+
+            alert(
+                "Passwords do not match."
+            );
+
+            confirmPasswordInput.focus();
+
+            return;
+        }
+
+
+        protectBtn.disabled =
+            true;
+
+
+        protectBtn.textContent =
+            "Protecting PDF...";
+
+
+        result.style.display =
+            "none";
+
+
+        try {
+
+            if (
+                typeof PDFEncrypt ===
+                "undefined"
+            ) {
+
+                throw new Error(
+                    "PDF encryption library failed to load."
+                );
+            }
+
+
+            const arrayBuffer =
+                await selectedFile.arrayBuffer();
+
+
+            const pdfBytes =
+                new Uint8Array(
+                    arrayBuffer
+                );
+
+
+            const encryptedBytes =
+                await PDFEncrypt.encryptPDF(
+                    pdfBytes,
+                    password,
+                    {
+                        algorithm:
+                            "AES-256"
+                    }
+                );
+
+
+            const blob =
+                new Blob(
+                    [encryptedBytes],
+                    {
+                        type:
+                            "application/pdf"
+                    }
+                );
+
+
+            if (downloadUrl) {
+
+                URL.revokeObjectURL(
+                    downloadUrl
+                );
+            }
+
+
+            downloadUrl =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            downloadBtn.href =
+                downloadUrl;
+
+
+            downloadBtn.download =
+                selectedFile.name.replace(
+                    /\.pdf$/i,
+                    ""
+                ) +
+                "-protected.pdf";
+
+
+            result.style.display =
+                "block";
+
+
+        } catch (error) {
+
+            console.error(
+                "PDF PROTECT ERROR:",
+                error
+            );
+
+
+            alert(
+                "PDF protection could not be completed.\n\n" +
+                error.message
+            );
+
+        } finally {
+
+            protectBtn.disabled =
+                false;
+
+
+            protectBtn.textContent =
+                "Protect PDF";
+        }
+    }
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        pdfInput.value =
+            "";
+
+
+        selectedFile =
+            null;
+
+
+        fileName.textContent =
+            "";
+
+
+        fileSize.textContent =
+            "";
+
+
+        passwordInput.value =
+            "";
+
+
+        confirmPasswordInput.value =
+            "";
+
+
+        fileInfo.style.display =
+            "none";
+
+
+        protectControls.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
 
 
         protectBtn.disabled =
@@ -387,17 +680,29 @@ protectBtn.addEventListener("click", async () => {
         protectBtn.textContent =
             "Protect PDF";
 
+
+        downloadBtn.href =
+            "#";
+
+
+        if (downloadUrl) {
+
+            URL.revokeObjectURL(
+                downloadUrl
+            );
+
+
+            downloadUrl =
+                null;
+        }
     }
-
-});
-
-
-document.getElementById(
-    "year"
-).textContent =
-    new Date().getFullYear();
+);
 
 </script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

@@ -8,9 +8,62 @@
     <meta name="description" content="Format and beautify JavaScript code online with FileVora.">
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .js-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .js-action-row .convert-btn{
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .js-reset-btn{
+            background:#ffffff !important;
+            color:#ef1f2b !important;
+            border:1px solid #ef1f2b !important;
+            box-shadow:none !important;
+        }
+
+        .js-reset-btn:hover{
+            background:#fff5f5 !important;
+        }
+
+        .js-result-actions{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:15px;
+        }
+
+        .js-result-actions .download-btn{
+            width:100% !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+            text-align:center !important;
+        }
+
+        @media (max-width:600px){
+            .js-action-row,
+            .js-result-actions{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
+
+<%- include("partials/tool-header") %>
 
 <div class="converter-page">
 
@@ -32,12 +85,21 @@
 
             </div>
 
+
             <div style="text-align:left;">
 
-                <label for="jsInput"
-                       style="display:block; margin-bottom:8px; font-weight:700; color:#111827;">
+                <label
+                    for="jsInput"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
                     JavaScript Code
                 </label>
+
 
                 <textarea
                     id="jsInput"
@@ -59,15 +121,31 @@
 
             </div>
 
-            <button
-                class="convert-btn"
-                onclick="formatJavaScript()"
-            >
-                Format JavaScript
-            </button>
 
-            <div id="errorMessage"
-                 style="
+            <div class="js-action-row">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="formatBtn"
+                >
+                    Format JavaScript
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn js-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                id="errorMessage"
+                style="
                     display:none;
                     margin-top:18px;
                     padding:14px 18px;
@@ -76,16 +154,24 @@
                     border-radius:10px;
                     color:#b91c1c;
                     text-align:left;
-                 ">
-            </div>
+                "
+            ></div>
 
-            <div class="result" id="result">
 
-                <h2>JavaScript Formatted</h2>
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2>
+                    JavaScript Formatted
+                </h2>
 
                 <p>
                     Your JavaScript code has been successfully formatted.
                 </p>
+
 
                 <textarea
                     id="output"
@@ -107,22 +193,27 @@
                     "
                 ></textarea>
 
-                <button
-                    class="download-btn"
-                    onclick="copyFormattedJS()"
-                    type="button"
-                >
-                    Copy JavaScript
-                </button>
 
-                <a
-                    id="downloadBtn"
-                    class="download-btn"
-                    href="#"
-                    download="formatted.js"
-                >
-                    ↓ Download JS
-                </a>
+                <div class="js-result-actions">
+
+                    <button
+                        type="button"
+                        class="download-btn"
+                        id="copyBtn"
+                    >
+                        Copy JavaScript
+                    </button>
+
+                    <a
+                        id="downloadBtn"
+                        class="download-btn"
+                        href="#"
+                        download="formatted.js"
+                    >
+                        Download JS
+                    </a>
+
+                </div>
 
             </div>
 
@@ -132,365 +223,934 @@
 
 </div>
 
+
 <script>
+
+const jsInput =
+    document.getElementById("jsInput");
+
+const formatBtn =
+    document.getElementById("formatBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const result =
+    document.getElementById("result");
+
+const output =
+    document.getElementById("output");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let currentDownloadUrl =
+    null;
+
+
+/* =========================
+   FORMAT JAVASCRIPT
+========================= */
 
 function formatJavaScript() {
 
-    const input = document.getElementById("jsInput").value.trim();
-    const result = document.getElementById("result");
-    const output = document.getElementById("output");
-    const errorMessage = document.getElementById("errorMessage");
-    const downloadBtn = document.getElementById("downloadBtn");
+    const input =
+        jsInput.value.trim();
 
-    result.style.display = "none";
-    errorMessage.style.display = "none";
+
+    result.style.display =
+        "none";
+
+
+    errorMessage.style.display =
+        "none";
+
 
     if (!input) {
-        showError("Please enter JavaScript code.");
+
+        showError(
+            "Please enter JavaScript code."
+        );
+
         return;
     }
 
+
     try {
 
-        const formatted = beautifyJavaScript(input);
+        const formatted =
+            beautifyJavaScript(
+                input
+            );
 
-        output.value = formatted;
 
-        const blob = new Blob(
-            [formatted],
-            {
-                type: "text/javascript;charset=utf-8;"
-            }
-        );
+        output.value =
+            formatted;
 
-        const url = URL.createObjectURL(blob);
 
-        downloadBtn.href = url;
+        const blob =
+            new Blob(
+                [formatted],
+                {
+                    type:
+                        "text/javascript;charset=utf-8;"
+                }
+            );
 
-        result.style.display = "block";
+
+        if (
+            currentDownloadUrl
+        ) {
+
+            URL.revokeObjectURL(
+                currentDownloadUrl
+            );
+        }
+
+
+        currentDownloadUrl =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        downloadBtn.href =
+            currentDownloadUrl;
+
+
+        result.style.display =
+            "block";
+
+
+        result.scrollIntoView({
+            behavior:"smooth",
+            block:"nearest"
+        });
+
 
     } catch (error) {
 
-        showError("Unable to format the JavaScript code.");
-
+        showError(
+            "Unable to format the JavaScript code."
+        );
     }
 
 }
 
 
+/* =========================
+   BEAUTIFY JAVASCRIPT
+========================= */
+
 function beautifyJavaScript(code) {
 
-    // Normalize line endings
-    code = code
-        .replace(/\r\n/g, "\n")
-        .replace(/\r/g, "\n")
-        .trim();
+    code =
+        code
+            .replace(/\r\n/g, "\n")
+            .replace(/\r/g, "\n")
+            .trim();
 
-    let result = "";
-    let indent = 0;
 
-    let inString = false;
-    let stringChar = "";
-    let inTemplate = false;
-    let inLineComment = false;
-    let inBlockComment = false;
+    let formatted =
+        "";
 
-    let current = "";
+    let current =
+        "";
 
-    function addIndent() {
+    let indent =
+        0;
 
-        result += "    ".repeat(indent);
+    let parenDepth =
+        0;
 
+    let bracketDepth =
+        0;
+
+    let inString =
+        false;
+
+    let stringChar =
+        "";
+
+    let inTemplate =
+        false;
+
+    let inLineComment =
+        false;
+
+    let inBlockComment =
+        false;
+
+
+    function indentation() {
+
+        return "    ".repeat(
+            indent
+        );
     }
+
 
     function flushLine() {
 
-        const line = current.trim();
+        const line =
+            current.trim();
+
 
         if (line) {
-            addIndent();
-            result += line;
-            result += "\n";
+
+            formatted +=
+                indentation() +
+                line +
+                "\n";
         }
 
-        current = "";
 
+        current =
+            "";
     }
 
-    for (let i = 0; i < code.length; i++) {
 
-        const char = code[i];
-        const next = code[i + 1];
+    for (
+        let i = 0;
+        i < code.length;
+        i++
+    ) {
 
-        // Line comment
-        if (inLineComment) {
+        const char =
+            code[i];
 
-            current += char;
+        const next =
+            code[i + 1];
 
-            if (char === "\n") {
-                inLineComment = false;
+
+        /* LINE COMMENT */
+
+        if (
+            inLineComment
+        ) {
+
+            current +=
+                char;
+
+
+            if (
+                char === "\n"
+            ) {
+
+                inLineComment =
+                    false;
+
                 flushLine();
             }
 
-            continue;
 
+            continue;
         }
 
-        // Block comment
-        if (inBlockComment) {
 
-            current += char;
+        /* BLOCK COMMENT */
 
-            if (char === "*" && next === "/") {
+        if (
+            inBlockComment
+        ) {
 
-                current += "/";
+            current +=
+                char;
+
+
+            if (
+                char === "*" &&
+                next === "/"
+            ) {
+
+                current +=
+                    "/";
+
                 i++;
 
-                inBlockComment = false;
+
+                inBlockComment =
+                    false;
+
 
                 flushLine();
-
             }
 
-            continue;
 
+            continue;
         }
 
-        // Strings
-        if (inString) {
 
-            current += char;
+        /* STRING */
 
-            if (char === "\\" && next) {
+        if (
+            inString
+        ) {
 
-                current += next;
+            current +=
+                char;
+
+
+            if (
+                char === "\\" &&
+                next
+            ) {
+
+                current +=
+                    next;
+
                 i++;
 
-            } else if (char === stringChar) {
 
-                inString = false;
+            } else if (
+                char === stringChar
+            ) {
 
+                inString =
+                    false;
             }
 
-            continue;
 
+            continue;
         }
 
-        // Template literal
-        if (inTemplate) {
 
-            current += char;
+        /* TEMPLATE */
 
-            if (char === "\\" && next) {
+        if (
+            inTemplate
+        ) {
 
-                current += next;
+            current +=
+                char;
+
+
+            if (
+                char === "\\" &&
+                next
+            ) {
+
+                current +=
+                    next;
+
                 i++;
 
-            } else if (char === "`") {
 
-                inTemplate = false;
+            } else if (
+                char === "`"
+            ) {
 
+                inTemplate =
+                    false;
             }
 
-            continue;
 
+            continue;
         }
 
-        // Start line comment
-        if (char === "/" && next === "/") {
 
-            current += "//";
+        /* START COMMENTS */
+
+        if (
+            char === "/" &&
+            next === "/"
+        ) {
+
+            current +=
+                "//";
+
             i++;
 
-            inLineComment = true;
+
+            inLineComment =
+                true;
 
             continue;
-
         }
 
-        // Start block comment
-        if (char === "/" && next === "*") {
 
-            current += "/*";
+        if (
+            char === "/" &&
+            next === "*"
+        ) {
+
+            current +=
+                "/*";
+
             i++;
 
-            inBlockComment = true;
+
+            inBlockComment =
+                true;
 
             continue;
-
         }
 
-        // Start string
+
+        /* START STRING */
+
         if (
             char === '"' ||
             char === "'"
         ) {
 
-            current += char;
+            current +=
+                char;
 
-            inString = true;
-            stringChar = char;
 
-            continue;
+            inString =
+                true;
 
-        }
 
-        // Start template
-        if (char === "`") {
+            stringChar =
+                char;
 
-            current += char;
-
-            inTemplate = true;
 
             continue;
-
         }
 
-        // Opening brace
-        if (char === "{") {
 
-            current = current.trim();
+        /* START TEMPLATE */
 
-            if (current) {
-                result += "    ".repeat(indent) + current + " {\n";
+        if (
+            char === "`"
+        ) {
+
+            current +=
+                char;
+
+
+            inTemplate =
+                true;
+
+
+            continue;
+        }
+
+
+        /* PARENTHESES */
+
+        if (
+            char === "("
+        ) {
+
+            parenDepth++;
+
+
+            current +=
+                char;
+
+
+            continue;
+        }
+
+
+        if (
+            char === ")"
+        ) {
+
+            parenDepth =
+                Math.max(
+                    0,
+                    parenDepth - 1
+                );
+
+
+            current +=
+                char;
+
+
+            continue;
+        }
+
+
+        /* BRACKETS */
+
+        if (
+            char === "["
+        ) {
+
+            bracketDepth++;
+
+
+            current +=
+                char;
+
+
+            continue;
+        }
+
+
+        if (
+            char === "]"
+        ) {
+
+            bracketDepth =
+                Math.max(
+                    0,
+                    bracketDepth - 1
+                );
+
+
+            current +=
+                char;
+
+
+            continue;
+        }
+
+
+        /* OPEN BRACE */
+
+        if (
+            char === "{"
+        ) {
+
+            const before =
+                current.trim();
+
+
+            if (before) {
+
+                formatted +=
+                    indentation() +
+                    before +
+                    " {\n";
+
             } else {
-                result += "    ".repeat(indent) + "{\n";
+
+                formatted +=
+                    indentation() +
+                    "{\n";
             }
 
-            current = "";
+
+            current =
+                "";
+
 
             indent++;
 
-            continue;
 
+            continue;
         }
 
-        // Closing brace
-        if (char === "}") {
 
-            if (current.trim()) {
+        /* CLOSE BRACE */
+
+        if (
+            char === "}"
+        ) {
+
+            if (
+                current.trim()
+            ) {
+
                 flushLine();
             }
 
-            indent = Math.max(0, indent - 1);
 
-            addIndent();
+            indent =
+                Math.max(
+                    0,
+                    indent - 1
+                );
 
-            result += "}";
 
-            // Add newline unless followed by ; , ) ] else/catch/finally
+            formatted +=
+                indentation() +
+                "}";
+
+
+            let lookAhead =
+                code
+                    .slice(i + 1)
+                    .trimStart();
+
+
             if (
+                lookAhead.startsWith(
+                    "else"
+                ) ||
+                lookAhead.startsWith(
+                    "catch"
+                ) ||
+                lookAhead.startsWith(
+                    "finally"
+                )
+            ) {
+
+                formatted +=
+                    " ";
+
+            } else if (
                 next !== ";" &&
                 next !== "," &&
                 next !== ")" &&
                 next !== "]"
             ) {
-                result += "\n";
+
+                formatted +=
+                    "\n";
             }
 
-            continue;
 
+            continue;
         }
 
-        // Semicolon
-        if (char === ";") {
 
-            current = current.trim();
+        /* SEMICOLON */
 
-            if (current) {
+        if (
+            char === ";"
+        ) {
 
-                current += ";";
+            current +=
+                ";";
+
+
+            /*
+             * Do not break lines for:
+             * for (let i = 0; i < 10; i++)
+             */
+
+            if (
+                parenDepth === 0
+            ) {
+
+                flushLine();
+            }
+
+
+            continue;
+        }
+
+
+        /* NEWLINE */
+
+        if (
+            char === "\n"
+        ) {
+
+            if (
+                current.trim() &&
+                parenDepth === 0
+            ) {
 
                 flushLine();
 
+            } else if (
+                current &&
+                !current.endsWith(" ")
+            ) {
+
+                current +=
+                    " ";
             }
 
-            continue;
-
-        }
-
-        // Newline
-        if (char === "\n") {
-
-            if (current.trim()) {
-                flushLine();
-            }
 
             continue;
-
         }
 
-        // Space
-        if (/\s/.test(char)) {
+
+        /* WHITESPACE */
+
+        if (
+            /\s/.test(char)
+        ) {
 
             if (
                 current.length > 0 &&
                 !current.endsWith(" ")
             ) {
-                current += " ";
+
+                current +=
+                    " ";
             }
 
-            continue;
 
+            continue;
         }
 
-        current += char;
 
+        current +=
+            char;
     }
 
-    if (current.trim()) {
+
+    if (
+        current.trim()
+    ) {
+
         flushLine();
     }
 
-    let formatted = result.trim();
 
-    // Improve common control structures
-    formatted = formatted
-        .replace(/\}\s*else\s*\{/g, "} else {")
-        .replace(/\}\s*catch\s*\(/g, "} catch (")
-        .replace(/\}\s*finally\s*\{/g, "} finally {");
+    let finalCode =
+        formatted.trim();
 
-    return formatted;
 
+    finalCode =
+        finalCode
+            .replace(
+                /\}\s*\n?\s*else\s*\{/g,
+                "} else {"
+            )
+            .replace(
+                /\}\s*\n?\s*catch\s*\(/g,
+                "} catch ("
+            )
+            .replace(
+                /\}\s*\n?\s*finally\s*\{/g,
+                "} finally {"
+            );
+
+
+    return finalCode;
 }
 
 
-async function copyFormattedJS() {
+/* =========================
+   COPY
+========================= */
 
-    const output = document.getElementById("output");
+copyBtn.addEventListener(
+    "click",
+    async function () {
 
-    if (!output.value) {
-        return;
+        if (
+            !output.value
+        ) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                output.value
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy JavaScript";
+
+                },
+                1500
+            );
+
+
+        } catch (error) {
+
+            output.select();
+
+
+            document.execCommand(
+                "copy"
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy JavaScript";
+
+                },
+                1500
+            );
+        }
+
     }
+);
 
-    try {
 
-        await navigator.clipboard.writeText(output.value);
-
-        alert("JavaScript copied to clipboard!");
-
-    } catch (error) {
-
-        output.select();
-        document.execCommand("copy");
-
-        alert("JavaScript copied to clipboard!");
-
-    }
-
-}
-
+/* =========================
+   ERROR
+========================= */
 
 function showError(message) {
 
-    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent =
+        message;
 
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
 
+    errorMessage.style.display =
+        "block";
+
+
+    result.style.display =
+        "none";
 }
 
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        jsInput.value =
+            "";
+
+
+        output.value =
+            "";
+
+
+        errorMessage.textContent =
+            "";
+
+
+        errorMessage.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        copyBtn.textContent =
+            "Copy JavaScript";
+
+
+        if (
+            currentDownloadUrl
+        ) {
+
+            URL.revokeObjectURL(
+                currentDownloadUrl
+            );
+
+
+            currentDownloadUrl =
+                null;
+        }
+
+
+        downloadBtn.href =
+            "#";
+
+
+        jsInput.focus();
+
+    }
+);
+
+
+/* =========================
+   EVENT
+========================= */
+
+formatBtn.addEventListener(
+    "click",
+    formatJavaScript
+);
+
 </script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date().getFullYear();
+
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

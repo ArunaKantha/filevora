@@ -1,38 +1,64 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="description" content="Convert PDF files to Word documents online for free with FileVora. Fast and easy PDF to Word conversion.">
+    <meta
+        name="description"
+        content="Convert PDF files to Word documents online for free with FileVora. Fast and easy PDF to Word conversion."
+    >
 
     <title>PDF to Word — FileVora</title>
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+
+    <style>
+        #wordActions {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        #wordActions #convertBtn,
+        #wordActions #resetBtn {
+            width: 100% !important;
+            height: 50px !important;
+            min-height: 50px !important;
+            margin: 0 !important;
+            padding: 0 20px !important;
+            box-sizing: border-box !important;
+        }
+
+        #wordActions #resetBtn {
+            background: #ffffff !important;
+            color: #ef233c !important;
+            border: 1px solid #ef233c !important;
+            box-shadow: none !important;
+        }
+
+        #wordActions #resetBtn:hover {
+            background: #fff5f6 !important;
+            color: #ef233c !important;
+            border-color: #ef233c !important;
+        }
+
+        #wordActions #convertBtn:disabled {
+            display: flex !important;
+        }
+    </style>
 </head>
 
-<body>
+<body class="pdf-tool">
 
-<header class="site-header">
-    <div class="container nav">
-
-        <a class="brand" href="/">
-            <span class="brand-mark">F</span>
-            <span>File<span>Vora</span></span>
-        </a>
-
-        <nav class="nav-links">
-            <a href="/">Home</a>
-            <a href="/#tools">Tools</a>
-            <a href="/#categories">Categories</a>
-        </nav>
-
-    </div>
-</header>
-
+<%- include("partials/tool-header") %>
 
 <main class="converter-page">
 
@@ -42,7 +68,9 @@
 
             <div class="converter-header">
 
-                <div class="tool-icon">PDF</div>
+                <div class="tool-icon">
+                    PDF
+                </div>
 
                 <h1>PDF to Word</h1>
 
@@ -53,15 +81,25 @@
             </div>
 
 
-            <label class="upload-area" for="pdfInput">
+            <label
+                class="upload-area"
+                for="pdfInput"
+            >
 
-                <div class="upload-icon">📄</div>
+                <div class="upload-icon">
+                    ↑
+                </div>
 
-                <strong>Choose a PDF file</strong>
+                <strong>
+                    Choose a PDF file
+                </strong>
 
-                <span>PDF files only</span>
+                <span>
+                    PDF files only
+                </span>
 
             </label>
+
 
             <input
                 id="pdfInput"
@@ -70,7 +108,10 @@
             >
 
 
-            <div class="file-info" id="fileInfo">
+            <div
+                class="file-info"
+                id="fileInfo"
+            >
 
                 <strong id="fileName"></strong>
 
@@ -79,18 +120,36 @@
             </div>
 
 
-            <button
-                class="convert-btn"
-                id="convertBtn"
-                disabled
+            <div id="wordActions">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="convertBtn"
+                    disabled
+                >
+                    Convert to Word
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
             >
-                Convert to Word
-            </button>
 
-
-            <div class="result" id="result">
-
-                <h2>Word File Ready</h2>
+                <h2>
+                    Word File Ready
+                </h2>
 
                 <p>
                     Your PDF has been converted successfully.
@@ -99,9 +158,10 @@
                 <a
                     id="downloadBtn"
                     class="download-btn"
+                    href="#"
                     download="filevora-document.docx"
                 >
-                    ↓ Download Word
+                    Download Word
                 </a>
 
             </div>
@@ -113,18 +173,64 @@
 </main>
 
 
-<footer>
+<footer class="site-footer">
 
-    <div class="container footer-inner">
+    <div class="container footer-grid">
 
-        <a class="brand" href="/">
-            <span class="brand-mark">F</span>
-            <span>File<span>Vora</span></span>
-        </a>
+        <div class="footer-brand">
 
-        <p>
-            © <span id="year"></span> FILEVORA. All rights reserved.
-        </p>
+            <a class="brand" href="/">
+                <span class="brand-mark">F</span>
+                <span class="brand-name">
+                    File<span>Vora</span>
+                </span>
+            </a>
+
+            <p>
+                Fast, simple online tools for everyday file tasks.
+            </p>
+
+        </div>
+
+        <div>
+            <h3>Company</h3>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/security">Security</a>
+        </div>
+
+        <div>
+            <h3>Resources</h3>
+            <a href="/blog">Blog</a>
+            <a href="/#tools">Tools</a>
+            <a href="/faq">FAQ</a>
+        </div>
+
+        <div>
+            <h3>Legal</h3>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+            <a href="/disclaimer">Disclaimer</a>
+        </div>
+
+        <div>
+            <h3>Contact</h3>
+            <a href="/contact">Email</a>
+            <a href="/contact">Facebook</a>
+            <a href="/contact">Instagram</a>
+        </div>
+
+    </div>
+
+    <div class="container footer-bottom">
+
+        <span>
+            © <span data-current-year></span> FileVora. All rights reserved.
+        </span>
+
+        <span>
+            All in One Tool.
+        </span>
 
     </div>
 
@@ -132,243 +238,450 @@
 
 
 <script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+        element.textContent =
+            new Date().getFullYear();
+    });
+</script>
 
-const pdfInput = document.getElementById("pdfInput");
-const fileInfo = document.getElementById("fileInfo");
-const fileName = document.getElementById("fileName");
-const fileSize = document.getElementById("fileSize");
-const convertBtn = document.getElementById("convertBtn");
-const result = document.getElementById("result");
-const downloadBtn = document.getElementById("downloadBtn");
+
+<script>
+
+const pdfInput =
+    document.getElementById("pdfInput");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const wordActions =
+    document.getElementById("wordActions");
+
+const result =
+    document.getElementById("result");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let downloadUrl = null;
 
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
 
-pdfInput.addEventListener("change", () => {
+pdfInput.addEventListener(
+    "change",
+    function () {
 
-    const file = pdfInput.files[0];
-
-    if (!file) {
-
-        convertBtn.disabled = true;
-        fileInfo.style.display = "none";
-        result.style.display = "none";
-
-        return;
-    }
+        const file =
+            pdfInput.files[0];
 
 
-    if (file.type !== "application/pdf") {
+        if (!file) {
 
-        alert("Please choose a PDF file.");
+            convertBtn.disabled = true;
 
-        pdfInput.value = "";
+            fileInfo.style.display =
+                "none";
 
-        return;
-    }
+            result.style.display =
+                "none";
 
-
-    fileName.textContent = file.name;
-
-
-    const sizeMB = file.size / (1024 * 1024);
-
-    fileSize.textContent =
-        sizeMB >= 1
-            ? sizeMB.toFixed(2) + " MB"
-            : (file.size / 1024).toFixed(2) + " KB";
-
-
-    fileInfo.style.display = "block";
-
-    convertBtn.disabled = false;
-
-    result.style.display = "none";
-
-});
-
-
-convertBtn.addEventListener("click", async () => {
-
-    const file = pdfInput.files[0];
-
-    if (!file) return;
-
-
-    convertBtn.disabled = true;
-
-    convertBtn.textContent = "Converting PDF...";
-
-
-    try {
-
-        // Check PDF.js
-        if (typeof pdfjsLib === "undefined") {
-            throw new Error("PDF.js library failed to load.");
-        }
-
-
-        // Check DOCX library
-        if (
-            typeof window.docx === "undefined" ||
-            !window.docx.Document ||
-            !window.docx.Packer
-        ) {
-            throw new Error("DOCX library failed to load.");
-        }
-
-
-        const arrayBuffer = await file.arrayBuffer();
-
-
-        const pdf = await pdfjsLib.getDocument({
-            data: arrayBuffer
-        }).promise;
-
-
-        let fullText = "";
-
-
-        for (
-            let pageNumber = 1;
-            pageNumber <= pdf.numPages;
-            pageNumber++
-        ) {
-
-            convertBtn.textContent =
-                `Reading page ${pageNumber} of ${pdf.numPages}...`;
-
-
-            const page = await pdf.getPage(pageNumber);
-
-            const textContent =
-                await page.getTextContent();
-
-
-            const pageText = textContent.items
-                .map(item => item.str)
-                .join(" ");
-
-
-            fullText += pageText;
-
-
-            if (pageNumber < pdf.numPages) {
-                fullText += "\n\n";
-            }
-
-        }
-
-
-        if (!fullText.trim()) {
-
-            alert(
-                "No selectable text was found in this PDF. " +
-                "Scanned or image-only PDFs are not supported yet."
-            );
-
-            convertBtn.disabled = false;
-
-            convertBtn.textContent = "Convert to Word";
+            wordActions.style.display =
+                "none";
 
             return;
         }
 
 
-        convertBtn.textContent = "Creating Word file...";
+        if (
+            file.type !==
+            "application/pdf"
+        ) {
+
+            alert(
+                "Please choose a PDF file."
+            );
 
 
-        const {
-            Document,
-            Packer,
-            Paragraph,
-            TextRun
-        } = window.docx;
+            pdfInput.value = "";
 
 
-        const paragraphs = fullText
-            .split(/\n+/)
-            .filter(text => text.trim() !== "")
-            .map(text => {
+            convertBtn.disabled = true;
 
-                return new Paragraph({
 
-                    children: [
-                        new TextRun({
-                            text: text.trim(),
-                            size: 22
-                        })
-                    ],
+            fileInfo.style.display =
+                "none";
 
-                    spacing: {
-                        after: 160
-                    }
+
+            result.style.display =
+                "none";
+
+
+            wordActions.style.display =
+                "none";
+
+
+            return;
+        }
+
+
+        fileName.textContent =
+            file.name;
+
+
+        const sizeMB =
+            file.size /
+            (1024 * 1024);
+
+
+        fileSize.textContent =
+            sizeMB >= 1
+                ? sizeMB.toFixed(2) + " MB"
+                : (file.size / 1024).toFixed(2) + " KB";
+
+
+        fileInfo.style.display =
+            "block";
+
+
+        result.style.display =
+            "none";
+
+
+        convertBtn.disabled =
+            false;
+
+
+        wordActions.style.display =
+            "grid";
+    }
+);
+
+
+convertBtn.addEventListener(
+    "click",
+    async function () {
+
+        const file =
+            pdfInput.files[0];
+
+
+        if (!file) {
+            return;
+        }
+
+
+        convertBtn.disabled =
+            true;
+
+
+        convertBtn.textContent =
+            "Converting PDF...";
+
+
+        result.style.display =
+            "none";
+
+
+        try {
+
+            if (
+                typeof pdfjsLib ===
+                "undefined"
+            ) {
+
+                throw new Error(
+                    "PDF.js library failed to load."
+                );
+            }
+
+
+            if (
+                typeof window.docx ===
+                    "undefined" ||
+                !window.docx.Document ||
+                !window.docx.Packer
+            ) {
+
+                throw new Error(
+                    "DOCX library failed to load."
+                );
+            }
+
+
+            const arrayBuffer =
+                await file.arrayBuffer();
+
+
+            const pdf =
+                await pdfjsLib
+                    .getDocument({
+                        data: arrayBuffer
+                    })
+                    .promise;
+
+
+            let fullText = "";
+
+
+            for (
+                let pageNumber = 1;
+                pageNumber <= pdf.numPages;
+                pageNumber++
+            ) {
+
+                convertBtn.textContent =
+                    `Reading page ${pageNumber} of ${pdf.numPages}...`;
+
+
+                const page =
+                    await pdf.getPage(
+                        pageNumber
+                    );
+
+
+                const textContent =
+                    await page.getTextContent();
+
+
+                const pageText =
+                    textContent.items
+                        .map(
+                            item =>
+                                item.str
+                        )
+                        .join(" ");
+
+
+                fullText +=
+                    pageText;
+
+
+                if (
+                    pageNumber <
+                    pdf.numPages
+                ) {
+
+                    fullText +=
+                        "\n\n";
+                }
+            }
+
+
+            if (
+                !fullText.trim()
+            ) {
+
+                alert(
+                    "No selectable text was found in this PDF. " +
+                    "Scanned or image-only PDFs are not supported yet."
+                );
+
+
+                convertBtn.disabled =
+                    false;
+
+
+                convertBtn.textContent =
+                    "Convert to Word";
+
+
+                return;
+            }
+
+
+            convertBtn.textContent =
+                "Creating Word file...";
+
+
+            const {
+                Document,
+                Packer,
+                Paragraph,
+                TextRun
+            } = window.docx;
+
+
+            const paragraphs =
+                fullText
+                    .split(/\n+/)
+                    .filter(
+                        text =>
+                            text.trim() !== ""
+                    )
+                    .map(
+                        function (text) {
+
+                            return new Paragraph({
+
+                                children: [
+
+                                    new TextRun({
+                                        text:
+                                            text.trim(),
+                                        size: 22
+                                    })
+
+                                ],
+
+                                spacing: {
+                                    after: 160
+                                }
+
+                            });
+                        }
+                    );
+
+
+            const document =
+                new Document({
+
+                    sections: [
+
+                        {
+
+                            properties: {},
+
+                            children:
+                                paragraphs
+                        }
+
+                    ]
 
                 });
 
-            });
+
+            const blob =
+                await Packer.toBlob(
+                    document
+                );
 
 
-        const document = new Document({
+            if (downloadUrl) {
 
-            sections: [
-
-                {
-                    properties: {},
-
-                    children: paragraphs
-                }
-
-            ]
-
-        });
+                URL.revokeObjectURL(
+                    downloadUrl
+                );
+            }
 
 
-        const blob = await Packer.toBlob(document);
+            downloadUrl =
+                URL.createObjectURL(
+                    blob
+                );
 
 
-        const url = URL.createObjectURL(blob);
+            downloadBtn.href =
+                downloadUrl;
 
 
-        downloadBtn.href = url;
-
-        downloadBtn.download =
-            "filevora-document.docx";
+            downloadBtn.download =
+                "filevora-document.docx";
 
 
-        result.style.display = "block";
+            result.style.display =
+                "block";
 
 
-        convertBtn.disabled = false;
-
-        convertBtn.textContent = "Convert to Word";
-
-
-    } catch (error) {
-
-        console.error("PDF TO WORD ERROR:", error);
-
-        alert(
-            "Something went wrong while converting the PDF.\n\n" +
-            error.message
-        );
+            convertBtn.disabled =
+                false;
 
 
-        convertBtn.disabled = false;
+            convertBtn.textContent =
+                "Convert to Word";
 
-        convertBtn.textContent = "Convert to Word";
 
+        } catch (error) {
+
+            console.error(
+                "PDF TO WORD ERROR:",
+                error
+            );
+
+
+            alert(
+                "Something went wrong while converting the PDF.\n\n" +
+                error.message
+            );
+
+
+            convertBtn.disabled =
+                false;
+
+
+            convertBtn.textContent =
+                "Convert to Word";
+        }
     }
+);
 
-});
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        pdfInput.value = "";
 
 
-document.getElementById("year").textContent =
-    new Date().getFullYear();
+        fileName.textContent = "";
+        fileSize.textContent = "";
+
+
+        fileInfo.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        wordActions.style.display =
+            "none";
+
+
+        convertBtn.disabled =
+            true;
+
+
+        convertBtn.textContent =
+            "Convert to Word";
+
+
+        downloadBtn.href = "#";
+
+
+        if (downloadUrl) {
+
+            URL.revokeObjectURL(
+                downloadUrl
+            );
+
+            downloadUrl = null;
+        }
+    }
+);
 
 </script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

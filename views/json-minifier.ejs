@@ -3,56 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>JSON Minifier - FileVora</title>
+
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .json-minifier-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:15px;
+        }
+
+        .json-minifier-action-row .convert-btn{
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .json-minifier-reset-btn{
+            background:#ffffff !important;
+            color:#ef1f2b !important;
+            border:1px solid #ef1f2b !important;
+            box-shadow:none !important;
+        }
+
+        .json-minifier-reset-btn:hover{
+            background:#fff5f5 !important;
+        }
+
+        .json-result-actions{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:15px;
+        }
+
+        .json-result-actions .download-btn{
+            width:100% !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        @media (max-width:600px){
+            .json-minifier-action-row,
+            .json-result-actions{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
+<%- include("partials/tool-header") %>
+
 <div class="converter-page">
+
     <div class="container">
+
         <div class="converter-card">
 
             <div class="converter-header">
-                <div class="tool-icon">🗜️</div>
+
+                <div class="tool-icon">
+                    JM
+                </div>
+
                 <h1>JSON Minifier</h1>
-                <p>Minify JSON data instantly.</p>
+
+                <p>
+                    Minify JSON data instantly.
+                </p>
+
             </div>
 
-            <label for="jsonInput">JSON Code</label>
+
+            <label for="jsonInput">
+                JSON Code
+            </label>
+
 
             <textarea
                 id="jsonInput"
                 placeholder="Paste your JSON here..."
-                style="width:100%;min-height:260px;padding:15px;border:1px solid #ddd;border-radius:10px;font-family:monospace;font-size:14px;box-sizing:border-box;"
+                style="
+                    width:100%;
+                    min-height:260px;
+                    padding:15px;
+                    border:1px solid #ddd;
+                    border-radius:10px;
+                    font-family:monospace;
+                    font-size:14px;
+                    box-sizing:border-box;
+                    resize:vertical;
+                "
             ></textarea>
 
-            <button
-                type="button"
-                class="convert-btn"
-                onclick="minifyJSON()"
-                style="margin-top:15px;"
+
+            <div class="json-minifier-action-row">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="minifyBtn"
+                >
+                    Minify JSON
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn json-minifier-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+                style="
+                    display:none;
+                    margin-top:25px;
+                "
             >
-                Minify JSON
-            </button>
 
-            <div class="result" style="margin-top:25px;">
+                <label for="output">
+                    Minified JSON
+                </label>
 
-                <label for="output">Minified JSON</label>
 
                 <textarea
                     id="output"
                     readonly
                     placeholder="Minified JSON will appear here..."
-                    style="width:100%;min-height:220px;padding:15px;border:1px solid #ddd;border-radius:10px;font-family:monospace;font-size:14px;box-sizing:border-box;"
+                    style="
+                        width:100%;
+                        min-height:220px;
+                        padding:15px;
+                        border:1px solid #ddd;
+                        border-radius:10px;
+                        font-family:monospace;
+                        font-size:14px;
+                        box-sizing:border-box;
+                        resize:vertical;
+                    "
                 ></textarea>
 
-                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px;">
+
+                <div class="json-result-actions">
 
                     <button
                         type="button"
                         class="download-btn"
-                        onclick="copyJSON()"
+                        id="copyBtn"
                     >
                         Copy JSON
                     </button>
@@ -60,7 +172,7 @@
                     <button
                         type="button"
                         class="download-btn"
-                        onclick="downloadJSON()"
+                        id="downloadBtn"
                     >
                         Download JSON
                     </button>
@@ -70,75 +182,362 @@
             </div>
 
         </div>
+
     </div>
+
 </div>
+
 
 <script>
 
+const jsonInput =
+    document.getElementById("jsonInput");
+
+const output =
+    document.getElementById("output");
+
+const minifyBtn =
+    document.getElementById("minifyBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+const result =
+    document.getElementById("result");
+
+
+/* =========================
+   MINIFY JSON
+========================= */
+
 function minifyJSON() {
 
-    var input = document.getElementById("jsonInput");
-    var output = document.getElementById("output");
+    const input =
+        jsonInput.value.trim();
+
+
+    if (!input) {
+
+        alert(
+            "Please paste some JSON first."
+        );
+
+        return;
+    }
+
 
     try {
 
-        var data = JSON.parse(input.value);
+        const data =
+            JSON.parse(input);
 
-        output.value = JSON.stringify(data);
+
+        output.value =
+            JSON.stringify(data);
+
+
+        result.style.display =
+            "block";
+
+
+        result.scrollIntoView({
+            behavior:"smooth",
+            block:"nearest"
+        });
+
 
     } catch (error) {
 
-        alert("Invalid JSON. Please check your JSON code.");
+        output.value =
+            "";
 
+
+        result.style.display =
+            "none";
+
+
+        alert(
+            "Invalid JSON. Please check your JSON code."
+        );
     }
 }
 
 
-function copyJSON() {
+/* =========================
+   COPY JSON
+========================= */
 
-    var output = document.getElementById("output");
+async function copyJSON() {
 
-    if (output.value.trim() === "") {
-        alert("Please minify JSON first.");
+    if (
+        output.value.trim() === ""
+    ) {
+
+        alert(
+            "Please minify JSON first."
+        );
+
         return;
     }
 
-    output.select();
-    document.execCommand("copy");
 
-    alert("JSON copied successfully!");
+    try {
+
+        await navigator.clipboard.writeText(
+            output.value
+        );
+
+
+        copyBtn.textContent =
+            "Copied!";
+
+
+        setTimeout(
+            function () {
+
+                copyBtn.textContent =
+                    "Copy JSON";
+
+            },
+            1500
+        );
+
+
+    } catch (error) {
+
+        output.select();
+
+        document.execCommand(
+            "copy"
+        );
+
+
+        copyBtn.textContent =
+            "Copied!";
+
+
+        setTimeout(
+            function () {
+
+                copyBtn.textContent =
+                    "Copy JSON";
+
+            },
+            1500
+        );
+    }
 }
 
+
+/* =========================
+   DOWNLOAD JSON
+========================= */
 
 function downloadJSON() {
 
-    var output = document.getElementById("output");
+    if (
+        output.value.trim() === ""
+    ) {
 
-    if (output.value.trim() === "") {
-        alert("Please minify JSON first.");
+        alert(
+            "Please minify JSON first."
+        );
+
         return;
     }
 
-    var blob = new Blob(
-        [output.value],
-        { type: "application/json" }
+
+    const blob =
+        new Blob(
+            [output.value],
+            {
+                type:"application/json"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        "filevora-minified.json";
+
+
+    document.body.appendChild(
+        link
     );
 
-    var url = URL.createObjectURL(blob);
 
-    var link = document.createElement("a");
-
-    link.href = url;
-    link.download = "filevora-minified.json";
-
-    document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
 
-    URL.revokeObjectURL(url);
+
+    document.body.removeChild(
+        link
+    );
+
+
+    URL.revokeObjectURL(
+        url
+    );
 }
 
+
+/* =========================
+   RESET
+========================= */
+
+function resetJSON() {
+
+    jsonInput.value =
+        "";
+
+
+    output.value =
+        "";
+
+
+    result.style.display =
+        "none";
+
+
+    copyBtn.textContent =
+        "Copy JSON";
+
+
+    minifyBtn.textContent =
+        "Minify JSON";
+
+
+    jsonInput.focus();
+}
+
+
+/* =========================
+   EVENTS
+========================= */
+
+minifyBtn.addEventListener(
+    "click",
+    minifyJSON
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    resetJSON
+);
+
+
+copyBtn.addEventListener(
+    "click",
+    copyJSON
+);
+
+
+downloadBtn.addEventListener(
+    "click",
+    downloadJSON
+);
+
 </script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+
+        element.textContent =
+            new Date().getFullYear();
+
+    });
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

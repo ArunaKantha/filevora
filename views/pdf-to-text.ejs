@@ -1,118 +1,215 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>PDF to Text Converter - FileVora</title>
-    <meta name="description" content="Extract text from PDF files quickly and download it as a text file with FileVora.">
+
+    <meta
+        name="description"
+        content="Extract text from PDF files quickly and download it as a text file with FileVora."
+    >
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <style>
+        #textActions {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        #textActions #convertBtn,
+        #textActions #resetBtn {
+            width: 100% !important;
+            height: 50px !important;
+            min-height: 50px !important;
+            margin: 0 !important;
+            padding: 0 20px !important;
+            box-sizing: border-box !important;
+        }
+
+        #textActions #resetBtn {
+            background: #ffffff !important;
+            color: #ef233c !important;
+            border: 1px solid #ef233c !important;
+            box-shadow: none !important;
+        }
+
+        #textActions #resetBtn:hover {
+            background: #fff5f6 !important;
+            color: #ef233c !important;
+            border-color: #ef233c !important;
+        }
+
+        #textActions #convertBtn:disabled {
+            display: flex !important;
+        }
+
+        #resultButtons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        #resultButtons .download-btn {
+            margin: 0 !important;
+        }
+    </style>
 </head>
 
-<body>
+<body class="pdf-tool">
 
-    <main class="converter-page">
-        <div class="container">
+<%- include("partials/tool-header") %>
 
-            <div class="converter-card">
+<main class="converter-page">
 
-                <div class="converter-header">
+    <div class="container">
 
-                    <div class="tool-icon">
-                        TXT
-                    </div>
+        <div class="converter-card">
 
-                    <h1>PDF to Text Converter</h1>
+            <div class="converter-header">
 
-                    <p>
-                        Extract text from PDF files and download it as a text file.
-                    </p>
-
+                <div class="tool-icon">
+                    TXT
                 </div>
 
-                <label class="upload-area" for="pdfInput">
+                <h1>
+                    PDF to Text Converter
+                </h1>
 
-                    <div class="upload-icon">📄</div>
+                <p>
+                    Extract text from PDF files and download it as a text file.
+                </p>
 
-                    <strong>Click to upload PDF</strong>
+            </div>
 
-                    <span>
-                        Select a PDF file to extract its text
-                    </span>
 
-                </label>
+            <label
+                class="upload-area"
+                for="pdfInput"
+            >
 
-                <input
-                    type="file"
-                    id="pdfInput"
-                    accept="application/pdf"
-                >
-
-                <div class="file-info" id="fileInfo">
-
-                    <strong id="fileName"></strong>
-
-                    <span id="fileSize"></span>
-
+                <div class="upload-icon">
+                    ↑
                 </div>
+
+                <strong>
+                    Click to upload PDF
+                </strong>
+
+                <span>
+                    Select a PDF file to extract its text
+                </span>
+
+            </label>
+
+
+            <input
+                type="file"
+                id="pdfInput"
+                accept="application/pdf,.pdf"
+            >
+
+
+            <div
+                class="file-info"
+                id="fileInfo"
+            >
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <div id="textActions">
 
                 <button
                     class="convert-btn"
                     id="convertBtn"
+                    type="button"
                     disabled
                 >
                     Extract Text
                 </button>
 
-                <div
-                    class="result"
-                    id="result"
-                    style="text-align:left;"
+                <button
+                    class="convert-btn reset-btn"
+                    id="resetBtn"
+                    type="button"
                 >
+                    Reset
+                </button>
 
-                    <h2>Text Extracted</h2>
+            </div>
 
-                    <p id="pageInfo">
-                        Text extracted successfully.
-                    </p>
 
-                    <textarea
-                        id="textOutput"
-                        readonly
-                        style="
-                            width:100%;
-                            min-height:280px;
-                            margin-top:16px;
-                            padding:14px;
-                            border:1px solid #d1d5db;
-                            border-radius:10px;
-                            background:#ffffff;
-                            font-family:monospace;
-                            font-size:13px;
-                            line-height:1.5;
-                            box-sizing:border-box;
-                            resize:vertical;
-                        "
-                    ></textarea>
+            <div
+                class="result"
+                id="result"
+                style="text-align:left;"
+            >
+
+                <h2 style="text-align:center;">
+                    Text Extracted
+                </h2>
+
+                <p
+                    id="pageInfo"
+                    style="text-align:center;"
+                >
+                    Text extracted successfully.
+                </p>
+
+
+                <textarea
+                    id="textOutput"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:280px;
+                        margin-top:16px;
+                        padding:14px;
+                        border:1px solid #d1d5db;
+                        border-radius:10px;
+                        background:#ffffff;
+                        font-family:monospace;
+                        font-size:13px;
+                        line-height:1.5;
+                        box-sizing:border-box;
+                        resize:vertical;
+                    "
+                ></textarea>
+
+
+                <div id="resultButtons">
 
                     <button
                         class="download-btn"
                         id="copyBtn"
                         type="button"
                     >
-                        📋 Copy Text
+                        Copy Text
                     </button>
 
                     <a
                         href="#"
                         class="download-btn"
                         id="downloadBtn"
-                        style="margin-left:8px;"
+                        download
                     >
-                        ⬇ Download TXT
+                        Download TXT
                     </a>
 
                 </div>
@@ -120,231 +217,541 @@
             </div>
 
         </div>
-    </main>
 
-    <script>
+    </div>
 
-        const pdfInput =
-            document.getElementById("pdfInput");
-
-        const fileInfo =
-            document.getElementById("fileInfo");
-
-        const fileName =
-            document.getElementById("fileName");
-
-        const fileSize =
-            document.getElementById("fileSize");
-
-        const convertBtn =
-            document.getElementById("convertBtn");
-
-        const result =
-            document.getElementById("result");
-
-        const textOutput =
-            document.getElementById("textOutput");
-
-        const pageInfo =
-            document.getElementById("pageInfo");
-
-        const copyBtn =
-            document.getElementById("copyBtn");
-
-        const downloadBtn =
-            document.getElementById("downloadBtn");
+</main>
 
 
-        pdfjsLib.GlobalWorkerOptions.workerSrc =
-            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+<footer class="site-footer">
+
+    <div class="container footer-grid">
+
+        <div class="footer-brand">
+
+            <a class="brand" href="/">
+                <span class="brand-mark">F</span>
+                <span class="brand-name">
+                    File<span>Vora</span>
+                </span>
+            </a>
+
+            <p>
+                Fast, simple online tools for everyday file tasks.
+            </p>
+
+        </div>
+
+        <div>
+            <h3>Company</h3>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/security">Security</a>
+        </div>
+
+        <div>
+            <h3>Resources</h3>
+            <a href="/blog">Blog</a>
+            <a href="/#tools">Tools</a>
+            <a href="/faq">FAQ</a>
+        </div>
+
+        <div>
+            <h3>Legal</h3>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+            <a href="/disclaimer">Disclaimer</a>
+        </div>
+
+        <div>
+            <h3>Contact</h3>
+            <a href="/contact">Email</a>
+            <a href="/contact">Facebook</a>
+            <a href="/contact">Instagram</a>
+        </div>
+
+    </div>
+
+    <div class="container footer-bottom">
+
+        <span>
+            © <span data-current-year></span> FileVora. All rights reserved.
+        </span>
+
+        <span>
+            All in One Tool.
+        </span>
+
+    </div>
+
+</footer>
 
 
-        let selectedFile = null;
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+        element.textContent =
+            new Date().getFullYear();
+    });
+</script>
 
 
-        pdfInput.addEventListener("change", function () {
+<script>
 
-            selectedFile = this.files[0];
+const pdfInput =
+    document.getElementById("pdfInput");
 
-            if (!selectedFile) {
+const fileInfo =
+    document.getElementById("fileInfo");
 
-                fileInfo.style.display = "none";
-                convertBtn.disabled = true;
+const fileName =
+    document.getElementById("fileName");
 
-                return;
-            }
+const fileSize =
+    document.getElementById("fileSize");
 
-            fileName.textContent =
-                selectedFile.name;
+const convertBtn =
+    document.getElementById("convertBtn");
 
-            fileSize.textContent =
-                (selectedFile.size / 1024).toFixed(2) +
-                " KB";
+const resetBtn =
+    document.getElementById("resetBtn");
 
-            fileInfo.style.display = "block";
+const textActions =
+    document.getElementById("textActions");
 
-            convertBtn.disabled = false;
+const result =
+    document.getElementById("result");
 
-            result.style.display = "none";
+const textOutput =
+    document.getElementById("textOutput");
 
-        });
+const pageInfo =
+    document.getElementById("pageInfo");
 
+const copyBtn =
+    document.getElementById("copyBtn");
 
-        convertBtn.addEventListener("click", async function () {
-
-            if (!selectedFile) {
-                return;
-            }
-
-            convertBtn.disabled = true;
-            convertBtn.textContent = "Extracting Text...";
-
-            result.style.display = "none";
-
-            try {
-
-                const arrayBuffer =
-                    await selectedFile.arrayBuffer();
-
-                const pdf =
-                    await pdfjsLib.getDocument({
-                        data: arrayBuffer
-                    }).promise;
-
-                let allText = "";
-
-                for (
-                    let pageNumber = 1;
-                    pageNumber <= pdf.numPages;
-                    pageNumber++
-                ) {
-
-                    const page =
-                        await pdf.getPage(pageNumber);
-
-                    const content =
-                        await page.getTextContent();
-
-                    const pageText =
-                        content.items
-                            .map(item => item.str)
-                            .join(" ");
-
-                    allText +=
-                        "Page " +
-                        pageNumber +
-                        "\n\n";
-
-                    allText +=
-                        pageText.trim();
-
-                    allText +=
-                        "\n\n------------------------------\n\n";
-                }
+const downloadBtn =
+    document.getElementById("downloadBtn");
 
 
-                if (!allText.trim()) {
-
-                    throw new Error(
-                        "No text found in this PDF."
-                    );
-
-                }
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
 
-                textOutput.value =
-                    allText.trim();
+let selectedFile = null;
+let downloadUrl = null;
 
-                pageInfo.textContent =
-                    "Extracted text from " +
-                    pdf.numPages +
-                    " page(s).";
 
-                const blob =
-                    new Blob(
-                        [allText.trim()],
-                        {
-                            type: "text/plain;charset=utf-8"
-                        }
-                    );
+function formatFileSize(bytes) {
 
-                const url =
-                    URL.createObjectURL(blob);
+    if (bytes < 1024) {
+        return bytes + " B";
+    }
 
-                downloadBtn.href = url;
+    if (bytes < 1024 * 1024) {
+        return (bytes / 1024).toFixed(2) + " KB";
+    }
 
-                downloadBtn.download =
-                    selectedFile.name.replace(
-                        /\.pdf$/i,
-                        ""
-                    ) + ".txt";
+    return (
+        bytes / (1024 * 1024)
+    ).toFixed(2) + " MB";
+}
 
-                result.style.display =
-                    "block";
 
-            } catch (error) {
+pdfInput.addEventListener(
+    "change",
+    function () {
 
-                console.error(error);
+        selectedFile =
+            this.files[0];
 
-                alert(
-                    "No readable text could be extracted from this PDF. Scanned/image-only PDFs may require OCR."
-                );
 
-            } finally {
+        if (!selectedFile) {
 
-                convertBtn.disabled = false;
+            fileInfo.style.display =
+                "none";
+
+            result.style.display =
+                "none";
+
+            textActions.style.display =
+                "none";
+
+            convertBtn.disabled =
+                true;
+
+            return;
+        }
+
+
+        if (
+            selectedFile.type !==
+            "application/pdf"
+        ) {
+
+            alert(
+                "Please choose a PDF file."
+            );
+
+
+            pdfInput.value =
+                "";
+
+
+            selectedFile =
+                null;
+
+
+            fileInfo.style.display =
+                "none";
+
+
+            result.style.display =
+                "none";
+
+
+            textActions.style.display =
+                "none";
+
+
+            convertBtn.disabled =
+                true;
+
+
+            return;
+        }
+
+
+        fileName.textContent =
+            selectedFile.name;
+
+
+        fileSize.textContent =
+            formatFileSize(
+                selectedFile.size
+            );
+
+
+        fileInfo.style.display =
+            "block";
+
+
+        result.style.display =
+            "none";
+
+
+        convertBtn.disabled =
+            false;
+
+
+        textActions.style.display =
+            "grid";
+    }
+);
+
+
+convertBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (!selectedFile) {
+            return;
+        }
+
+
+        convertBtn.disabled =
+            true;
+
+
+        convertBtn.textContent =
+            "Extracting Text...";
+
+
+        result.style.display =
+            "none";
+
+
+        try {
+
+            const arrayBuffer =
+                await selectedFile.arrayBuffer();
+
+
+            const pdf =
+                await pdfjsLib
+                    .getDocument({
+                        data:
+                            arrayBuffer
+                    })
+                    .promise;
+
+
+            let allText = "";
+
+
+            for (
+                let pageNumber = 1;
+                pageNumber <= pdf.numPages;
+                pageNumber++
+            ) {
 
                 convertBtn.textContent =
-                    "Extract Text";
+                    `Reading page ${pageNumber} of ${pdf.numPages}...`;
 
+
+                const page =
+                    await pdf.getPage(
+                        pageNumber
+                    );
+
+
+                const content =
+                    await page.getTextContent();
+
+
+                const pageText =
+                    content.items
+                        .map(
+                            item =>
+                                item.str
+                        )
+                        .join(" ");
+
+
+                allText +=
+                    "Page " +
+                    pageNumber +
+                    "\n\n";
+
+
+                allText +=
+                    pageText.trim();
+
+
+                allText +=
+                    "\n\n------------------------------\n\n";
             }
 
-        });
 
+            if (
+                !allText.trim()
+            ) {
 
-        copyBtn.addEventListener("click", async function () {
-
-            if (!textOutput.value) {
-                return;
+                throw new Error(
+                    "No text found in this PDF."
+                );
             }
 
-            try {
 
-                await navigator.clipboard.writeText(
-                    textOutput.value
+            textOutput.value =
+                allText.trim();
+
+
+            pageInfo.textContent =
+                "Extracted text from " +
+                pdf.numPages +
+                " page(s).";
+
+
+            const blob =
+                new Blob(
+                    [
+                        allText.trim()
+                    ],
+                    {
+                        type:
+                            "text/plain;charset=utf-8"
+                    }
                 );
 
-                copyBtn.textContent =
-                    "✓ Copied";
 
-                setTimeout(() => {
+            if (downloadUrl) {
 
-                    copyBtn.textContent =
-                        "📋 Copy Text";
-
-                }, 1500);
-
-            } catch (error) {
-
-                textOutput.select();
-
-                document.execCommand("copy");
-
-                copyBtn.textContent =
-                    "✓ Copied";
-
-                setTimeout(() => {
-
-                    copyBtn.textContent =
-                        "📋 Copy Text";
-
-                }, 1500);
-
+                URL.revokeObjectURL(
+                    downloadUrl
+                );
             }
 
-        });
 
-    </script>
+            downloadUrl =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            downloadBtn.href =
+                downloadUrl;
+
+
+            downloadBtn.download =
+                selectedFile.name.replace(
+                    /\.pdf$/i,
+                    ""
+                ) + ".txt";
+
+
+            result.style.display =
+                "block";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            alert(
+                "No readable text could be extracted from this PDF. Scanned/image-only PDFs may require OCR."
+            );
+
+        } finally {
+
+            convertBtn.disabled =
+                false;
+
+
+            convertBtn.textContent =
+                "Extract Text";
+        }
+    }
+);
+
+
+copyBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (
+            !textOutput.value
+        ) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                textOutput.value
+            );
+
+
+            copyBtn.textContent =
+                "Copied";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy Text";
+
+                },
+                1500
+            );
+
+
+        } catch (error) {
+
+            textOutput.select();
+
+
+            document.execCommand(
+                "copy"
+            );
+
+
+            copyBtn.textContent =
+                "Copied";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy Text";
+
+                },
+                1500
+            );
+        }
+    }
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        pdfInput.value =
+            "";
+
+
+        selectedFile =
+            null;
+
+
+        fileName.textContent =
+            "";
+
+
+        fileSize.textContent =
+            "";
+
+
+        textOutput.value =
+            "";
+
+
+        pageInfo.textContent =
+            "Text extracted successfully.";
+
+
+        fileInfo.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        textActions.style.display =
+            "none";
+
+
+        convertBtn.disabled =
+            true;
+
+
+        convertBtn.textContent =
+            "Extract Text";
+
+
+        copyBtn.textContent =
+            "Copy Text";
+
+
+        downloadBtn.href =
+            "#";
+
+
+        if (downloadUrl) {
+
+            URL.revokeObjectURL(
+                downloadUrl
+            );
+
+            downloadUrl =
+                null;
+        }
+    }
+);
+
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

@@ -5,86 +5,212 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Unit Converter - FileVora</title>
-    <meta name="description" content="Convert length, weight and temperature units quickly with FileVora Unit Converter.">
+
+    <meta
+        name="description"
+        content="Convert length, weight and temperature units quickly with FileVora Unit Converter."
+    >
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        #unitActions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 18px;
+        }
+
+        #unitActions #convertBtn,
+        #unitActions #resetBtn {
+            width: 100% !important;
+            height: 50px !important;
+            min-height: 50px !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
+        }
+
+        #unitActions #resetBtn {
+            background: #ffffff !important;
+            color: #ef1f2b !important;
+            border: 1px solid #ef1f2b !important;
+            box-shadow: none !important;
+        }
+
+        #unitActions #resetBtn:hover {
+            background: #fff5f5 !important;
+        }
+
+        @media (max-width: 600px) {
+            #unitActions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <main class="converter-page">
-        <div class="container">
+<%- include("partials/tool-header") %>
 
-            <div class="converter-card">
+<main class="converter-page">
 
-                <div class="converter-header">
-                    <div class="tool-icon">↔</div>
+    <div class="container">
 
-                    <h1>Unit Converter</h1>
+        <div class="converter-card">
 
-                    <p>
-                        Convert length, weight and temperature units instantly.
-                    </p>
+            <div class="converter-header">
+
+                <div class="tool-icon">
+                    ↔
                 </div>
 
-                <div style="display:grid; gap:16px; text-align:left;">
+                <h1>
+                    Unit Converter
+                </h1>
 
-                    <!-- Category -->
-                    <div>
-                        <label style="display:block; margin-bottom:7px; font-weight:700; color:#111827;">
-                            Category
-                        </label>
+                <p>
+                    Convert length, weight and temperature units instantly.
+                </p>
 
-                        <select
-                            id="category"
-                            style="width:100%; padding:13px 14px; border:1px solid #cbd5e1; border-radius:10px; font-size:15px; background:#fff;"
-                        >
-                            <option value="length">Length</option>
-                            <option value="weight">Weight</option>
-                            <option value="temperature">Temperature</option>
-                        </select>
-                    </div>
+            </div>
 
-                    <!-- From -->
-                    <div>
-                        <label style="display:block; margin-bottom:7px; font-weight:700; color:#111827;">
-                            From
-                        </label>
 
-                        <select
-                            id="fromUnit"
-                            style="width:100%; padding:13px 14px; border:1px solid #cbd5e1; border-radius:10px; font-size:15px; background:#fff;"
-                        ></select>
-                    </div>
+            <div style="display:grid; gap:16px; text-align:left;">
 
-                    <!-- Value -->
-                    <div>
-                        <label style="display:block; margin-bottom:7px; font-weight:700; color:#111827;">
-                            Value
-                        </label>
+                <div>
 
-                        <input
-                            type="number"
-                            id="value"
-                            placeholder="Enter value"
-                            step="any"
-                            style="width:100%; box-sizing:border-box; padding:13px 14px; border:1px solid #cbd5e1; border-radius:10px; font-size:15px;"
-                        >
-                    </div>
+                    <label
+                        style="
+                            display:block;
+                            margin-bottom:7px;
+                            font-weight:700;
+                            color:#111827;
+                        "
+                    >
+                        Category
+                    </label>
 
-                    <!-- To -->
-                    <div>
-                        <label style="display:block; margin-bottom:7px; font-weight:700; color:#111827;">
-                            To
-                        </label>
+                    <select
+                        id="category"
+                        style="
+                            width:100%;
+                            padding:13px 14px;
+                            border:1px solid #cbd5e1;
+                            border-radius:10px;
+                            font-size:15px;
+                            background:#fff;
+                        "
+                    >
+                        <option value="length">
+                            Length
+                        </option>
 
-                        <select
-                            id="toUnit"
-                            style="width:100%; padding:13px 14px; border:1px solid #cbd5e1; border-radius:10px; font-size:15px; background:#fff;"
-                        ></select>
-                    </div>
+                        <option value="weight">
+                            Weight
+                        </option>
+
+                        <option value="temperature">
+                            Temperature
+                        </option>
+                    </select>
 
                 </div>
+
+
+                <div>
+
+                    <label
+                        style="
+                            display:block;
+                            margin-bottom:7px;
+                            font-weight:700;
+                            color:#111827;
+                        "
+                    >
+                        From
+                    </label>
+
+                    <select
+                        id="fromUnit"
+                        style="
+                            width:100%;
+                            padding:13px 14px;
+                            border:1px solid #cbd5e1;
+                            border-radius:10px;
+                            font-size:15px;
+                            background:#fff;
+                        "
+                    ></select>
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        style="
+                            display:block;
+                            margin-bottom:7px;
+                            font-weight:700;
+                            color:#111827;
+                        "
+                    >
+                        Value
+                    </label>
+
+                    <input
+                        type="number"
+                        id="value"
+                        placeholder="Enter value"
+                        step="any"
+                        style="
+                            width:100%;
+                            box-sizing:border-box;
+                            padding:13px 14px;
+                            border:1px solid #cbd5e1;
+                            border-radius:10px;
+                            font-size:15px;
+                        "
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label
+                        style="
+                            display:block;
+                            margin-bottom:7px;
+                            font-weight:700;
+                            color:#111827;
+                        "
+                    >
+                        To
+                    </label>
+
+                    <select
+                        id="toUnit"
+                        style="
+                            width:100%;
+                            padding:13px 14px;
+                            border:1px solid #cbd5e1;
+                            border-radius:10px;
+                            font-size:15px;
+                            background:#fff;
+                        "
+                    ></select>
+
+                </div>
+
+            </div>
+
+
+            <div id="unitActions">
 
                 <button
                     type="button"
@@ -94,226 +220,575 @@
                     Convert
                 </button>
 
-                <div class="result" id="result">
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
 
-                    <h2>Conversion Result</h2>
+            </div>
 
-                    <p id="resultText"></p>
 
-                </div>
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>
+                    Conversion Result
+                </h2>
+
+                <p id="resultText"></p>
 
             </div>
 
         </div>
-    </main>
 
-    <script>
-        const category = document.getElementById("category");
-        const fromUnit = document.getElementById("fromUnit");
-        const toUnit = document.getElementById("toUnit");
-        const valueInput = document.getElementById("value");
-        const convertBtn = document.getElementById("convertBtn");
-        const result = document.getElementById("result");
-        const resultText = document.getElementById("resultText");
+    </div>
 
-        const units = {
+</main>
 
-            length: {
-                meter: {
-                    name: "Meter",
-                    factor: 1
-                },
-                kilometer: {
-                    name: "Kilometer",
-                    factor: 1000
-                },
-                centimeter: {
-                    name: "Centimeter",
-                    factor: 0.01
-                },
-                millimeter: {
-                    name: "Millimeter",
-                    factor: 0.001
-                },
-                mile: {
-                    name: "Mile",
-                    factor: 1609.344
-                },
-                yard: {
-                    name: "Yard",
-                    factor: 0.9144
-                },
-                foot: {
-                    name: "Foot",
-                    factor: 0.3048
-                },
-                inch: {
-                    name: "Inch",
-                    factor: 0.0254
-                }
-            },
 
-            weight: {
-                kilogram: {
-                    name: "Kilogram",
-                    factor: 1
-                },
-                gram: {
-                    name: "Gram",
-                    factor: 0.001
-                },
-                milligram: {
-                    name: "Milligram",
-                    factor: 0.000001
-                },
-                pound: {
-                    name: "Pound",
-                    factor: 0.45359237
-                },
-                ounce: {
-                    name: "Ounce",
-                    factor: 0.028349523125
-                },
-                stone: {
-                    name: "Stone",
-                    factor: 6.35029318
-                }
-            },
+<script>
 
-            temperature: {
-                celsius: {
-                    name: "Celsius"
-                },
-                fahrenheit: {
-                    name: "Fahrenheit"
-                },
-                kelvin: {
-                    name: "Kelvin"
-                }
-            }
+const category =
+    document.getElementById("category");
 
-        };
+const fromUnit =
+    document.getElementById("fromUnit");
 
-        function loadUnits() {
+const toUnit =
+    document.getElementById("toUnit");
 
-            const selectedCategory = category.value;
-            const categoryUnits = units[selectedCategory];
+const valueInput =
+    document.getElementById("value");
 
-            fromUnit.innerHTML = "";
-            toUnit.innerHTML = "";
+const convertBtn =
+    document.getElementById("convertBtn");
 
-            Object.keys(categoryUnits).forEach(key => {
+const resetBtn =
+    document.getElementById("resetBtn");
 
-                const option1 = document.createElement("option");
-                option1.value = key;
-                option1.textContent = categoryUnits[key].name;
+const result =
+    document.getElementById("result");
 
-                const option2 = document.createElement("option");
-                option2.value = key;
-                option2.textContent = categoryUnits[key].name;
+const resultText =
+    document.getElementById("resultText");
 
-                fromUnit.appendChild(option1);
-                toUnit.appendChild(option2);
 
-            });
+const units = {
 
-            if (Object.keys(categoryUnits).length > 1) {
-                toUnit.selectedIndex = 1;
-            }
+    length: {
 
-            result.style.display = "none";
+        meter: {
+            name: "Meter",
+            factor: 1
+        },
+
+        kilometer: {
+            name: "Kilometer",
+            factor: 1000
+        },
+
+        centimeter: {
+            name: "Centimeter",
+            factor: 0.01
+        },
+
+        millimeter: {
+            name: "Millimeter",
+            factor: 0.001
+        },
+
+        mile: {
+            name: "Mile",
+            factor: 1609.344
+        },
+
+        yard: {
+            name: "Yard",
+            factor: 0.9144
+        },
+
+        foot: {
+            name: "Foot",
+            factor: 0.3048
+        },
+
+        inch: {
+            name: "Inch",
+            factor: 0.0254
         }
 
-        function convertTemperature(value, from, to) {
+    },
 
-            let celsius;
 
-            if (from === "celsius") {
-                celsius = value;
-            } else if (from === "fahrenheit") {
-                celsius = (value - 32) * 5 / 9;
-            } else if (from === "kelvin") {
-                celsius = value - 273.15;
-            }
+    weight: {
 
-            if (to === "celsius") {
-                return celsius;
-            }
+        kilogram: {
+            name: "Kilogram",
+            factor: 1
+        },
 
-            if (to === "fahrenheit") {
-                return (celsius * 9 / 5) + 32;
-            }
+        gram: {
+            name: "Gram",
+            factor: 0.001
+        },
 
-            if (to === "kelvin") {
-                return celsius + 273.15;
-            }
+        milligram: {
+            name: "Milligram",
+            factor: 0.000001
+        },
+
+        pound: {
+            name: "Pound",
+            factor: 0.45359237
+        },
+
+        ounce: {
+            name: "Ounce",
+            factor: 0.028349523125
+        },
+
+        stone: {
+            name: "Stone",
+            factor: 6.35029318
         }
 
-        function formatNumber(number) {
+    },
 
-            if (!Number.isFinite(number)) {
-                return "Invalid result";
-            }
 
-            return Number(number.toFixed(10)).toLocaleString("en-US", {
-                maximumFractionDigits: 10
-            });
+    temperature: {
+
+        celsius: {
+            name: "Celsius"
+        },
+
+        fahrenheit: {
+            name: "Fahrenheit"
+        },
+
+        kelvin: {
+            name: "Kelvin"
         }
 
-        category.addEventListener("change", loadUnits);
+    }
 
-        convertBtn.addEventListener("click", () => {
+};
 
-            const value = parseFloat(valueInput.value);
 
-            if (isNaN(value)) {
-                alert("Please enter a valid number.");
-                return;
-            }
+function loadUnits() {
 
-            const selectedCategory = category.value;
-            const from = fromUnit.value;
-            const to = toUnit.value;
+    const selectedCategory =
+        category.value;
 
-            let convertedValue;
+    const categoryUnits =
+        units[selectedCategory];
 
-            if (selectedCategory === "temperature") {
 
-                convertedValue = convertTemperature(
+    fromUnit.innerHTML =
+        "";
+
+    toUnit.innerHTML =
+        "";
+
+
+    Object.keys(
+        categoryUnits
+    ).forEach(function (key) {
+
+        const option1 =
+            document.createElement(
+                "option"
+            );
+
+        option1.value =
+            key;
+
+        option1.textContent =
+            categoryUnits[key].name;
+
+
+        const option2 =
+            document.createElement(
+                "option"
+            );
+
+        option2.value =
+            key;
+
+        option2.textContent =
+            categoryUnits[key].name;
+
+
+        fromUnit.appendChild(
+            option1
+        );
+
+        toUnit.appendChild(
+            option2
+        );
+
+    });
+
+
+    if (
+        Object.keys(
+            categoryUnits
+        ).length > 1
+    ) {
+
+        toUnit.selectedIndex =
+            1;
+    }
+
+
+    result.style.display =
+        "none";
+
+    resultText.textContent =
+        "";
+}
+
+
+function convertTemperature(
+    value,
+    from,
+    to
+) {
+
+    let celsius;
+
+
+    if (
+        from ===
+        "celsius"
+    ) {
+
+        celsius =
+            value;
+
+    } else if (
+        from ===
+        "fahrenheit"
+    ) {
+
+        celsius =
+            (value - 32) *
+            5 / 9;
+
+    } else if (
+        from ===
+        "kelvin"
+    ) {
+
+        celsius =
+            value - 273.15;
+    }
+
+
+    if (
+        to ===
+        "celsius"
+    ) {
+
+        return celsius;
+    }
+
+
+    if (
+        to ===
+        "fahrenheit"
+    ) {
+
+        return (
+            celsius *
+            9 / 5
+        ) + 32;
+    }
+
+
+    if (
+        to ===
+        "kelvin"
+    ) {
+
+        return (
+            celsius +
+            273.15
+        );
+    }
+
+}
+
+
+function formatNumber(number) {
+
+    if (
+        !Number.isFinite(
+            number
+        )
+    ) {
+
+        return "Invalid result";
+    }
+
+
+    return Number(
+        number.toFixed(10)
+    ).toLocaleString(
+        "en-US",
+        {
+            maximumFractionDigits:
+                10
+        }
+    );
+
+}
+
+
+category.addEventListener(
+    "change",
+    loadUnits
+);
+
+
+convertBtn.addEventListener(
+    "click",
+    function () {
+
+        const value =
+            parseFloat(
+                valueInput.value
+            );
+
+
+        if (
+            isNaN(value)
+        ) {
+
+            alert(
+                "Please enter a valid number."
+            );
+
+            return;
+        }
+
+
+        const selectedCategory =
+            category.value;
+
+        const from =
+            fromUnit.value;
+
+        const to =
+            toUnit.value;
+
+
+        let convertedValue;
+
+
+        if (
+            selectedCategory ===
+            "temperature"
+        ) {
+
+            convertedValue =
+                convertTemperature(
                     value,
                     from,
                     to
                 );
 
-            } else {
+        } else {
 
-                const fromFactor = units[selectedCategory][from].factor;
-                const toFactor = units[selectedCategory][to].factor;
+            const fromFactor =
+                units[
+                    selectedCategory
+                ][from].factor;
 
-                const baseValue = value * fromFactor;
 
-                convertedValue = baseValue / toFactor;
-            }
+            const toFactor =
+                units[
+                    selectedCategory
+                ][to].factor;
 
-            const fromName = units[selectedCategory][from].name;
-            const toName = units[selectedCategory][to].name;
 
-            resultText.textContent =
-                `${formatNumber(value)} ${fromName} = ${formatNumber(convertedValue)} ${toName}`;
+            const baseValue =
+                value *
+                fromFactor;
 
-            result.style.display = "block";
-        });
 
-        valueInput.addEventListener("keydown", (event) => {
+            convertedValue =
+                baseValue /
+                toFactor;
+        }
 
-            if (event.key === "Enter") {
-                convertBtn.click();
-            }
 
-        });
+        const fromName =
+            units[
+                selectedCategory
+            ][from].name;
+
+
+        const toName =
+            units[
+                selectedCategory
+            ][to].name;
+
+
+        resultText.textContent =
+            `${formatNumber(value)} ${fromName} = ${formatNumber(convertedValue)} ${toName}`;
+
+
+        result.style.display =
+            "block";
+
+    }
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        category.value =
+            "length";
+
 
         loadUnits();
-    </script>
+
+
+        fromUnit.value =
+            "meter";
+
+
+        toUnit.value =
+            "kilometer";
+
+
+        valueInput.value =
+            "";
+
+
+        resultText.textContent =
+            "";
+
+
+        result.style.display =
+            "none";
+
+
+        valueInput.focus();
+
+    }
+);
+
+
+valueInput.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key ===
+            "Enter"
+        ) {
+
+            convertBtn.click();
+        }
+
+    }
+);
+
+
+loadUnits();
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date()
+                    .getFullYear();
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

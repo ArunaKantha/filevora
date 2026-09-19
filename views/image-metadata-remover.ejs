@@ -1,4 +1,4 @@
-```ejs
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,9 +8,12 @@
     <title>Image Metadata Remover - FileVora</title>
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
 </head>
 
 <body>
+<%- include("partials/tool-header") %>
 
 <main class="converter-page">
 
@@ -59,21 +62,36 @@
 
             <div class="file-info" id="fileInfo">
 
-                <strong id="fileName"></strong>
+    <strong id="fileName"></strong>
 
-                <span id="fileSize"></span>
+    <span id="fileSize"></span>
 
-            </div>
+</div>
 
+<div class="preview-area" id="metadataPreviewArea" style="display:none;">
+    <img id="metadataPreview" alt="Image preview">
+</div>
 
-            <button
-                class="convert-btn"
-                id="removeBtn"
-                type="button"
-                disabled
-            >
-                Remove Metadata
-            </button>
+<div class="fv-image-actions" id="metadataActions" hidden>
+
+    <button
+        class="convert-btn"
+        id="removeBtn"
+        type="button"
+        disabled
+    >
+        Remove Metadata
+    </button>
+
+    <button
+        class="fv-reset-btn"
+        id="metadataResetBtn"
+        type="button"
+    >
+        Reset
+    </button>
+
+</div>
 
 
             <div
@@ -94,7 +112,7 @@
                     class="download-btn"
                     id="downloadBtn"
                 >
-                    ⬇ Download Clean Image
+                    Download Clean Image
                 </button>
 
             </div>
@@ -128,6 +146,19 @@ const result =
 
 const downloadBtn =
     document.getElementById("downloadBtn");
+    const metadataPreview =
+    document.getElementById("metadataPreview");
+
+const metadataPreviewArea =
+    document.getElementById("metadataPreviewArea");
+
+const metadataActions =
+    document.getElementById("metadataActions");
+
+const metadataResetBtn =
+    document.getElementById("metadataResetBtn");
+
+let metadataPreviewURL = null;
 
 
 let selectedFile = null;
@@ -183,11 +214,22 @@ imageInput.addEventListener("change", function () {
 
     fileInfo.style.display = "block";
 
-    removeBtn.disabled = false;
+if (metadataPreviewURL) {
+    URL.revokeObjectURL(metadataPreviewURL);
+}
 
-    result.style.display = "none";
+metadataPreviewURL = URL.createObjectURL(file);
 
-    cleanBlob = null;
+metadataPreview.src = metadataPreviewURL;
+metadataPreviewArea.style.display = "block";
+
+metadataActions.hidden = false;
+
+removeBtn.disabled = false;
+
+result.style.display = "none";
+
+cleanBlob = null;
 
 });
 
@@ -437,9 +479,50 @@ downloadBtn.addEventListener("click", function () {
     }, 2000);
 
 });
+metadataResetBtn.addEventListener("click", function () {
+
+    if (metadataPreviewURL) {
+        URL.revokeObjectURL(metadataPreviewURL);
+        metadataPreviewURL = null;
+    }
+
+    imageInput.value = "";
+
+    selectedFile = null;
+    cleanBlob = null;
+
+    fileName.textContent = "";
+    fileSize.textContent = "";
+
+    fileInfo.style.display = "none";
+
+    metadataPreview.src = "";
+    metadataPreviewArea.style.display = "none";
+
+    metadataActions.hidden = true;
+
+    removeBtn.disabled = true;
+    removeBtn.textContent = "Remove Metadata";
+
+    result.style.display = "none";
+});
 
 </script>
 
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
 </body>
 </html>
-```

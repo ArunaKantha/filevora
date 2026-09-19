@@ -14,12 +14,19 @@ const resultArea = document.getElementById("resultArea");
 const downloadBtn = document.getElementById("downloadBtn");
 
 let selectedFile = null;
+let previewURL = null;
+let downloadURL = null;
+
 
 function formatBytes(bytes) {
     if (bytes === 0) return "0 Bytes";
 
     const units = ["Bytes", "KB", "MB", "GB"];
-    const index = Math.floor(Math.log(bytes) / Math.log(1024));
+
+    const index = Math.min(
+        Math.floor(Math.log(bytes) / Math.log(1024)),
+        units.length - 1
+    );
 
     return (
         (bytes / Math.pow(1024, index)).toFixed(2) +
@@ -27,6 +34,7 @@ function formatBytes(bytes) {
         units[index]
     );
 }
+
 
 imageInput.addEventListener("change", function () {
 
@@ -38,67 +46,193 @@ imageInput.addEventListener("change", function () {
 
     originalSize.textContent = formatBytes(file.size);
 
-    const imageURL = URL.createObjectURL(file);
+    if (previewURL) {
+        URL.revokeObjectURL(previewURL);
+    }
 
-    previewImage.src = imageURL;
+    previewURL = URL.createObjectURL(file);
+
+    previewImage.src = previewURL;
 
     previewArea.hidden = false;
     resultArea.hidden = true;
+
 });
+
 
 quality.addEventListener("input", function () {
-    qualityValue.textContent = `${this.value}%`;
+
+    qualityValue.textContent = this.value + "%";
+
 });
 
-compressBtn.addEventListener("click", function () {
 
+compressBtn.addEventListener("click", function () {
+    console.log("COMPRESS BUTTON CLICKED");
+console.log("IMAGE STATE:", previewImage.complete, previewImage.naturalWidth, previewImage.naturalHeight);
     if (!selectedFile) {
         alert("Please choose an image first.");
         return;
     }
 
-    const img = new Image();
+    if (!previewImage.complete || !previewImage.naturalWidth) {
+        alert("Please wait for the image to finish loading.");
+        return;
+    }
 
-    img.onload = function () {
+    compressBtn.disabled = true;
+    compressBtn.textContent = "Compressing...";
 
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
 
-        canvas.width = img.width;
-        canvas.height = img.height;
+    const canvas = document.createElement("canvas");
 
-        ctx.drawImage(img, 0, 0);
+    canvas.width = previewImage.naturalWidth;
+    canvas.height = previewImage.naturalHeight;
 
-        const compressionQuality = Number(quality.value) / 100;
 
-        canvas.toBlob(
-            function (blob) {
+    const ctx = canvas.getContext("2d");
 
-                if (!blob) {
-                    alert("Compression failed. Please try another image.");
-                    return;
-                }
+    if (!ctx) {
+        alert("Your browser could not process this image.");
 
-                compressedSize.textContent = formatBytes(blob.size);
+        compressBtn.disabled = false;
+        compressBtn.textContent = "Compress Image";
 
-                const savedPercentage =
-                    ((selectedFile.size - blob.size) / selectedFile.size) * 100;
+        return;
+    }
 
-                reduction.textContent =
-                    savedPercentage > 0
-                        ? `${savedPercentage.toFixed(1)}%`
-                        : "0%";
 
-                const compressedURL = URL.createObjectURL(blob);
+    ctx.drawImage(
+        previewImage,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+    console.log("CANVAS DRAW DONE", canvas.width, canvas.height);
 
-                downloadBtn.href = compressedURL;
 
-                resultArea.hidden = false;
-            },
-            "image/jpeg",
-            compressionQuality
-        );
-    };
+    /*
+       Use JPEG output for JPG images.
+       WebP stays WebP.
+       PNG stays PNG.
+    */
 
-    img.src = URL.createObjectURL(selectedFile);
+    let outputType = selectedFile.type;
+
+    if (
+        outputType !== "image/jpeg" &&
+        outputType !== "image/png" &&
+        outputType !== "image/webp"
+    ) {
+        outputType = "image/jpeg";
+    }
+
+
+    const compressionQuality =
+        Number(quality.value) / 100;
+
+console.log("STARTING TOBLOB", outputType, compressionQuality);
+    canvas.toBlob(
+
+        function (blob) {
+            console.log("TOBLOB CALLBACK", blob);
+
+            compressBtn.disabled = false;
+            compressBtn.textContent = "Compress Image";
+
+
+            if (!blob) {
+
+                alert(
+                    "Compression failed. Please try another image."
+                );
+
+                return;
+            }
+
+
+            // Never return a file larger than the original
+let finalBlob;
+
+if (blob.size < selectedFile.size) {
+
+    finalBlob = blob;
+
+    compressedSize.textContent =
+        formatBytes(blob.size);
+
+    const difference =
+        selectedFile.size - blob.size;
+
+    const savedPercentage =
+        (difference / selectedFile.size) * 100;
+
+    reduction.textContent =
+        savedPercentage.toFixed(1) + "%";
+
+} else {
+
+    finalBlob = selectedFile;
+
+    compressedSize.textContent =
+        formatBytes(selectedFile.size);
+
+    reduction.textContent =
+        "No reduction possible at this quality";
+}
+
+if (downloadURL) {
+    URL.revokeObjectURL(downloadURL);
+}
+
+downloadURL =
+    URL.createObjectURL(finalBlob);
+
+downloadBtn.href = downloadURL;
+
+
+            let extension = "jpg";
+
+            if (outputType === "image/png") {
+                extension = "png";
+            }
+
+            if (outputType === "image/webp") {
+                extension = "webp";
+            }
+
+
+            downloadBtn.download =
+                "filevora-compressed-image." +
+                extension;
+
+
+            resultArea.hidden = false;
+resultArea.removeAttribute("hidden");
+resultArea.style.setProperty("display", "block", "important");
+
+
+            resultArea.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest"
+            });
+
+        },
+
+        outputType,
+
+        compressionQuality
+
+    );
+
 });
+// Image Compressor - Reset Button
+const compressResetBtn =
+    document.getElementById("compressResetBtn");
+
+if (compressResetBtn) {
+    compressResetBtn.addEventListener("click", function () {
+        window.location.reload();
+    });
+}

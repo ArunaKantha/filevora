@@ -112,6 +112,8 @@ convertBtn.addEventListener("click", function () {
             downloadBtn.href = pngURL;
 
             resultArea.hidden = false;
+resultArea.removeAttribute("hidden");
+resultArea.style.setProperty("display", "block", "important");
 
         }, "image/png");
     };
@@ -126,3 +128,11 @@ convertBtn.addEventListener("click", function () {
 
     img.src = URL.createObjectURL(selectedFile);
 });
+// JPG to PNG - Reset Button
+const resetBtn = document.getElementById("resetBtn");
+
+if (resetBtn) {
+    resetBtn.addEventListener("click", function () {
+        window.location.reload();
+    });
+}

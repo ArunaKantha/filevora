@@ -8,9 +8,62 @@
     <meta name="description" content="Format and beautify CSS code online with FileVora.">
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .css-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .css-action-row .convert-btn{
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .css-reset-btn{
+            background:#ffffff !important;
+            color:#ef1f2b !important;
+            border:1px solid #ef1f2b !important;
+            box-shadow:none !important;
+        }
+
+        .css-reset-btn:hover{
+            background:#fff5f5 !important;
+        }
+
+        .css-result-actions{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:15px;
+        }
+
+        .css-result-actions .download-btn{
+            width:100% !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+            text-align:center !important;
+        }
+
+        @media (max-width:600px){
+            .css-action-row,
+            .css-result-actions{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
+
+<%- include("partials/tool-header") %>
 
 <div class="converter-page">
 
@@ -32,12 +85,21 @@
 
             </div>
 
+
             <div style="text-align:left;">
 
-                <label for="cssInput"
-                       style="display:block; margin-bottom:8px; font-weight:700; color:#111827;">
+                <label
+                    for="cssInput"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
                     CSS Code
                 </label>
+
 
                 <textarea
                     id="cssInput"
@@ -59,15 +121,31 @@
 
             </div>
 
-            <button
-                class="convert-btn"
-                onclick="formatCSS()"
-            >
-                Format CSS
-            </button>
 
-            <div id="errorMessage"
-                 style="
+            <div class="css-action-row">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="formatBtn"
+                >
+                    Format CSS
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn css-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                id="errorMessage"
+                style="
                     display:none;
                     margin-top:18px;
                     padding:14px 18px;
@@ -76,16 +154,24 @@
                     border-radius:10px;
                     color:#b91c1c;
                     text-align:left;
-                 ">
-            </div>
+                "
+            ></div>
 
-            <div class="result" id="result">
 
-                <h2>CSS Formatted</h2>
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2>
+                    CSS Formatted
+                </h2>
 
                 <p>
                     Your CSS code has been successfully formatted.
                 </p>
+
 
                 <textarea
                     id="output"
@@ -107,22 +193,27 @@
                     "
                 ></textarea>
 
-                <button
-                    class="download-btn"
-                    onclick="copyFormattedCSS()"
-                    type="button"
-                >
-                    Copy CSS
-                </button>
 
-                <a
-                    id="downloadBtn"
-                    class="download-btn"
-                    href="#"
-                    download="formatted.css"
-                >
-                    ↓ Download CSS
-                </a>
+                <div class="css-result-actions">
+
+                    <button
+                        type="button"
+                        class="download-btn"
+                        id="copyBtn"
+                    >
+                        Copy CSS
+                    </button>
+
+                    <a
+                        id="downloadBtn"
+                        class="download-btn"
+                        href="#"
+                        download="formatted.css"
+                    >
+                        Download CSS
+                    </a>
+
+                </div>
 
             </div>
 
@@ -132,164 +223,486 @@
 
 </div>
 
+
 <script>
+
+const cssInput =
+    document.getElementById("cssInput");
+
+const formatBtn =
+    document.getElementById("formatBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const result =
+    document.getElementById("result");
+
+const output =
+    document.getElementById("output");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let currentDownloadUrl =
+    null;
+
+
+/* =========================
+   FORMAT CSS
+========================= */
 
 function formatCSS() {
 
-    const input = document.getElementById("cssInput").value.trim();
-    const result = document.getElementById("result");
-    const output = document.getElementById("output");
-    const errorMessage = document.getElementById("errorMessage");
-    const downloadBtn = document.getElementById("downloadBtn");
+    const input =
+        cssInput.value.trim();
 
-    result.style.display = "none";
-    errorMessage.style.display = "none";
+
+    result.style.display =
+        "none";
+
+
+    errorMessage.style.display =
+        "none";
+
 
     if (!input) {
-        showError("Please enter CSS code.");
+
+        showError(
+            "Please enter CSS code."
+        );
+
         return;
     }
 
+
     try {
 
-        const formatted = beautifyCSS(input);
+        const formatted =
+            beautifyCSS(
+                input
+            );
 
-        output.value = formatted;
 
-        const blob = new Blob(
-            [formatted],
-            {
-                type: "text/css;charset=utf-8;"
-            }
-        );
+        output.value =
+            formatted;
 
-        const url = URL.createObjectURL(blob);
 
-        downloadBtn.href = url;
+        const blob =
+            new Blob(
+                [formatted],
+                {
+                    type:
+                        "text/css;charset=utf-8;"
+                }
+            );
 
-        result.style.display = "block";
+
+        if (
+            currentDownloadUrl
+        ) {
+
+            URL.revokeObjectURL(
+                currentDownloadUrl
+            );
+        }
+
+
+        currentDownloadUrl =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        downloadBtn.href =
+            currentDownloadUrl;
+
+
+        result.style.display =
+            "block";
+
+
+        result.scrollIntoView({
+            behavior:"smooth",
+            block:"nearest"
+        });
+
 
     } catch (error) {
 
-        showError("Unable to format the CSS code.");
-
+        showError(
+            "Unable to format the CSS code."
+        );
     }
 
 }
 
+
+/* =========================
+   BEAUTIFY CSS
+========================= */
 
 function beautifyCSS(css) {
 
-    // Normalize whitespace
-    css = css
-        .replace(/\r\n/g, "\n")
-        .replace(/\r/g, "\n")
-        .trim();
+    css =
+        css
+            .replace(/\r\n/g, "\n")
+            .replace(/\r/g, "\n")
+            .trim();
 
-    // Add line breaks around braces
-    css = css
-        .replace(/\{/g, "{\n")
-        .replace(/\}/g, "\n}\n")
-        .replace(/;/g, ";\n");
 
-    // Remove unnecessary blank lines
-    css = css
-        .replace(/\n\s*\n+/g, "\n")
-        .trim();
+    css =
+        css
+            .replace(/\{/g, "{\n")
+            .replace(/\}/g, "\n}\n")
+            .replace(/;/g, ";\n");
 
-    const lines = css.split("\n");
 
-    let formatted = "";
-    let indent = 0;
+    css =
+        css
+            .replace(/\n\s*\n+/g, "\n")
+            .trim();
 
-    lines.forEach(line => {
 
-        line = line.trim();
+    const lines =
+        css.split("\n");
 
-        if (!line) {
-            return;
-        }
 
-        // Closing brace
-        if (line.startsWith("}")) {
+    let formatted =
+        "";
 
-            indent = Math.max(0, indent - 1);
+    let indent =
+        0;
 
-            formatted += getIndent(indent) + "}\n";
 
-            // Handle content after closing brace
-            const remaining = line.substring(1).trim();
+    lines.forEach(
+        function (line) {
 
-            if (remaining) {
-                formatted += getIndent(indent) + remaining + "\n";
+            line =
+                line.trim();
+
+
+            if (!line) {
+                return;
             }
 
-            return;
+
+            if (
+                line.startsWith("}")
+            ) {
+
+                indent =
+                    Math.max(
+                        0,
+                        indent - 1
+                    );
+
+
+                formatted +=
+                    getIndent(indent) +
+                    "}\n";
+
+
+                const remaining =
+                    line
+                        .substring(1)
+                        .trim();
+
+
+                if (remaining) {
+
+                    formatted +=
+                        getIndent(indent) +
+                        remaining +
+                        "\n";
+                }
+
+
+                return;
+            }
+
+
+            if (
+                line.endsWith("{")
+            ) {
+
+                formatted +=
+                    getIndent(indent) +
+                    line +
+                    "\n";
+
+
+                indent++;
+
+
+                return;
+            }
+
+
+            formatted +=
+                getIndent(indent) +
+                line +
+                "\n";
+
         }
+    );
 
-        // Opening brace
-        if (line.endsWith("{")) {
-
-            formatted += getIndent(indent) + line + "\n";
-
-            indent++;
-
-            return;
-        }
-
-        // Normal CSS property / selector
-        formatted += getIndent(indent) + line + "\n";
-
-    });
 
     return formatted.trim();
-
 }
 
+
+/* =========================
+   INDENT
+========================= */
 
 function getIndent(level) {
 
-    return "    ".repeat(level);
-
+    return "    ".repeat(
+        level
+    );
 }
 
 
-async function copyFormattedCSS() {
+/* =========================
+   COPY CSS
+========================= */
 
-    const output = document.getElementById("output");
+copyBtn.addEventListener(
+    "click",
+    async function () {
 
-    if (!output.value) {
-        return;
+        if (!output.value) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                output.value
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy CSS";
+
+                },
+                1500
+            );
+
+
+        } catch (error) {
+
+            output.select();
+
+
+            document.execCommand(
+                "copy"
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy CSS";
+
+                },
+                1500
+            );
+        }
+
     }
+);
 
-    try {
 
-        await navigator.clipboard.writeText(output.value);
-
-        alert("CSS copied to clipboard!");
-
-    } catch (error) {
-
-        output.select();
-        document.execCommand("copy");
-
-        alert("CSS copied to clipboard!");
-
-    }
-
-}
-
+/* =========================
+   ERROR
+========================= */
 
 function showError(message) {
 
-    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent =
+        message;
 
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
 
+    errorMessage.style.display =
+        "block";
+
+
+    result.style.display =
+        "none";
 }
 
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        cssInput.value =
+            "";
+
+
+        output.value =
+            "";
+
+
+        errorMessage.textContent =
+            "";
+
+
+        errorMessage.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        copyBtn.textContent =
+            "Copy CSS";
+
+
+        if (
+            currentDownloadUrl
+        ) {
+
+            URL.revokeObjectURL(
+                currentDownloadUrl
+            );
+
+
+            currentDownloadUrl =
+                null;
+        }
+
+
+        downloadBtn.href =
+            "#";
+
+
+        cssInput.focus();
+
+    }
+);
+
+
+/* =========================
+   EVENT
+========================= */
+
+formatBtn.addEventListener(
+    "click",
+    formatCSS
+);
+
 </script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date().getFullYear();
+
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

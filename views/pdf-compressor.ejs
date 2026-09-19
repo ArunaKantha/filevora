@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,29 +12,52 @@
     <title>PDF Compressor — FileVora</title>
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+    <style>
+        #compressActions {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        #compressActions #compressBtn,
+        #compressActions #resetBtn {
+            width: 100% !important;
+            height: 50px !important;
+            min-height: 50px !important;
+            margin: 0 !important;
+            padding: 0 20px !important;
+            box-sizing: border-box !important;
+        }
+
+        #compressActions #resetBtn {
+            background: #ffffff !important;
+            color: #ef233c !important;
+            border: 1px solid #ef233c !important;
+            box-shadow: none !important;
+        }
+
+        #compressActions #resetBtn:hover {
+            background: #fff5f6 !important;
+            color: #ef233c !important;
+        }
+
+        /* Keep Compress button visible while processing */
+        #compressActions #compressBtn:disabled {
+            display: flex !important;
+        }
+    </style>
 </head>
 
-<body>
+<body class="pdf-tool">
 
-<header class="site-header">
-    <div class="container nav">
-
-        <a class="brand" href="/">
-            <span class="brand-mark">F</span>
-            <span>File<span>Vora</span></span>
-        </a>
-
-        <nav class="nav-links">
-            <a href="/">Home</a>
-            <a href="/#tools">Tools</a>
-            <a href="/#categories">Categories</a>
-        </nav>
-
-    </div>
-</header>
-
+<%- include("partials/tool-header") %>
 
 <main class="converter-page">
 
@@ -59,7 +82,7 @@
 
             <label class="upload-area" for="pdfInput">
 
-                <div class="upload-icon">📄</div>
+                <div class="upload-icon">↑</div>
 
                 <strong>Choose a PDF file</strong>
 
@@ -84,13 +107,26 @@
             </div>
 
 
-            <button
-                class="convert-btn"
-                id="compressBtn"
-                disabled
-            >
-                Compress PDF
-            </button>
+            <div id="compressActions">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="compressBtn"
+                    disabled
+                >
+                    Compress PDF
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
 
 
             <div class="result" id="result">
@@ -100,11 +136,12 @@
                 <p id="resultText"></p>
 
                 <a
-                    id="downloadBtn"
                     class="download-btn"
-                    download="filevora-compressed.pdf"
+                    id="downloadBtn"
+                    href="#"
+                    download
                 >
-                    ↓ Download Compressed PDF
+                    Download Compressed PDF
                 </a>
 
             </div>
@@ -116,25 +153,74 @@
 </main>
 
 
-<footer>
+<footer class="site-footer">
 
-    <div class="container footer-inner">
+    <div class="container footer-grid">
 
-        <a class="brand" href="/">
+        <div class="footer-brand">
 
-            <span class="brand-mark">F</span>
+            <a class="brand" href="/">
+                <span class="brand-mark">F</span>
+                <span class="brand-name">
+                    File<span>Vora</span>
+                </span>
+            </a>
 
-            <span>File<span>Vora</span></span>
+            <p>
+                Fast, simple online tools for everyday file tasks.
+            </p>
 
-        </a>
+        </div>
 
-        <p>
-            © <span id="year"></span> FILEVORA. All rights reserved.
-        </p>
+        <div>
+            <h3>Company</h3>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/security">Security</a>
+        </div>
+
+        <div>
+            <h3>Resources</h3>
+            <a href="/blog">Blog</a>
+            <a href="/#tools">Tools</a>
+            <a href="/faq">FAQ</a>
+        </div>
+
+        <div>
+            <h3>Legal</h3>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+            <a href="/disclaimer">Disclaimer</a>
+        </div>
+
+        <div>
+            <h3>Contact</h3>
+            <a href="/contact">Email</a>
+            <a href="/contact">Facebook</a>
+            <a href="/contact">Instagram</a>
+        </div>
 
     </div>
 
+    <div class="container footer-bottom">
+        <span>
+            © <span data-current-year></span> FileVora. All rights reserved.
+        </span>
+
+        <span>All in One Tool.</span>
+    </div>
+
 </footer>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+        element.textContent =
+            new Date().getFullYear();
+    });
+</script>
 
 
 <script>
@@ -154,6 +240,12 @@ const fileSize =
 const compressBtn =
     document.getElementById("compressBtn");
 
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const compressActions =
+    document.getElementById("compressActions");
+
 const result =
     document.getElementById("result");
 
@@ -165,6 +257,7 @@ const downloadBtn =
 
 
 let selectedFile = null;
+let downloadUrl = null;
 
 
 function formatSize(bytes) {
@@ -177,8 +270,9 @@ function formatSize(bytes) {
         return (bytes / 1024).toFixed(2) + " KB";
     }
 
-    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
-
+    return (
+        bytes / (1024 * 1024)
+    ).toFixed(2) + " MB";
 }
 
 
@@ -195,8 +289,8 @@ pdfInput.addEventListener("change", function () {
         compressBtn.disabled = true;
 
         fileInfo.style.display = "none";
-
         result.style.display = "none";
+        compressActions.style.display = "none";
 
         return;
     }
@@ -211,6 +305,10 @@ pdfInput.addEventListener("change", function () {
         selectedFile = null;
 
         compressBtn.disabled = true;
+
+        fileInfo.style.display = "none";
+        result.style.display = "none";
+        compressActions.style.display = "none";
 
         return;
     }
@@ -238,125 +336,186 @@ pdfInput.addEventListener("change", function () {
     compressBtn.disabled =
         false;
 
+
+    compressActions.style.display =
+        "grid";
 });
 
 
-compressBtn.addEventListener("click", async function () {
+compressBtn.addEventListener(
+    "click",
+    async function () {
 
-    if (!selectedFile) return;
-
-
-    compressBtn.disabled =
-        true;
-
-
-    compressBtn.textContent =
-        "Compressing PDF...";
-
-
-    result.style.display =
-        "none";
-
-
-    try {
-
-        const originalBytes =
-            await selectedFile.arrayBuffer();
-
-
-        const pdf =
-            await PDFLib.PDFDocument.load(
-                originalBytes
-            );
-
-
-        /*
-         * Re-save the PDF using pdf-lib.
-         * This can remove some unnecessary document
-         * overhead and produce a cleaner PDF.
-         */
-
-        const compressedBytes =
-            await pdf.save({
-                useObjectStreams: true,
-                addDefaultPage: false
-            });
-
-
-        const originalSize =
-            selectedFile.size;
-
-
-        const compressedSize =
-            compressedBytes.length;
-
-
-        const reduction =
-            ((originalSize - compressedSize) /
-                originalSize) * 100;
-
-
-        const blob =
-            new Blob(
-                [compressedBytes],
-                { type: "application/pdf" }
-            );
-
-
-        const url =
-            URL.createObjectURL(blob);
-
-
-        downloadBtn.href =
-            url;
-
-
-        downloadBtn.download =
-            "filevora-compressed.pdf";
-
-
-        if (compressedSize < originalSize) {
-
-            resultText.textContent =
-                `Original: ${formatSize(originalSize)} • Compressed: ${formatSize(compressedSize)} • Reduced by ${reduction.toFixed(1)}%.`;
-
-        } else {
-
-            resultText.textContent =
-                `Original: ${formatSize(originalSize)} • Optimized file: ${formatSize(compressedSize)}. This PDF was already highly optimized.`;
-
+        if (!selectedFile) {
+            return;
         }
 
 
+        compressBtn.disabled =
+            true;
+
+        compressBtn.textContent =
+            "Compressing PDF...";
+
+
         result.style.display =
-            "block";
+            "none";
 
 
-    } catch (error) {
+        try {
 
-        console.error(error);
+            const originalBytes =
+                await selectedFile.arrayBuffer();
 
-        alert(
-            "Something went wrong while compressing the PDF."
-        );
 
+            const pdf =
+                await PDFLib.PDFDocument.load(
+                    originalBytes
+                );
+
+
+            const compressedBytes =
+                await pdf.save({
+                    useObjectStreams: true,
+                    addDefaultPage: false
+                });
+
+
+            const originalSize =
+                selectedFile.size;
+
+
+            const compressedSize =
+                compressedBytes.length;
+
+
+            const reduction =
+                (
+                    (originalSize - compressedSize) /
+                    originalSize
+                ) * 100;
+
+
+            const blob =
+                new Blob(
+                    [compressedBytes],
+                    {
+                        type: "application/pdf"
+                    }
+                );
+
+
+            if (downloadUrl) {
+                URL.revokeObjectURL(downloadUrl);
+            }
+
+
+            downloadUrl =
+                URL.createObjectURL(blob);
+
+
+            downloadBtn.href =
+                downloadUrl;
+
+
+            downloadBtn.download =
+                "filevora-compressed.pdf";
+
+
+            if (
+                compressedSize <
+                originalSize
+            ) {
+
+                resultText.textContent =
+                    `Original: ${formatSize(originalSize)} • Compressed: ${formatSize(compressedSize)} • Reduced by ${reduction.toFixed(1)}%.`;
+
+            } else {
+
+                resultText.textContent =
+                    `Original: ${formatSize(originalSize)} • Optimized file: ${formatSize(compressedSize)}. This PDF was already highly optimized.`;
+            }
+
+
+            result.style.display =
+                "block";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Something went wrong while compressing the PDF."
+            );
+        }
+
+
+        compressBtn.disabled =
+            false;
+
+
+        compressBtn.textContent =
+            "Compress PDF";
     }
+);
 
 
-    compressBtn.disabled =
-        false;
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        pdfInput.value = "";
+
+        selectedFile = null;
 
 
-    compressBtn.textContent =
-        "Compress PDF";
-
-});
+        fileName.textContent = "";
+        fileSize.textContent = "";
 
 
-document.getElementById("year").textContent =
-    new Date().getFullYear();
+        fileInfo.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        compressActions.style.display =
+            "none";
+
+
+        compressBtn.disabled =
+            true;
+
+
+        compressBtn.textContent =
+            "Compress PDF";
+
+
+        resultText.textContent = "";
+
+
+        downloadBtn.href = "#";
+
+
+        if (downloadUrl) {
+
+            URL.revokeObjectURL(
+                downloadUrl
+            );
+
+            downloadUrl = null;
+        }
+    }
+);
 
 </script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

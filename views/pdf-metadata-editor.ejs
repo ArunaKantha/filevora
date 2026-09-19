@@ -1,482 +1,814 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>PDF Metadata Editor - FileVora</title>
-    <meta name="description" content="View and edit PDF metadata such as title, author, subject and keywords with FileVora.">
+
+    <meta
+        name="description"
+        content="View and edit PDF metadata such as title, author, subject and keywords with FileVora."
+    >
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
 
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+    <style>
+        #metadataForm {
+            display: none;
+            margin-top: 22px;
+            text-align: left;
+        }
+
+        #metadataForm label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        #metadataForm input {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 14px;
+            outline: none;
+        }
+
+        #metadataForm input:focus {
+            border-color: #ef233c;
+        }
+
+        #metadataActions {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        #metadataActions #saveBtn,
+        #metadataActions #resetBtn {
+            width: 100% !important;
+            height: 50px !important;
+            min-height: 50px !important;
+            margin: 0 !important;
+            padding: 0 20px !important;
+            box-sizing: border-box !important;
+        }
+
+        #metadataActions #resetBtn {
+            background: #ffffff !important;
+            color: #ef233c !important;
+            border: 1px solid #ef233c !important;
+            box-shadow: none !important;
+        }
+
+        #metadataActions #resetBtn:hover {
+            background: #fff5f6 !important;
+            color: #ef233c !important;
+        }
+
+        #metadataActions #saveBtn:disabled {
+            display: flex !important;
+        }
+
+        @media (max-width: 600px) {
+            #metadataActions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
-<body>
+<body class="pdf-tool">
 
-    <main class="converter-page">
-        <div class="container">
+<%- include("partials/tool-header") %>
 
-            <div class="converter-card">
+<main class="converter-page">
 
-                <div class="converter-header">
+    <div class="container">
 
-                    <div class="tool-icon">
-                        PDF
-                    </div>
+        <div class="converter-card">
 
-                    <h1>PDF Metadata Editor</h1>
+            <div class="converter-header">
 
-                    <p>
-                        View and edit PDF title, author, subject and keywords.
-                    </p>
-
+                <div class="tool-icon">
+                    PDF
                 </div>
 
-                <label class="upload-area" for="pdfInput">
+                <h1>
+                    PDF Metadata Editor
+                </h1>
 
-                    <div class="upload-icon">📄</div>
+                <p>
+                    View and edit PDF title, author, subject and keywords.
+                </p>
 
-                    <strong>Click to upload PDF</strong>
+            </div>
 
-                    <span>
-                        Select a PDF file to edit its metadata
-                    </span>
 
+            <label
+                class="upload-area"
+                for="pdfInput"
+            >
+
+                <div class="upload-icon">
+                    ↑
+                </div>
+
+                <strong>
+                    Click to upload PDF
+                </strong>
+
+                <span>
+                    Select a PDF file to edit its metadata
+                </span>
+
+            </label>
+
+
+            <input
+                type="file"
+                id="pdfInput"
+                accept="application/pdf,.pdf"
+            >
+
+
+            <div
+                class="file-info"
+                id="fileInfo"
+            >
+
+                <strong id="fileName"></strong>
+
+                <span id="fileSize"></span>
+
+            </div>
+
+
+            <div id="metadataForm">
+
+                <label for="titleInput">
+                    Title
                 </label>
 
                 <input
-                    type="file"
-                    id="pdfInput"
-                    accept="application/pdf"
+                    type="text"
+                    id="titleInput"
+                    placeholder="Document title"
                 >
 
-                <div class="file-info" id="fileInfo">
 
-                    <strong id="fileName"></strong>
+                <label for="authorInput">
+                    Author
+                </label>
 
-                    <span id="fileSize"></span>
-
-                </div>
-
-                <div
-                    id="metadataForm"
-                    style="
-                        display:none;
-                        margin-top:22px;
-                        text-align:left;
-                    "
+                <input
+                    type="text"
+                    id="authorInput"
+                    placeholder="Author name"
                 >
 
-                    <label
-                        for="titleInput"
-                        style="
-                            display:block;
-                            margin-bottom:6px;
-                            font-weight:700;
-                            color:#111827;
-                        "
-                    >
-                        Title
-                    </label>
 
-                    <input
-                        type="text"
-                        id="titleInput"
-                        placeholder="Document title"
-                        style="
-                            width:100%;
-                            padding:13px;
-                            margin-bottom:16px;
-                            border:1px solid #cbd5e1;
-                            border-radius:10px;
-                            box-sizing:border-box;
-                            font-size:14px;
-                            outline:none;
-                        "
-                    >
+                <label for="subjectInput">
+                    Subject
+                </label>
 
-
-                    <label
-                        for="authorInput"
-                        style="
-                            display:block;
-                            margin-bottom:6px;
-                            font-weight:700;
-                            color:#111827;
-                        "
-                    >
-                        Author
-                    </label>
-
-                    <input
-                        type="text"
-                        id="authorInput"
-                        placeholder="Author name"
-                        style="
-                            width:100%;
-                            padding:13px;
-                            margin-bottom:16px;
-                            border:1px solid #cbd5e1;
-                            border-radius:10px;
-                            box-sizing:border-box;
-                            font-size:14px;
-                            outline:none;
-                        "
-                    >
-
-
-                    <label
-                        for="subjectInput"
-                        style="
-                            display:block;
-                            margin-bottom:6px;
-                            font-weight:700;
-                            color:#111827;
-                        "
-                    >
-                        Subject
-                    </label>
-
-                    <input
-                        type="text"
-                        id="subjectInput"
-                        placeholder="Document subject"
-                        style="
-                            width:100%;
-                            padding:13px;
-                            margin-bottom:16px;
-                            border:1px solid #cbd5e1;
-                            border-radius:10px;
-                            box-sizing:border-box;
-                            font-size:14px;
-                            outline:none;
-                        "
-                    >
-
-
-                    <label
-                        for="keywordsInput"
-                        style="
-                            display:block;
-                            margin-bottom:6px;
-                            font-weight:700;
-                            color:#111827;
-                        "
-                    >
-                        Keywords
-                    </label>
-
-                    <input
-                        type="text"
-                        id="keywordsInput"
-                        placeholder="PDF, FileVora, document"
-                        style="
-                            width:100%;
-                            padding:13px;
-                            margin-bottom:16px;
-                            border:1px solid #cbd5e1;
-                            border-radius:10px;
-                            box-sizing:border-box;
-                            font-size:14px;
-                            outline:none;
-                        "
-                    >
-
-
-                    <label
-                        for="creatorInput"
-                        style="
-                            display:block;
-                            margin-bottom:6px;
-                            font-weight:700;
-                            color:#111827;
-                        "
-                    >
-                        Creator
-                    </label>
-
-                    <input
-                        type="text"
-                        id="creatorInput"
-                        placeholder="Creator application"
-                        style="
-                            width:100%;
-                            padding:13px;
-                            margin-bottom:16px;
-                            border:1px solid #cbd5e1;
-                            border-radius:10px;
-                            box-sizing:border-box;
-                            font-size:14px;
-                            outline:none;
-                        "
-                    >
-
-                </div>
-
-
-                <button
-                    class="convert-btn"
-                    id="saveBtn"
-                    disabled
-                >
-                    Save Metadata
-                </button>
-
-
-                <div
-                    class="result"
-                    id="result"
+                <input
+                    type="text"
+                    id="subjectInput"
+                    placeholder="Document subject"
                 >
 
-                    <h2>Metadata Updated</h2>
 
-                    <p>
-                        Your PDF metadata has been updated successfully.
-                    </p>
+                <label for="keywordsInput">
+                    Keywords
+                </label>
 
-                    <a
-                        href="#"
-                        class="download-btn"
-                        id="downloadBtn"
+                <input
+                    type="text"
+                    id="keywordsInput"
+                    placeholder="PDF, FileVora, document"
+                >
+
+
+                <label for="creatorInput">
+                    Creator
+                </label>
+
+                <input
+                    type="text"
+                    id="creatorInput"
+                    placeholder="Creator application"
+                >
+
+
+                <div id="metadataActions">
+
+                    <button
+                        class="convert-btn"
+                        id="saveBtn"
+                        type="button"
+                        disabled
                     >
-                        ⬇ Download PDF
-                    </a>
+                        Save Metadata
+                    </button>
+
+                    <button
+                        class="convert-btn reset-btn"
+                        id="resetBtn"
+                        type="button"
+                    >
+                        Reset
+                    </button>
 
                 </div>
 
             </div>
 
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>
+                    Metadata Updated
+                </h2>
+
+                <p>
+                    Your PDF metadata has been updated successfully.
+                </p>
+
+                <a
+                    href="#"
+                    class="download-btn"
+                    id="downloadBtn"
+                    download
+                >
+                    Download PDF
+                </a>
+
+            </div>
+
         </div>
-    </main>
+
+    </div>
+
+</main>
 
 
-    <script>
+<footer class="site-footer">
 
-        const pdfInput =
-            document.getElementById("pdfInput");
+    <div class="container footer-grid">
 
-        const fileInfo =
-            document.getElementById("fileInfo");
+        <div class="footer-brand">
 
-        const fileName =
-            document.getElementById("fileName");
+            <a class="brand" href="/">
+                <span class="brand-mark">F</span>
+                <span class="brand-name">File<span>Vora</span></span>
+            </a>
 
-        const fileSize =
-            document.getElementById("fileSize");
+            <p>
+                Fast, simple online tools for everyday file tasks.
+            </p>
 
-        const metadataForm =
-            document.getElementById("metadataForm");
+        </div>
 
-        const titleInput =
-            document.getElementById("titleInput");
+        <div>
+            <h3>Company</h3>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/security">Security</a>
+        </div>
 
-        const authorInput =
-            document.getElementById("authorInput");
+        <div>
+            <h3>Resources</h3>
+            <a href="/blog">Blog</a>
+            <a href="/#tools">Tools</a>
+            <a href="/faq">FAQ</a>
+        </div>
 
-        const subjectInput =
-            document.getElementById("subjectInput");
+        <div>
+            <h3>Legal</h3>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+            <a href="/disclaimer">Disclaimer</a>
+        </div>
 
-        const keywordsInput =
-            document.getElementById("keywordsInput");
+        <div>
+            <h3>Contact</h3>
+            <a href="/contact">Email</a>
+            <a href="/contact">Facebook</a>
+            <a href="/contact">Instagram</a>
+        </div>
 
-        const creatorInput =
-            document.getElementById("creatorInput");
+    </div>
 
-        const saveBtn =
-            document.getElementById("saveBtn");
+    <div class="container footer-bottom">
 
-        const result =
-            document.getElementById("result");
+        <span>
+            © <span data-current-year></span> FileVora. All rights reserved.
+        </span>
 
-        const downloadBtn =
-            document.getElementById("downloadBtn");
+        <span>
+            All in One Tool.
+        </span>
 
+    </div>
 
-        let selectedFile = null;
-
-
-        pdfInput.addEventListener("change", async function () {
-
-            selectedFile = this.files[0];
-
-            if (!selectedFile) {
-
-                metadataForm.style.display = "none";
-                fileInfo.style.display = "none";
-                saveBtn.disabled = true;
-
-                return;
-            }
-
-
-            fileName.textContent =
-                selectedFile.name;
-
-            fileSize.textContent =
-                (selectedFile.size / 1024).toFixed(2) +
-                " KB";
-
-            fileInfo.style.display = "block";
+</footer>
 
 
-            try {
-
-                const arrayBuffer =
-                    await selectedFile.arrayBuffer();
-
-                const pdfDoc =
-                    await PDFLib.PDFDocument.load(
-                        arrayBuffer,
-                        {
-                            ignoreEncryption: true
-                        }
-                    );
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+        element.textContent =
+            new Date().getFullYear();
+    });
+</script>
 
 
-                titleInput.value =
-                    pdfDoc.getTitle() || "";
+<script>
 
-                authorInput.value =
-                    pdfDoc.getAuthor() || "";
+const pdfInput =
+    document.getElementById("pdfInput");
 
-                subjectInput.value =
-                    pdfDoc.getSubject() || "";
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const metadataForm =
+    document.getElementById("metadataForm");
+
+const metadataActions =
+    document.getElementById("metadataActions");
+
+const titleInput =
+    document.getElementById("titleInput");
+
+const authorInput =
+    document.getElementById("authorInput");
+
+const subjectInput =
+    document.getElementById("subjectInput");
+
+const keywordsInput =
+    document.getElementById("keywordsInput");
+
+const creatorInput =
+    document.getElementById("creatorInput");
+
+const saveBtn =
+    document.getElementById("saveBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const result =
+    document.getElementById("result");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let selectedFile = null;
+let downloadUrl = null;
+
+
+function formatFileSize(bytes) {
+
+    if (bytes < 1024) {
+        return bytes + " B";
+    }
+
+    if (bytes < 1024 * 1024) {
+        return (
+            bytes / 1024
+        ).toFixed(2) + " KB";
+    }
+
+    return (
+        bytes /
+        (1024 * 1024)
+    ).toFixed(2) + " MB";
+}
+
+
+pdfInput.addEventListener(
+    "change",
+    async function () {
+
+        selectedFile =
+            this.files[0];
+
+
+        result.style.display =
+            "none";
+
+
+        if (!selectedFile) {
+
+            metadataForm.style.display =
+                "none";
+
+            metadataActions.style.display =
+                "none";
+
+            fileInfo.style.display =
+                "none";
+
+            saveBtn.disabled =
+                true;
+
+            return;
+        }
+
+
+        if (
+            selectedFile.type !== "application/pdf" &&
+            !selectedFile.name
+                .toLowerCase()
+                .endsWith(".pdf")
+        ) {
+
+            alert(
+                "Please choose a valid PDF file."
+            );
+
+
+            pdfInput.value =
+                "";
+
+
+            selectedFile =
+                null;
+
+
+            metadataForm.style.display =
+                "none";
+
+
+            metadataActions.style.display =
+                "none";
+
+
+            fileInfo.style.display =
+                "none";
+
+
+            saveBtn.disabled =
+                true;
+
+
+            return;
+        }
+
+
+        fileName.textContent =
+            selectedFile.name;
+
+
+        fileSize.textContent =
+            formatFileSize(
+                selectedFile.size
+            );
+
+
+        fileInfo.style.display =
+            "block";
+
+
+        try {
+
+            const arrayBuffer =
+                await selectedFile.arrayBuffer();
+
+
+            const pdfDoc =
+                await PDFLib.PDFDocument.load(
+                    arrayBuffer,
+                    {
+                        ignoreEncryption: true
+                    }
+                );
+
+
+            titleInput.value =
+                pdfDoc.getTitle() || "";
+
+
+            authorInput.value =
+                pdfDoc.getAuthor() || "";
+
+
+            subjectInput.value =
+                pdfDoc.getSubject() || "";
+
+
+            const pdfKeywords =
+                pdfDoc.getKeywords();
+
+
+            if (
+                Array.isArray(pdfKeywords)
+            ) {
 
                 keywordsInput.value =
-                    (pdfDoc.getKeywords() || []).join(", ");
+                    pdfKeywords.join(", ");
 
-                creatorInput.value =
-                    pdfDoc.getCreator() || "";
+            } else {
 
-
-                metadataForm.style.display =
-                    "block";
-
-                saveBtn.disabled = false;
-
-                result.style.display =
-                    "none";
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "Unable to read this PDF. Please try another PDF file."
-                );
-
-                metadataForm.style.display =
-                    "none";
-
-                saveBtn.disabled = true;
-
+                keywordsInput.value =
+                    pdfKeywords || "";
             }
 
-        });
+
+            creatorInput.value =
+                pdfDoc.getCreator() || "";
 
 
-        saveBtn.addEventListener("click", async function () {
-
-            if (!selectedFile) {
-                return;
-            }
-
-            saveBtn.disabled = true;
-            saveBtn.textContent = "Saving Metadata...";
-
-            result.style.display = "none";
+            metadataForm.style.display =
+                "block";
 
 
-            try {
-
-                const arrayBuffer =
-                    await selectedFile.arrayBuffer();
-
-                const pdfDoc =
-                    await PDFLib.PDFDocument.load(
-                        arrayBuffer
-                    );
+            metadataActions.style.display =
+                "grid";
 
 
-                pdfDoc.setTitle(
-                    titleInput.value.trim()
+            saveBtn.disabled =
+                false;
+
+
+            result.style.display =
+                "none";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            alert(
+                "Unable to read this PDF. Please try another PDF file."
+            );
+
+
+            metadataForm.style.display =
+                "none";
+
+
+            metadataActions.style.display =
+                "none";
+
+
+            saveBtn.disabled =
+                true;
+        }
+    }
+);
+
+
+saveBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (!selectedFile) {
+            return;
+        }
+
+
+        saveBtn.disabled =
+            true;
+
+
+        saveBtn.textContent =
+            "Saving Metadata...";
+
+
+        result.style.display =
+            "none";
+
+
+        try {
+
+            const arrayBuffer =
+                await selectedFile.arrayBuffer();
+
+
+            const pdfDoc =
+                await PDFLib.PDFDocument.load(
+                    arrayBuffer
                 );
 
-                pdfDoc.setAuthor(
-                    authorInput.value.trim()
-                );
 
-                pdfDoc.setSubject(
-                    subjectInput.value.trim()
-                );
+            pdfDoc.setTitle(
+                titleInput.value.trim()
+            );
 
 
-                const keywords =
-                    keywordsInput.value
-                        .split(",")
-                        .map(keyword => keyword.trim())
-                        .filter(keyword => keyword.length > 0);
+            pdfDoc.setAuthor(
+                authorInput.value.trim()
+            );
 
 
-                pdfDoc.setKeywords(keywords);
+            pdfDoc.setSubject(
+                subjectInput.value.trim()
+            );
 
 
-                pdfDoc.setCreator(
-                    creatorInput.value.trim()
-                );
-
-
-                const pdfBytes =
-                    await pdfDoc.save();
-
-
-                const blob =
-                    new Blob(
-                        [pdfBytes],
-                        {
-                            type: "application/pdf"
+            const keywords =
+                keywordsInput.value
+                    .split(",")
+                    .map(
+                        function (keyword) {
+                            return keyword.trim();
+                        }
+                    )
+                    .filter(
+                        function (keyword) {
+                            return keyword.length > 0;
                         }
                     );
 
 
-                const url =
-                    URL.createObjectURL(blob);
+            pdfDoc.setKeywords(
+                keywords
+            );
 
 
-                downloadBtn.href = url;
-
-                downloadBtn.download =
-                    selectedFile.name.replace(
-                        /\.pdf$/i,
-                        ""
-                    ) + "-metadata-edited.pdf";
+            pdfDoc.setCreator(
+                creatorInput.value.trim()
+            );
 
 
-                result.style.display =
-                    "block";
+            const pdfBytes =
+                await pdfDoc.save();
 
 
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    "Unable to update the PDF metadata. Please try another PDF."
+            const blob =
+                new Blob(
+                    [pdfBytes],
+                    {
+                        type:
+                            "application/pdf"
+                    }
                 );
 
-            } finally {
 
-                saveBtn.disabled = false;
+            if (downloadUrl) {
 
-                saveBtn.textContent =
-                    "Save Metadata";
-
+                URL.revokeObjectURL(
+                    downloadUrl
+                );
             }
 
-        });
 
-    </script>
+            downloadUrl =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            downloadBtn.href =
+                downloadUrl;
+
+
+            downloadBtn.download =
+                selectedFile.name.replace(
+                    /\.pdf$/i,
+                    ""
+                ) +
+                "-metadata-edited.pdf";
+
+
+            result.style.display =
+                "block";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            alert(
+                "Unable to update the PDF metadata. Please try another PDF."
+            );
+
+
+        } finally {
+
+            saveBtn.disabled =
+                false;
+
+
+            saveBtn.textContent =
+                "Save Metadata";
+        }
+    }
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        pdfInput.value =
+            "";
+
+
+        selectedFile =
+            null;
+
+
+        fileName.textContent =
+            "";
+
+
+        fileSize.textContent =
+            "";
+
+
+        titleInput.value =
+            "";
+
+
+        authorInput.value =
+            "";
+
+
+        subjectInput.value =
+            "";
+
+
+        keywordsInput.value =
+            "";
+
+
+        creatorInput.value =
+            "";
+
+
+        fileInfo.style.display =
+            "none";
+
+
+        metadataForm.style.display =
+            "none";
+
+
+        metadataActions.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        saveBtn.disabled =
+            true;
+
+
+        saveBtn.textContent =
+            "Save Metadata";
+
+
+        downloadBtn.href =
+            "#";
+
+
+        if (downloadUrl) {
+
+            URL.revokeObjectURL(
+                downloadUrl
+            );
+
+
+            downloadUrl =
+                null;
+        }
+    }
+);
+
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

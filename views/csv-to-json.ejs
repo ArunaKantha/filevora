@@ -8,9 +8,62 @@
     <meta name="description" content="Convert CSV data to JSON format quickly and easily with FileVora.">
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .csv-json-action-row {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .csv-json-action-row .convert-btn {
+            width:100% !important;
+            min-height:50px !important;
+            height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .csv-json-reset-btn {
+            background:#ffffff !important;
+            color:#ef1f2b !important;
+            border:1px solid #ef1f2b !important;
+            box-shadow:none !important;
+        }
+
+        .csv-json-reset-btn:hover {
+            background:#fff5f5 !important;
+        }
+
+        .json-result-actions {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:15px;
+        }
+
+        .json-result-actions .download-btn {
+            width:100% !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+            text-align:center !important;
+        }
+
+        @media (max-width:600px) {
+            .csv-json-action-row,
+            .json-result-actions {
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
+
+<%- include("partials/tool-header") %>
 
 <div class="converter-page">
 
@@ -32,12 +85,21 @@
 
             </div>
 
+
             <div style="text-align:left;">
 
-                <label for="csvInput"
-                       style="display:block; margin-bottom:8px; font-weight:700; color:#111827;">
+                <label
+                    for="csvInput"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
                     CSV Data
                 </label>
+
 
                 <textarea
                     id="csvInput"
@@ -62,15 +124,31 @@ Sarah,30,Kandy"
 
             </div>
 
-            <button
-                class="convert-btn"
-                onclick="convertCSVToJSON()"
-            >
-                Convert to JSON
-            </button>
 
-            <div id="errorMessage"
-                 style="
+            <div class="csv-json-action-row">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="convertBtn"
+                >
+                    Convert to JSON
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn csv-json-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                id="errorMessage"
+                style="
                     display:none;
                     margin-top:18px;
                     padding:14px 18px;
@@ -79,25 +157,66 @@ Sarah,30,Kandy"
                     border-radius:10px;
                     color:#b91c1c;
                     text-align:left;
-                 ">
-            </div>
+                "
+            ></div>
 
-            <div class="result" id="result">
 
-                <h2>Conversion Complete</h2>
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2>
+                    Conversion Complete
+                </h2>
 
                 <p>
                     Your CSV data has been successfully converted to JSON.
                 </p>
 
-                <a
-                    id="downloadBtn"
-                    class="download-btn"
-                    href="#"
-                    download="filevora-data.json"
-                >
-                    ↓ Download JSON
-                </a>
+
+                <textarea
+                    id="jsonOutput"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:220px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        background:#ffffff;
+                    "
+                ></textarea>
+
+
+                <div class="json-result-actions">
+
+                    <button
+                        type="button"
+                        class="download-btn"
+                        id="copyJsonBtn"
+                    >
+                        Copy JSON
+                    </button>
+
+
+                    <a
+                        id="downloadBtn"
+                        class="download-btn"
+                        href="#"
+                        download="filevora-data.json"
+                    >
+                        Download JSON
+                    </a>
+
+                </div>
 
             </div>
 
@@ -107,157 +226,594 @@ Sarah,30,Kandy"
 
 </div>
 
+
 <script>
+
+const csvInput =
+    document.getElementById("csvInput");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const result =
+    document.getElementById("result");
+
+const jsonOutput =
+    document.getElementById("jsonOutput");
+
+const copyJsonBtn =
+    document.getElementById("copyJsonBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let currentDownloadUrl =
+    null;
+
+
+/* =========================
+   CONVERT CSV TO JSON
+========================= */
 
 function convertCSVToJSON() {
 
-    const input = document.getElementById("csvInput").value.trim();
-    const errorMessage = document.getElementById("errorMessage");
-    const result = document.getElementById("result");
-    const downloadBtn = document.getElementById("downloadBtn");
+    const input =
+        csvInput.value.trim();
 
-    errorMessage.style.display = "none";
-    result.style.display = "none";
+
+    errorMessage.textContent =
+        "";
+
+    errorMessage.style.display =
+        "none";
+
+
+    result.style.display =
+        "none";
+
+
+    jsonOutput.value =
+        "";
+
 
     if (!input) {
-        showError("Please enter CSV data.");
+
+        showError(
+            "Please enter CSV data."
+        );
+
         return;
     }
 
+
     try {
 
-        const rows = parseCSV(input);
+        const rows =
+            parseCSV(input);
 
-        if (rows.length < 2) {
-            showError("CSV must contain a header row and at least one data row.");
+
+        if (
+            rows.length < 2
+        ) {
+
+            showError(
+                "CSV must contain a header row and at least one data row."
+            );
+
             return;
         }
 
-        const headers = rows[0];
 
-        if (headers.length === 0) {
-            showError("No CSV headers were found.");
+        const headers =
+            rows[0];
+
+
+        if (
+            headers.length === 0
+        ) {
+
+            showError(
+                "No CSV headers were found."
+            );
+
             return;
         }
 
-        const jsonData = [];
 
-        for (let i = 1; i < rows.length; i++) {
+        const jsonData =
+            [];
 
-            const row = rows[i];
 
-            // Skip completely empty rows
-            if (row.every(value => value.trim() === "")) {
+        for (
+            let i = 1;
+            i < rows.length;
+            i++
+        ) {
+
+            const row =
+                rows[i];
+
+
+            if (
+                row.every(
+                    function (value) {
+                        return value.trim() === "";
+                    }
+                )
+            ) {
+
                 continue;
             }
 
-            const object = {};
 
-            headers.forEach((header, index) => {
+            const object =
+                {};
 
-                object[header.trim()] =
-                    row[index] !== undefined ? row[index].trim() : "";
 
-            });
+            headers.forEach(
+                function (
+                    header,
+                    index
+                ) {
 
-            jsonData.push(object);
+                    object[
+                        header.trim()
+                    ] =
+                        row[index] !== undefined
+                            ? row[index].trim()
+                            : "";
+
+                }
+            );
+
+
+            jsonData.push(
+                object
+            );
         }
 
-        if (jsonData.length === 0) {
-            showError("No data rows were found.");
+
+        if (
+            jsonData.length === 0
+        ) {
+
+            showError(
+                "No data rows were found."
+            );
+
             return;
         }
 
-        const jsonContent = JSON.stringify(jsonData, null, 2);
 
-        const blob = new Blob(
-            [jsonContent],
-            {
-                type: "application/json;charset=utf-8;"
-            }
-        );
+        const jsonContent =
+            JSON.stringify(
+                jsonData,
+                null,
+                2
+            );
 
-        const url = URL.createObjectURL(blob);
 
-        downloadBtn.href = url;
+        jsonOutput.value =
+            jsonContent;
 
-        result.style.display = "block";
+
+        const blob =
+            new Blob(
+                [jsonContent],
+                {
+                    type:
+                        "application/json;charset=utf-8;"
+                }
+            );
+
+
+        if (
+            currentDownloadUrl
+        ) {
+
+            URL.revokeObjectURL(
+                currentDownloadUrl
+            );
+        }
+
+
+        currentDownloadUrl =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        downloadBtn.href =
+            currentDownloadUrl;
+
+
+        result.style.display =
+            "block";
+
+
+        result.scrollIntoView({
+            behavior:"smooth",
+            block:"nearest"
+        });
+
 
     } catch (error) {
 
-        showError("Invalid CSV format. Please check your data.");
-
+        showError(
+            "Invalid CSV format. Please check your data."
+        );
     }
 }
 
 
+/* =========================
+   PARSE CSV
+========================= */
+
 function parseCSV(text) {
 
-    const rows = [];
-    let row = [];
-    let value = "";
-    let insideQuotes = false;
+    const rows =
+        [];
 
-    for (let i = 0; i < text.length; i++) {
+    let row =
+        [];
 
-        const char = text[i];
-        const nextChar = text[i + 1];
+    let value =
+        "";
 
-        if (char === '"' && insideQuotes && nextChar === '"') {
+    let insideQuotes =
+        false;
 
-            value += '"';
+
+    for (
+        let i = 0;
+        i < text.length;
+        i++
+    ) {
+
+        const char =
+            text[i];
+
+        const nextChar =
+            text[i + 1];
+
+
+        if (
+            char === '"' &&
+            insideQuotes &&
+            nextChar === '"'
+        ) {
+
+            value +=
+                '"';
+
             i++;
 
-        } else if (char === '"') {
-
-            insideQuotes = !insideQuotes;
-
-        } else if (char === "," && !insideQuotes) {
-
-            row.push(value);
-            value = "";
 
         } else if (
-            (char === "\n" || char === "\r") &&
+            char === '"'
+        ) {
+
+            insideQuotes =
+                !insideQuotes;
+
+
+        } else if (
+            char === "," &&
             !insideQuotes
         ) {
 
-            if (char === "\r" && nextChar === "\n") {
+            row.push(
+                value
+            );
+
+            value =
+                "";
+
+
+        } else if (
+            (
+                char === "\n" ||
+                char === "\r"
+            ) &&
+            !insideQuotes
+        ) {
+
+            if (
+                char === "\r" &&
+                nextChar === "\n"
+            ) {
+
                 i++;
             }
 
-            row.push(value);
-            rows.push(row);
 
-            row = [];
-            value = "";
+            row.push(
+                value
+            );
+
+
+            rows.push(
+                row
+            );
+
+
+            row =
+                [];
+
+            value =
+                "";
+
 
         } else {
 
-            value += char;
-
+            value +=
+                char;
         }
     }
 
-    row.push(value);
 
-    if (row.length > 1 || row[0] !== "") {
-        rows.push(row);
+    row.push(
+        value
+    );
+
+
+    if (
+        row.length > 1 ||
+        row[0] !== ""
+    ) {
+
+        rows.push(
+            row
+        );
     }
+
 
     return rows;
 }
 
 
+/* =========================
+   COPY JSON
+========================= */
+
+copyJsonBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (
+            !jsonOutput.value
+        ) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                jsonOutput.value
+            );
+
+
+            copyJsonBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyJsonBtn.textContent =
+                        "Copy JSON";
+
+                },
+                1500
+            );
+
+
+        } catch (error) {
+
+            jsonOutput.select();
+
+
+            document.execCommand(
+                "copy"
+            );
+
+
+            copyJsonBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyJsonBtn.textContent =
+                        "Copy JSON";
+
+                },
+                1500
+            );
+        }
+
+    }
+);
+
+
+/* =========================
+   ERROR
+========================= */
+
 function showError(message) {
 
-    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent =
+        message;
 
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
+
+    errorMessage.style.display =
+        "block";
+
+
+    result.style.display =
+        "none";
 }
 
+
+/* =========================
+   RESET
+========================= */
+
+function resetCSVToJSON() {
+
+    csvInput.value =
+        "";
+
+
+    jsonOutput.value =
+        "";
+
+
+    errorMessage.textContent =
+        "";
+
+    errorMessage.style.display =
+        "none";
+
+
+    result.style.display =
+        "none";
+
+
+    copyJsonBtn.textContent =
+        "Copy JSON";
+
+
+    if (
+        currentDownloadUrl
+    ) {
+
+        URL.revokeObjectURL(
+            currentDownloadUrl
+        );
+
+        currentDownloadUrl =
+            null;
+    }
+
+
+    downloadBtn.href =
+        "#";
+
+
+    csvInput.focus();
+}
+
+
+/* =========================
+   EVENTS
+========================= */
+
+convertBtn.addEventListener(
+    "click",
+    convertCSVToJSON
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    resetCSVToJSON
+);
+
 </script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date()
+                    .getFullYear();
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

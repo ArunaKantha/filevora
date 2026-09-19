@@ -7,9 +7,12 @@
     <title>Image Flip - FileVora</title>
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
 </head>
 
 <body>
+<%- include("partials/tool-header") %>
 
 <div class="converter-page">
 
@@ -95,7 +98,7 @@
                         id="flipHorizontal"
                         style="width:auto; margin-top:0;"
                     >
-                        ↔️ Flip Horizontal
+                         Flip Horizontal
                     </button>
 
                     <button
@@ -104,7 +107,7 @@
                         id="flipVertical"
                         style="width:auto; margin-top:0;"
                     >
-                        ↕️ Flip Vertical
+                         Flip Vertical
                     </button>
 
                 </div>
@@ -147,14 +150,23 @@
 
             </div>
 
-            <button
-                type="button"
-                class="convert-btn"
-                id="downloadBtn"
-                disabled
-            >
-                ⬇️ Download Flipped Image
-            </button>
+            <div id="flipActions" style="display:none;">
+    <button
+        type="button"
+        class="convert-btn"
+        id="downloadBtn"
+        disabled
+    >
+        Download Flipped Image
+    </button>
+
+    <button
+        type="button"
+        id="flipResetBtn"
+    >
+        Reset
+    </button>
+</div>
 
             <div
                 class="result"
@@ -173,7 +185,7 @@
                     href="#"
                     download
                 >
-                    ⬇️ Download Image
+                     Download Image
                 </a>
 
             </div>
@@ -244,6 +256,7 @@ imageInput.addEventListener("change", function () {
             result.style.display = "none";
 
             downloadBtn.disabled = false;
+            document.getElementById("flipActions").style.display = "grid";
 
             drawPreview();
         };
@@ -367,7 +380,26 @@ downloadBtn.addEventListener("click", function () {
 
     }, format, quality);
 });
+document.getElementById("flipResetBtn").addEventListener("click", function () {
+    window.location.reload();
+});
 </script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>
+

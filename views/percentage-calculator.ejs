@@ -8,79 +8,120 @@
     <meta name="description" content="Calculate percentages quickly and easily with FileVora Percentage Calculator.">
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .percentage-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:12px;
+        }
+
+        .percentage-action-row .convert-btn{
+            width:100% !important;
+            min-height:50px !important;
+            height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .percentage-reset-btn{
+            background:#ffffff !important;
+            color:#ef1f2b !important;
+            border:1px solid #ef1f2b !important;
+            box-shadow:none !important;
+        }
+
+        .percentage-reset-btn:hover{
+            background:#fff5f5 !important;
+        }
+
+        @media (max-width:600px){
+            .percentage-action-row{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <main class="converter-page">
-        <div class="container">
+<%- include("partials/tool-header") %>
 
-            <div class="converter-card">
+<main class="converter-page">
+    <div class="container">
 
-                <div class="converter-header">
+        <div class="converter-card">
 
-                    <div class="tool-icon">
-                        %
-                    </div>
+            <div class="converter-header">
 
-                    <h1>Percentage Calculator</h1>
-
-                    <p>
-                        Calculate percentages, percentage changes and percentage differences easily.
-                    </p>
-
+                <div class="tool-icon">
+                    %
                 </div>
 
-                <!-- Calculator 1 -->
+                <h1>Percentage Calculator</h1>
 
-                <div
+                <p>
+                    Calculate percentages, percentage changes and percentage differences easily.
+                </p>
+
+            </div>
+
+
+            <!-- Calculator 1 -->
+
+            <div
+                style="
+                    text-align:left;
+                    padding:20px;
+                    margin-bottom:18px;
+                    background:#f8fafc;
+                    border:1px solid #e2e8f0;
+                    border-radius:14px;
+                "
+            >
+
+                <h2
                     style="
-                        text-align:left;
-                        padding:20px;
-                        margin-bottom:18px;
-                        background:#f8fafc;
-                        border:1px solid #e2e8f0;
-                        border-radius:14px;
+                        margin:0 0 16px;
+                        font-size:19px;
+                        color:#111827;
+                    "
+                >
+                    What is X% of Y?
+                </h2>
+
+                <input
+                    type="number"
+                    id="percent1"
+                    placeholder="Percentage (X)"
+                    style="
+                        width:100%;
+                        padding:13px;
+                        margin-bottom:10px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        box-sizing:border-box;
                     "
                 >
 
-                    <h2
-                        style="
-                            margin:0 0 16px;
-                            font-size:19px;
-                            color:#111827;
-                        "
-                    >
-                        What is X% of Y?
-                    </h2>
+                <input
+                    type="number"
+                    id="number1"
+                    placeholder="Number (Y)"
+                    style="
+                        width:100%;
+                        padding:13px;
+                        margin-bottom:12px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        box-sizing:border-box;
+                    "
+                >
 
-                    <input
-                        type="number"
-                        id="percent1"
-                        placeholder="Percentage (X)"
-                        style="
-                            width:100%;
-                            padding:13px;
-                            margin-bottom:10px;
-                            border:1px solid #cbd5e1;
-                            border-radius:10px;
-                            box-sizing:border-box;
-                        "
-                    >
-
-                    <input
-                        type="number"
-                        id="number1"
-                        placeholder="Number (Y)"
-                        style="
-                            width:100%;
-                            padding:13px;
-                            margin-bottom:12px;
-                            border:1px solid #cbd5e1;
-                            border-radius:10px;
-                            box-sizing:border-box;
-                        "
-                    >
+                <div class="percentage-action-row">
 
                     <button
                         class="convert-btn"
@@ -90,72 +131,84 @@
                         Calculate
                     </button>
 
-                    <div
-                        id="answer1"
-                        style="
-                            display:none;
-                            margin-top:14px;
-                            padding:14px;
-                            background:#ffffff;
-                            border-radius:10px;
-                            color:#166534;
-                            font-weight:700;
-                        "
-                    ></div>
+                    <button
+                        class="convert-btn percentage-reset-btn"
+                        type="button"
+                        onclick="resetCalculator1()"
+                    >
+                        Reset
+                    </button>
 
                 </div>
 
-
-                <!-- Calculator 2 -->
-
                 <div
+                    id="answer1"
                     style="
-                        text-align:left;
-                        padding:20px;
-                        margin-bottom:18px;
-                        background:#f8fafc;
-                        border:1px solid #e2e8f0;
-                        border-radius:14px;
+                        display:none;
+                        margin-top:14px;
+                        padding:14px;
+                        background:#ffffff;
+                        border-radius:10px;
+                        color:#166534;
+                        font-weight:700;
+                    "
+                ></div>
+
+            </div>
+
+
+            <!-- Calculator 2 -->
+
+            <div
+                style="
+                    text-align:left;
+                    padding:20px;
+                    margin-bottom:18px;
+                    background:#f8fafc;
+                    border:1px solid #e2e8f0;
+                    border-radius:14px;
+                "
+            >
+
+                <h2
+                    style="
+                        margin:0 0 16px;
+                        font-size:19px;
+                        color:#111827;
+                    "
+                >
+                    X is what % of Y?
+                </h2>
+
+                <input
+                    type="number"
+                    id="number2"
+                    placeholder="Number (X)"
+                    style="
+                        width:100%;
+                        padding:13px;
+                        margin-bottom:10px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        box-sizing:border-box;
                     "
                 >
 
-                    <h2
-                        style="
-                            margin:0 0 16px;
-                            font-size:19px;
-                            color:#111827;
-                        "
-                    >
-                        X is what % of Y?
-                    </h2>
+                <input
+                    type="number"
+                    id="number3"
+                    placeholder="Number (Y)"
+                    style="
+                        width:100%;
+                        padding:13px;
+                        margin-bottom:12px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        box-sizing:border-box;
+                    "
+                >
 
-                    <input
-                        type="number"
-                        id="number2"
-                        placeholder="Number (X)"
-                        style="
-                            width:100%;
-                            padding:13px;
-                            margin-bottom:10px;
-                            border:1px solid #cbd5e1;
-                            border-radius:10px;
-                            box-sizing:border-box;
-                        "
-                    >
-
-                    <input
-                        type="number"
-                        id="number3"
-                        placeholder="Number (Y)"
-                        style="
-                            width:100%;
-                            padding:13px;
-                            margin-bottom:12px;
-                            border:1px solid #cbd5e1;
-                            border-radius:10px;
-                            box-sizing:border-box;
-                        "
-                    >
+                <div class="percentage-action-row">
 
                     <button
                         class="convert-btn"
@@ -165,72 +218,84 @@
                         Calculate
                     </button>
 
-                    <div
-                        id="answer2"
-                        style="
-                            display:none;
-                            margin-top:14px;
-                            padding:14px;
-                            background:#ffffff;
-                            border-radius:10px;
-                            color:#166534;
-                            font-weight:700;
-                        "
-                    ></div>
+                    <button
+                        class="convert-btn percentage-reset-btn"
+                        type="button"
+                        onclick="resetCalculator2()"
+                    >
+                        Reset
+                    </button>
 
                 </div>
 
-
-                <!-- Calculator 3 -->
-
                 <div
+                    id="answer2"
                     style="
-                        text-align:left;
-                        padding:20px;
-                        margin-bottom:18px;
-                        background:#f8fafc;
-                        border:1px solid #e2e8f0;
-                        border-radius:14px;
+                        display:none;
+                        margin-top:14px;
+                        padding:14px;
+                        background:#ffffff;
+                        border-radius:10px;
+                        color:#166534;
+                        font-weight:700;
+                    "
+                ></div>
+
+            </div>
+
+
+            <!-- Calculator 3 -->
+
+            <div
+                style="
+                    text-align:left;
+                    padding:20px;
+                    margin-bottom:18px;
+                    background:#f8fafc;
+                    border:1px solid #e2e8f0;
+                    border-radius:14px;
+                "
+            >
+
+                <h2
+                    style="
+                        margin:0 0 16px;
+                        font-size:19px;
+                        color:#111827;
+                    "
+                >
+                    Percentage Change
+                </h2>
+
+                <input
+                    type="number"
+                    id="oldValue"
+                    placeholder="Original Value"
+                    style="
+                        width:100%;
+                        padding:13px;
+                        margin-bottom:10px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        box-sizing:border-box;
                     "
                 >
 
-                    <h2
-                        style="
-                            margin:0 0 16px;
-                            font-size:19px;
-                            color:#111827;
-                        "
-                    >
-                        Percentage Change
-                    </h2>
+                <input
+                    type="number"
+                    id="newValue"
+                    placeholder="New Value"
+                    style="
+                        width:100%;
+                        padding:13px;
+                        margin-bottom:12px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        box-sizing:border-box;
+                    "
+                >
 
-                    <input
-                        type="number"
-                        id="oldValue"
-                        placeholder="Original Value"
-                        style="
-                            width:100%;
-                            padding:13px;
-                            margin-bottom:10px;
-                            border:1px solid #cbd5e1;
-                            border-radius:10px;
-                            box-sizing:border-box;
-                        "
-                    >
-
-                    <input
-                        type="number"
-                        id="newValue"
-                        placeholder="New Value"
-                        style="
-                            width:100%;
-                            padding:13px;
-                            margin-bottom:12px;
-                            border:1px solid #cbd5e1;
-                            border-radius:10px;
-                            box-sizing:border-box;
-                        "
-                    >
+                <div class="percentage-action-row">
 
                     <button
                         class="convert-btn"
@@ -240,211 +305,363 @@
                         Calculate Change
                     </button>
 
-                    <div
-                        id="answer3"
-                        style="
-                            display:none;
-                            margin-top:14px;
-                            padding:14px;
-                            background:#ffffff;
-                            border-radius:10px;
-                            color:#166534;
-                            font-weight:700;
-                        "
-                    ></div>
+                    <button
+                        class="convert-btn percentage-reset-btn"
+                        type="button"
+                        onclick="resetCalculator3()"
+                    >
+                        Reset
+                    </button>
 
                 </div>
-
 
                 <div
-                    class="result"
-                    id="result"
-                    style="display:block; text-align:left;"
-                >
+                    id="answer3"
+                    style="
+                        display:none;
+                        margin-top:14px;
+                        padding:14px;
+                        background:#ffffff;
+                        border-radius:10px;
+                        color:#166534;
+                        font-weight:700;
+                    "
+                ></div>
 
-                    <h2>Quick Examples</h2>
+            </div>
 
-                    <p style="margin-top:8px;">
-                        20% of 150 = 30
-                    </p>
 
-                    <p style="margin-top:8px;">
-                        25 is 50% of 50
-                    </p>
+            <div
+                class="result"
+                id="result"
+                style="display:block; text-align:left;"
+            >
 
-                    <p style="margin-top:8px;">
-                        From 100 to 120 = 20% increase
-                    </p>
+                <h2>Quick Examples</h2>
 
-                </div>
+                <p style="margin-top:8px;">
+                    20% of 150 = 30
+                </p>
+
+                <p style="margin-top:8px;">
+                    25 is 50% of 50
+                </p>
+
+                <p style="margin-top:8px;">
+                    From 100 to 120 = 20% increase
+                </p>
 
             </div>
 
         </div>
-    </main>
+
+    </div>
+</main>
 
 
-    <script>
+<script>
 
-        function calculatePercentage() {
+function calculatePercentage() {
 
-            const percent =
-                parseFloat(
-                    document.getElementById("percent1").value
-                );
+    const percent =
+        parseFloat(
+            document.getElementById("percent1").value
+        );
 
-            const number =
-                parseFloat(
-                    document.getElementById("number1").value
-                );
+    const number =
+        parseFloat(
+            document.getElementById("number1").value
+        );
 
-            const answer =
-                document.getElementById("answer1");
-
-            if (
-                isNaN(percent) ||
-                isNaN(number)
-            ) {
-
-                alert("Please enter both values.");
-
-                return;
-            }
-
-            const result =
-                (percent / 100) * number;
-
-            answer.textContent =
-                percent + "% of " +
-                number +
-                " = " +
-                formatNumber(result);
-
-            answer.style.display = "block";
-        }
+    const answer =
+        document.getElementById("answer1");
 
 
-        function calculateWhatPercent() {
+    if (
+        isNaN(percent) ||
+        isNaN(number)
+    ) {
 
-            const x =
-                parseFloat(
-                    document.getElementById("number2").value
-                );
+        alert("Please enter both values.");
 
-            const y =
-                parseFloat(
-                    document.getElementById("number3").value
-                );
-
-            const answer =
-                document.getElementById("answer2");
-
-            if (
-                isNaN(x) ||
-                isNaN(y)
-            ) {
-
-                alert("Please enter both values.");
-
-                return;
-            }
-
-            if (y === 0) {
-
-                alert("The second value cannot be zero.");
-
-                return;
-            }
-
-            const result =
-                (x / y) * 100;
-
-            answer.textContent =
-                x +
-                " is " +
-                formatNumber(result) +
-                "% of " +
-                y;
-
-            answer.style.display = "block";
-        }
+        return;
+    }
 
 
-        function calculateChange() {
-
-            const oldValue =
-                parseFloat(
-                    document.getElementById("oldValue").value
-                );
-
-            const newValue =
-                parseFloat(
-                    document.getElementById("newValue").value
-                );
-
-            const answer =
-                document.getElementById("answer3");
-
-            if (
-                isNaN(oldValue) ||
-                isNaN(newValue)
-            ) {
-
-                alert("Please enter both values.");
-
-                return;
-            }
-
-            if (oldValue === 0) {
-
-                alert(
-                    "Original value cannot be zero."
-                );
-
-                return;
-            }
-
-            const change =
-                ((newValue - oldValue) /
-                    Math.abs(oldValue)) *
-                100;
-
-            const rounded =
-                formatNumber(Math.abs(change));
-
-            if (change > 0) {
-
-                answer.textContent =
-                    "Increase: " +
-                    rounded +
-                    "%";
-
-            } else if (change < 0) {
-
-                answer.textContent =
-                    "Decrease: " +
-                    rounded +
-                    "%";
-
-            } else {
-
-                answer.textContent =
-                    "No percentage change: 0%";
-            }
-
-            answer.style.display = "block";
-        }
+    const result =
+        (percent / 100) * number;
 
 
-        function formatNumber(number) {
+    answer.textContent =
+        percent + "% of " +
+        number +
+        " = " +
+        formatNumber(result);
 
-            return Number(
-                number.toFixed(6)
-            ).toLocaleString();
 
-        }
+    answer.style.display =
+        "block";
+}
 
-    </script>
+
+function calculateWhatPercent() {
+
+    const x =
+        parseFloat(
+            document.getElementById("number2").value
+        );
+
+    const y =
+        parseFloat(
+            document.getElementById("number3").value
+        );
+
+    const answer =
+        document.getElementById("answer2");
+
+
+    if (
+        isNaN(x) ||
+        isNaN(y)
+    ) {
+
+        alert("Please enter both values.");
+
+        return;
+    }
+
+
+    if (y === 0) {
+
+        alert("The second value cannot be zero.");
+
+        return;
+    }
+
+
+    const result =
+        (x / y) * 100;
+
+
+    answer.textContent =
+        x +
+        " is " +
+        formatNumber(result) +
+        "% of " +
+        y;
+
+
+    answer.style.display =
+        "block";
+}
+
+
+function calculateChange() {
+
+    const oldValue =
+        parseFloat(
+            document.getElementById("oldValue").value
+        );
+
+    const newValue =
+        parseFloat(
+            document.getElementById("newValue").value
+        );
+
+    const answer =
+        document.getElementById("answer3");
+
+
+    if (
+        isNaN(oldValue) ||
+        isNaN(newValue)
+    ) {
+
+        alert("Please enter both values.");
+
+        return;
+    }
+
+
+    if (oldValue === 0) {
+
+        alert(
+            "Original value cannot be zero."
+        );
+
+        return;
+    }
+
+
+    const change =
+        ((newValue - oldValue) /
+            Math.abs(oldValue)) *
+        100;
+
+
+    const rounded =
+        formatNumber(
+            Math.abs(change)
+        );
+
+
+    if (change > 0) {
+
+        answer.textContent =
+            "Increase: " +
+            rounded +
+            "%";
+
+    } else if (change < 0) {
+
+        answer.textContent =
+            "Decrease: " +
+            rounded +
+            "%";
+
+    } else {
+
+        answer.textContent =
+            "No percentage change: 0%";
+    }
+
+
+    answer.style.display =
+        "block";
+}
+
+
+function resetCalculator1() {
+
+    document.getElementById("percent1").value = "";
+    document.getElementById("number1").value = "";
+
+    const answer =
+        document.getElementById("answer1");
+
+    answer.textContent = "";
+    answer.style.display = "none";
+
+    document.getElementById("percent1").focus();
+}
+
+
+function resetCalculator2() {
+
+    document.getElementById("number2").value = "";
+    document.getElementById("number3").value = "";
+
+    const answer =
+        document.getElementById("answer2");
+
+    answer.textContent = "";
+    answer.style.display = "none";
+
+    document.getElementById("number2").focus();
+}
+
+
+function resetCalculator3() {
+
+    document.getElementById("oldValue").value = "";
+    document.getElementById("newValue").value = "";
+
+    const answer =
+        document.getElementById("answer3");
+
+    answer.textContent = "";
+    answer.style.display = "none";
+
+    document.getElementById("oldValue").focus();
+}
+
+
+function formatNumber(number) {
+
+    return Number(
+        number.toFixed(6)
+    ).toLocaleString();
+
+}
+
+</script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+        element.textContent =
+            new Date().getFullYear();
+    });
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

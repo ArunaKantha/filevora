@@ -10,129 +10,161 @@
 
     <style>
         .statistics-calculator {
-            max-width: 760px;
+            max-width:760px;
         }
 
         .numbers-input {
-            width: 100%;
-            min-height: 150px;
-            padding: 16px;
-            border: 1px solid #cbd5e1;
-            border-radius: 12px;
-            background: #f8fafc;
-            color: #111827;
-            font-family: inherit;
-            font-size: 16px;
-            line-height: 1.6;
-            resize: vertical;
-            outline: none;
-            box-sizing: border-box;
+            width:100%;
+            min-height:150px;
+            padding:16px;
+            border:1px solid #cbd5e1;
+            border-radius:12px;
+            background:#f8fafc;
+            color:#111827;
+            font-family:inherit;
+            font-size:16px;
+            line-height:1.6;
+            resize:vertical;
+            outline:none;
+            box-sizing:border-box;
         }
 
         .numbers-input:focus {
-            border-color: #2563eb;
-            background: #ffffff;
+            border-color:#ef1f2b;
+            background:#ffffff;
         }
 
         .input-label {
-            display: block;
-            margin-bottom: 9px;
-            color: #374151;
-            font-size: 14px;
-            font-weight: 700;
-            text-align: left;
+            display:block;
+            margin-bottom:9px;
+            color:#374151;
+            font-size:14px;
+            font-weight:700;
+            text-align:left;
         }
 
         .input-help {
-            margin: 8px 0 0;
-            color: #64748b;
-            font-size: 13px;
-            text-align: left;
+            margin:8px 0 0;
+            color:#64748b;
+            font-size:13px;
+            text-align:left;
+        }
+
+        .statistics-action-row {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:22px;
+        }
+
+        .statistics-action-row button {
+            width:100%;
+            height:50px;
+            min-height:50px;
+            margin:0;
+            padding:13px 20px;
+            border-radius:10px;
+            font-size:15px;
+            font-weight:800;
+            cursor:pointer;
+            box-sizing:border-box;
         }
 
         .calculate-btn {
-            width: 100%;
-            margin-top: 22px;
-            padding: 14px 22px;
-            border: none;
-            border-radius: 10px;
-            background: #2563eb;
-            color: #ffffff;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            border:1px solid #ef1f2b;
+            background:#ef1f2b;
+            color:#ffffff;
+            box-shadow:0 8px 18px rgba(239,31,43,.18);
         }
 
         .calculate-btn:hover {
-            background: #1d4ed8;
-            transform: translateY(-1px);
+            background:#dc1824;
+        }
+
+        .reset-statistics-btn {
+            background:#ffffff;
+            color:#ef1f2b;
+            border:1px solid #ef1f2b;
+            box-shadow:none;
+        }
+
+        .reset-statistics-btn:hover {
+            background:#fff5f5;
         }
 
         .statistics-result {
-            display: none;
-            margin-top: 28px;
-            padding: 24px;
-            border-radius: 14px;
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
+            display:none;
+            margin-top:28px;
+            padding:24px;
+            border-radius:14px;
+            background:#f0fdf4;
+            border:1px solid #bbf7d0;
         }
 
         .statistics-result h2 {
-            margin: 0 0 18px;
-            color: #166534;
-            font-size: 20px;
+            margin:0 0 18px;
+            color:#166534;
+            font-size:20px;
         }
 
         .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            display:grid;
+            grid-template-columns:repeat(2, 1fr);
+            gap:12px;
         }
 
         .stat-item {
-            padding: 16px;
-            background: #ffffff;
-            border: 1px solid #dcfce7;
-            border-radius: 10px;
-            text-align: left;
+            padding:16px;
+            background:#ffffff;
+            border:1px solid #dcfce7;
+            border-radius:10px;
+            text-align:left;
         }
 
         .stat-item span {
-            display: block;
-            margin-bottom: 5px;
-            color: #64748b;
-            font-size: 13px;
+            display:block;
+            margin-bottom:5px;
+            color:#64748b;
+            font-size:13px;
         }
 
         .stat-item strong {
-            display: block;
-            color: #166534;
-            font-size: 19px;
-            word-break: break-word;
+            display:block;
+            color:#166534;
+            font-size:19px;
+            word-break:break-word;
         }
 
         .error-message {
-            display: none;
-            margin-top: 18px;
-            padding: 13px;
-            border-radius: 10px;
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #b91c1c;
-            font-size: 14px;
-            text-align: left;
+            display:none;
+            margin-top:18px;
+            padding:13px;
+            border-radius:10px;
+            background:#fef2f2;
+            border:1px solid #fecaca;
+            color:#b91c1c;
+            font-size:14px;
+            text-align:left;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width:600px) {
             .stats-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns:1fr;
+            }
+
+            .statistics-action-row {
+                grid-template-columns:1fr;
             }
         }
     </style>
+
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
 </head>
 
 <body>
+
+<%- include("partials/tool-header") %>
 
 <div class="converter-page">
 
@@ -142,7 +174,9 @@
 
             <div class="converter-header">
 
-                <div class="tool-icon">Σ</div>
+                <div class="tool-icon">
+                    AVG
+                </div>
 
                 <h1>Average / Median / Mode</h1>
 
@@ -155,18 +189,17 @@
 
             <label
                 class="input-label"
-                for="numbersInput">
-
+                for="numbersInput"
+            >
                 Enter Numbers
-
             </label>
 
 
             <textarea
                 id="numbersInput"
                 class="numbers-input"
-                placeholder="Example: 10, 20, 20, 30, 40">
-            </textarea>
+                placeholder="Example: 10, 20, 20, 30, 40"
+            ></textarea>
 
 
             <p class="input-help">
@@ -174,24 +207,37 @@
             </p>
 
 
-            <button
-                class="calculate-btn"
-                onclick="calculateStatistics()">
+            <div class="statistics-action-row">
 
-                Calculate Statistics
+                <button
+                    type="button"
+                    class="calculate-btn"
+                    id="calculateStatisticsBtn"
+                >
+                    Calculate Statistics
+                </button>
 
-            </button>
+                <button
+                    type="button"
+                    class="reset-statistics-btn"
+                    id="resetStatisticsBtn"
+                >
+                    Reset
+                </button>
 
-
-            <div
-                id="errorMessage"
-                class="error-message">
             </div>
 
 
             <div
+                id="errorMessage"
+                class="error-message"
+            ></div>
+
+
+            <div
                 id="statisticsResult"
-                class="statistics-result">
+                class="statistics-result"
+            >
 
                 <h2>Results</h2>
 
@@ -250,309 +296,536 @@
 
 <script>
 
-    function parseNumbers() {
+const numbersInput =
+    document.getElementById("numbersInput");
 
-        const input =
-            document
-                .getElementById("numbersInput")
-                .value
-                .trim();
+const calculateStatisticsBtn =
+    document.getElementById("calculateStatisticsBtn");
 
-        if (!input) {
+const resetStatisticsBtn =
+    document.getElementById("resetStatisticsBtn");
 
-            throw new Error(
-                "Please enter some numbers."
-            );
-        }
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const statisticsResult =
+    document.getElementById("statisticsResult");
+
+const meanResult =
+    document.getElementById("meanResult");
+
+const medianResult =
+    document.getElementById("medianResult");
+
+const modeResult =
+    document.getElementById("modeResult");
+
+const sumResult =
+    document.getElementById("sumResult");
+
+const countResult =
+    document.getElementById("countResult");
+
+const minResult =
+    document.getElementById("minResult");
+
+const maxResult =
+    document.getElementById("maxResult");
+
+const rangeResult =
+    document.getElementById("rangeResult");
 
 
-        const values =
-            input
-                .split(/[\s,]+/)
-                .filter(value => value !== "")
-                .map(value => Number(value));
+function parseNumbers() {
+
+    const input =
+        numbersInput.value.trim();
 
 
-        if (values.length === 0) {
+    if (!input) {
 
-            throw new Error(
-                "No valid numbers found."
-            );
-        }
+        throw new Error(
+            "Please enter some numbers."
+        );
+    }
 
 
-        if (
-            values.some(
-                value => !Number.isFinite(value)
+    const values =
+        input
+            .split(/[\s,]+/)
+            .filter(
+                function (value) {
+                    return value !== "";
+                }
             )
-        ) {
-
-            throw new Error(
-                "Please enter valid numbers only."
-            );
-        }
-
-
-        return values;
-    }
-
-
-    function formatNumber(number) {
-
-        if (
-            Math.abs(number) < 1e-12
-        ) {
-            number = 0;
-        }
-
-
-        return Number(
-            number.toFixed(10)
-        ).toString();
-    }
-
-
-    function calculateMean(numbers) {
-
-        const sum =
-            numbers.reduce(
-                (total, number) =>
-                    total + number,
-                0
-            );
-
-        return sum / numbers.length;
-    }
-
-
-    function calculateMedian(numbers) {
-
-        const sorted =
-            [...numbers].sort(
-                (a, b) => a - b
+            .map(
+                function (value) {
+                    return Number(value);
+                }
             );
 
 
-        const middle =
-            Math.floor(
-                sorted.length / 2
-            );
+    if (values.length === 0) {
 
-
-        if (sorted.length % 2 === 0) {
-
-            return (
-                sorted[middle - 1] +
-                sorted[middle]
-            ) / 2;
-        }
-
-
-        return sorted[middle];
+        throw new Error(
+            "No valid numbers found."
+        );
     }
 
 
-    function calculateMode(numbers) {
+    if (
+        values.some(
+            function (value) {
+                return !Number.isFinite(value);
+            }
+        )
+    ) {
 
-        const frequency = new Map();
+        throw new Error(
+            "Please enter valid numbers only."
+        );
+    }
 
-        numbers.forEach(number => {
+
+    return values;
+}
+
+
+function formatNumber(number) {
+
+    if (
+        Math.abs(number) <
+        1e-12
+    ) {
+        number = 0;
+    }
+
+
+    return Number(
+        number.toFixed(10)
+    ).toString();
+}
+
+
+function calculateMean(numbers) {
+
+    const sum =
+        numbers.reduce(
+            function (
+                total,
+                number
+            ) {
+                return total + number;
+            },
+            0
+        );
+
+
+    return sum /
+        numbers.length;
+}
+
+
+function calculateMedian(numbers) {
+
+    const sorted =
+        [...numbers].sort(
+            function (a, b) {
+                return a - b;
+            }
+        );
+
+
+    const middle =
+        Math.floor(
+            sorted.length / 2
+        );
+
+
+    if (
+        sorted.length % 2 === 0
+    ) {
+
+        return (
+            sorted[middle - 1] +
+            sorted[middle]
+        ) / 2;
+    }
+
+
+    return sorted[middle];
+}
+
+
+function calculateMode(numbers) {
+
+    const frequency =
+        new Map();
+
+
+    numbers.forEach(
+        function (number) {
 
             frequency.set(
                 number,
-                (frequency.get(number) || 0) + 1
+                (
+                    frequency.get(number) ||
+                    0
+                ) + 1
             );
-
-        });
-
-
-        let highestFrequency = 0;
+        }
+    );
 
 
-        frequency.forEach(count => {
+    let highestFrequency =
+        0;
+
+
+    frequency.forEach(
+        function (count) {
 
             if (
-                count > highestFrequency
+                count >
+                highestFrequency
             ) {
 
-                highestFrequency = count;
+                highestFrequency =
+                    count;
             }
-
-        });
-
-
-        // No repeated number
-        if (highestFrequency === 1) {
-
-            return "No mode";
         }
+    );
 
 
-        const modes = [];
+    if (
+        highestFrequency === 1
+    ) {
 
-
-        frequency.forEach(
-            (count, number) => {
-
-                if (
-                    count === highestFrequency
-                ) {
-
-                    modes.push(number);
-                }
-
-            }
-        );
-
-
-        modes.sort(
-            (a, b) => a - b
-        );
-
-
-        return modes
-            .map(formatNumber)
-            .join(", ");
+        return "No mode";
     }
 
 
-    function calculateStatistics() {
-
-        const resultBox =
-            document.getElementById(
-                "statisticsResult"
-            );
-
-        const errorBox =
-            document.getElementById(
-                "errorMessage"
-            );
+    const modes =
+        [];
 
 
-        resultBox.style.display = "none";
-        errorBox.style.display = "none";
+    frequency.forEach(
+        function (
+            count,
+            number
+        ) {
 
+            if (
+                count ===
+                highestFrequency
+            ) {
 
-        try {
-
-            const numbers =
-                parseNumbers();
-
-
-            const sum =
-                numbers.reduce(
-                    (total, number) =>
-                        total + number,
-                    0
+                modes.push(
+                    number
                 );
-
-
-            const mean =
-                calculateMean(numbers);
-
-
-            const median =
-                calculateMedian(numbers);
-
-
-            const mode =
-                calculateMode(numbers);
-
-
-            const minimum =
-                Math.min(...numbers);
-
-
-            const maximum =
-                Math.max(...numbers);
-
-
-            const range =
-                maximum - minimum;
-
-
-            document.getElementById(
-                "meanResult"
-            ).textContent =
-                formatNumber(mean);
-
-
-            document.getElementById(
-                "medianResult"
-            ).textContent =
-                formatNumber(median);
-
-
-            document.getElementById(
-                "modeResult"
-            ).textContent =
-                mode;
-
-
-            document.getElementById(
-                "sumResult"
-            ).textContent =
-                formatNumber(sum);
-
-
-            document.getElementById(
-                "countResult"
-            ).textContent =
-                numbers.length;
-
-
-            document.getElementById(
-                "minResult"
-            ).textContent =
-                formatNumber(minimum);
-
-
-            document.getElementById(
-                "maxResult"
-            ).textContent =
-                formatNumber(maximum);
-
-
-            document.getElementById(
-                "rangeResult"
-            ).textContent =
-                formatNumber(range);
-
-
-            resultBox.style.display =
-                "block";
-
-        }
-
-        catch (error) {
-
-            errorBox.textContent =
-                error.message;
-
-            errorBox.style.display =
-                "block";
-        }
-    }
-
-
-    document
-        .getElementById("numbersInput")
-        .addEventListener(
-            "keydown",
-            function(event) {
-
-                if (
-                    event.ctrlKey &&
-                    event.key === "Enter"
-                ) {
-
-                    calculateStatistics();
-                }
-
             }
-        );
+        }
+    );
+
+
+    modes.sort(
+        function (a, b) {
+            return a - b;
+        }
+    );
+
+
+    return modes
+        .map(formatNumber)
+        .join(", ");
+}
+
+
+function calculateStatistics() {
+
+    statisticsResult.style.display =
+        "none";
+
+    errorMessage.style.display =
+        "none";
+
+
+    try {
+
+        const numbers =
+            parseNumbers();
+
+
+        const sum =
+            numbers.reduce(
+                function (
+                    total,
+                    number
+                ) {
+                    return total + number;
+                },
+                0
+            );
+
+
+        const mean =
+            calculateMean(
+                numbers
+            );
+
+
+        const median =
+            calculateMedian(
+                numbers
+            );
+
+
+        const mode =
+            calculateMode(
+                numbers
+            );
+
+
+        const minimum =
+            Math.min(
+                ...numbers
+            );
+
+
+        const maximum =
+            Math.max(
+                ...numbers
+            );
+
+
+        const range =
+            maximum -
+            minimum;
+
+
+        meanResult.textContent =
+            formatNumber(
+                mean
+            );
+
+
+        medianResult.textContent =
+            formatNumber(
+                median
+            );
+
+
+        modeResult.textContent =
+            mode;
+
+
+        sumResult.textContent =
+            formatNumber(
+                sum
+            );
+
+
+        countResult.textContent =
+            numbers.length;
+
+
+        minResult.textContent =
+            formatNumber(
+                minimum
+            );
+
+
+        maxResult.textContent =
+            formatNumber(
+                maximum
+            );
+
+
+        rangeResult.textContent =
+            formatNumber(
+                range
+            );
+
+
+        statisticsResult.style.display =
+            "block";
+
+    } catch (error) {
+
+        errorMessage.textContent =
+            error.message;
+
+
+        errorMessage.style.display =
+            "block";
+    }
+}
+
+
+/* =========================
+   CALCULATE
+========================= */
+
+calculateStatisticsBtn.addEventListener(
+    "click",
+    calculateStatistics
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetStatisticsBtn.addEventListener(
+    "click",
+    function () {
+
+        numbersInput.value =
+            "";
+
+
+        meanResult.textContent =
+            "-";
+
+        medianResult.textContent =
+            "-";
+
+        modeResult.textContent =
+            "-";
+
+        sumResult.textContent =
+            "-";
+
+        countResult.textContent =
+            "-";
+
+        minResult.textContent =
+            "-";
+
+        maxResult.textContent =
+            "-";
+
+        rangeResult.textContent =
+            "-";
+
+
+        errorMessage.textContent =
+            "";
+
+        errorMessage.style.display =
+            "none";
+
+
+        statisticsResult.style.display =
+            "none";
+
+
+        numbersInput.focus();
+
+    }
+);
+
+
+/* Ctrl + Enter = Calculate */
+
+numbersInput.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.ctrlKey &&
+            event.key === "Enter"
+        ) {
+
+            calculateStatistics();
+        }
+
+    }
+);
 
 </script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date()
+                    .getFullYear();
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

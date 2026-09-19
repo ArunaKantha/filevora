@@ -134,9 +134,24 @@ resizeBtn.addEventListener("click", function () {
                 `${newWidth} × ${newHeight} px`;
 
             resultArea.hidden = false;
+resultArea.removeAttribute("hidden");
+resultArea.style.setProperty("display", "block", "important");
+
+resultArea.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+});
 
         }, "image/jpeg", 0.92);
     };
 
     img.src = URL.createObjectURL(selectedImage);
 });
+// Image Resizer - Reset Button
+const resetBtn = document.getElementById("resetBtn");
+
+if (resetBtn) {
+    resetBtn.addEventListener("click", function () {
+        window.location.reload();
+    });
+}

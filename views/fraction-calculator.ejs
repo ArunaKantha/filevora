@@ -10,133 +10,169 @@
 
     <style>
         .fraction-calculator {
-            max-width: 760px;
+            max-width:760px;
         }
 
         .fraction-grid {
-            display: grid;
-            grid-template-columns: 1fr 100px 1fr;
-            gap: 16px;
-            align-items: center;
+            display:grid;
+            grid-template-columns:1fr 100px 1fr;
+            gap:16px;
+            align-items:center;
         }
 
         .fraction-box {
-            padding: 20px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 14px;
+            padding:20px;
+            background:#f8fafc;
+            border:1px solid #e2e8f0;
+            border-radius:14px;
         }
 
         .fraction-box label {
-            display: block;
-            margin-bottom: 8px;
-            color: #475569;
-            font-size: 14px;
-            font-weight: 700;
-            text-align: left;
+            display:block;
+            margin-bottom:8px;
+            color:#475569;
+            font-size:14px;
+            font-weight:700;
+            text-align:left;
         }
 
         .fraction-input {
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #cbd5e1;
-            border-radius: 9px;
-            background: #ffffff;
-            color: #111827;
-            font-size: 18px;
-            text-align: center;
-            outline: none;
-            box-sizing: border-box;
+            width:100%;
+            padding:13px;
+            border:1px solid #cbd5e1;
+            border-radius:9px;
+            background:#ffffff;
+            color:#111827;
+            font-size:18px;
+            text-align:center;
+            outline:none;
+            box-sizing:border-box;
         }
 
         .fraction-input:focus {
-            border-color: #2563eb;
+            border-color:#ef1f2b;
         }
 
         .operation-select {
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #cbd5e1;
-            border-radius: 9px;
-            background: #ffffff;
-            color: #111827;
-            font-size: 20px;
-            font-weight: 700;
-            text-align: center;
-            cursor: pointer;
-            outline: none;
+            width:100%;
+            padding:13px;
+            border:1px solid #cbd5e1;
+            border-radius:9px;
+            background:#ffffff;
+            color:#111827;
+            font-size:20px;
+            font-weight:700;
+            text-align:center;
+            cursor:pointer;
+            outline:none;
+        }
+
+        .fraction-action-row {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:22px;
+        }
+
+        .calculate-fraction-btn,
+        .reset-fraction-btn {
+            width:100%;
+            height:50px;
+            min-height:50px;
+            padding:13px 20px;
+            border-radius:10px;
+            font-size:15px;
+            font-weight:800;
+            cursor:pointer;
+            box-sizing:border-box;
         }
 
         .calculate-fraction-btn {
-            width: 100%;
-            margin-top: 22px;
-            padding: 14px 22px;
-            border: none;
-            border-radius: 10px;
-            background: #2563eb;
-            color: #ffffff;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
+            border:1px solid #ef1f2b;
+            background:#ef1f2b;
+            color:#ffffff;
+            box-shadow:0 8px 18px rgba(239,31,43,.18);
         }
 
         .calculate-fraction-btn:hover {
-            background: #1d4ed8;
+            background:#dc1824;
+        }
+
+        .reset-fraction-btn {
+            background:#ffffff;
+            color:#ef1f2b;
+            border:1px solid #ef1f2b;
+            box-shadow:none;
+        }
+
+        .reset-fraction-btn:hover {
+            background:#fff5f5;
         }
 
         .fraction-result {
-            display: none;
-            margin-top: 28px;
-            padding: 24px;
-            border-radius: 14px;
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
+            display:none;
+            margin-top:28px;
+            padding:24px;
+            border-radius:14px;
+            background:#f0fdf4;
+            border:1px solid #bbf7d0;
         }
 
         .fraction-result h2 {
-            margin: 0 0 8px;
-            color: #166534;
-            font-size: 20px;
+            margin:0 0 8px;
+            color:#166534;
+            font-size:20px;
         }
 
         .fraction-result p {
-            margin: 6px 0;
-            color: #4b5563;
-            font-size: 15px;
+            margin:6px 0;
+            color:#4b5563;
+            font-size:15px;
         }
 
         .result-fraction {
-            margin: 12px 0;
-            color: #166534;
-            font-size: 32px;
-            font-weight: 800;
+            margin:12px 0;
+            color:#166534;
+            font-size:32px;
+            font-weight:800;
         }
 
         .error-message {
-            display: none;
-            margin-top: 18px;
-            padding: 13px;
-            border-radius: 10px;
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #b91c1c;
-            font-size: 14px;
+            display:none;
+            margin-top:18px;
+            padding:13px;
+            border-radius:10px;
+            background:#fef2f2;
+            border:1px solid #fecaca;
+            color:#b91c1c;
+            font-size:14px;
         }
 
-        @media (max-width: 650px) {
+        @media (max-width:650px) {
+
             .fraction-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns:1fr;
             }
 
             .operation-select {
-                max-width: 100px;
-                margin: 0 auto;
+                max-width:100px;
+                margin:0 auto;
+                display:block;
+            }
+
+            .fraction-action-row {
+                grid-template-columns:1fr;
             }
         }
     </style>
+
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
 </head>
 
 <body>
+
+<%- include("partials/tool-header") %>
 
 <div class="converter-page">
 
@@ -146,7 +182,9 @@
 
             <div class="converter-header">
 
-                <div class="tool-icon">½</div>
+                <div class="tool-icon">
+                    ½
+                </div>
 
                 <h1>Fraction Calculator</h1>
 
@@ -179,13 +217,12 @@
 
                     <select
                         id="operation"
-                        class="operation-select">
-
+                        class="operation-select"
+                    >
                         <option value="+">+</option>
                         <option value="-">−</option>
                         <option value="*">×</option>
                         <option value="/">÷</option>
-
                     </select>
 
                 </div>
@@ -209,31 +246,44 @@
             </div>
 
 
-            <button
-                class="calculate-fraction-btn"
-                onclick="calculateFraction()">
+            <div class="fraction-action-row">
 
-                Calculate
+                <button
+                    type="button"
+                    class="calculate-fraction-btn"
+                    id="calculateFractionBtn"
+                >
+                    Calculate
+                </button>
 
-            </button>
+                <button
+                    type="button"
+                    class="reset-fraction-btn"
+                    id="resetFractionBtn"
+                >
+                    Reset
+                </button>
 
-
-            <div
-                class="error-message"
-                id="errorMessage">
             </div>
 
 
             <div
+                class="error-message"
+                id="errorMessage"
+            ></div>
+
+
+            <div
                 class="fraction-result"
-                id="fractionResult">
+                id="fractionResult"
+            >
 
                 <h2>Result</h2>
 
                 <div
                     class="result-fraction"
-                    id="resultFraction">
-                </div>
+                    id="resultFraction"
+                ></div>
 
                 <p id="decimalResult"></p>
 
@@ -250,359 +300,450 @@
 
 <script>
 
-    function gcd(a, b) {
+const fraction1Input =
+    document.getElementById("fraction1");
 
-        a = Math.abs(a);
-        b = Math.abs(b);
+const fraction2Input =
+    document.getElementById("fraction2");
 
-        while (b !== 0) {
+const operationSelect =
+    document.getElementById("operation");
 
-            const temp = b;
+const calculateFractionBtn =
+    document.getElementById("calculateFractionBtn");
 
-            b = a % b;
-            a = temp;
-        }
+const resetFractionBtn =
+    document.getElementById("resetFractionBtn");
 
-        return a;
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const fractionResult =
+    document.getElementById("fractionResult");
+
+const resultFraction =
+    document.getElementById("resultFraction");
+
+const decimalResult =
+    document.getElementById("decimalResult");
+
+const mixedResult =
+    document.getElementById("mixedResult");
+
+
+function gcd(a, b) {
+
+    a =
+        Math.abs(a);
+
+    b =
+        Math.abs(b);
+
+
+    while (b !== 0) {
+
+        const temp =
+            b;
+
+        b =
+            a % b;
+
+        a =
+            temp;
     }
 
 
-    function simplify(numerator, denominator) {
+    return a;
+}
 
-        if (denominator === 0) {
-            throw new Error("Denominator cannot be zero.");
-        }
 
-        if (numerator === 0) {
-            return {
-                numerator: 0,
-                denominator: 1
-            };
-        }
+function simplify(
+    numerator,
+    denominator
+) {
 
-        if (denominator < 0) {
+    if (
+        denominator === 0
+    ) {
 
-            numerator *= -1;
-            denominator *= -1;
-        }
+        throw new Error(
+            "Denominator cannot be zero."
+        );
+    }
 
-        const divisor =
-            gcd(numerator, denominator);
+
+    if (
+        numerator === 0
+    ) {
 
         return {
-            numerator: numerator / divisor,
-            denominator: denominator / divisor
+            numerator:0,
+            denominator:1
         };
     }
 
 
-    function parseFraction(value) {
+    if (
+        denominator < 0
+    ) {
 
-        value = value.trim();
+        numerator *=
+            -1;
 
-        if (!value) {
-            throw new Error("Please enter both fractions.");
-        }
+        denominator *=
+            -1;
+    }
 
 
-        // Mixed number: 1 1/2
-        const mixedMatch =
-            value.match(
-                /^(-?\d+)\s+(\d+)\s*\/\s*(\d+)$/
+    const divisor =
+        gcd(
+            numerator,
+            denominator
+        );
+
+
+    return {
+
+        numerator:
+            numerator / divisor,
+
+        denominator:
+            denominator / divisor
+    };
+}
+
+
+function parseFraction(value) {
+
+    value =
+        value.trim();
+
+
+    if (!value) {
+
+        throw new Error(
+            "Please enter both fractions."
+        );
+    }
+
+
+    /* Mixed number: 1 1/2 */
+
+    const mixedMatch =
+        value.match(
+            /^(-?\d+)\s+(\d+)\s*\/\s*(\d+)$/
+        );
+
+
+    if (mixedMatch) {
+
+        const whole =
+            parseInt(
+                mixedMatch[1]
             );
 
-        if (mixedMatch) {
-
-            const whole =
-                parseInt(mixedMatch[1]);
-
-            const numerator =
-                parseInt(mixedMatch[2]);
-
-            const denominator =
-                parseInt(mixedMatch[3]);
-
-            if (denominator === 0) {
-                throw new Error(
-                    "Denominator cannot be zero."
-                );
-            }
-
-            const sign =
-                whole < 0 ? -1 : 1;
-
-            return simplify(
-                whole * denominator +
-                sign * numerator,
-                denominator
+        const numerator =
+            parseInt(
+                mixedMatch[2]
             );
-        }
 
-
-        // Normal fraction: 1/2
-        if (value.includes("/")) {
-
-            const parts =
-                value.split("/");
-
-            if (parts.length !== 2) {
-
-                throw new Error(
-                    "Invalid fraction format."
-                );
-            }
-
-            const numerator =
-                Number(parts[0].trim());
-
-            const denominator =
-                Number(parts[1].trim());
-
-            if (
-                !Number.isInteger(numerator) ||
-                !Number.isInteger(denominator)
-            ) {
-
-                throw new Error(
-                    "Use whole numbers in fractions."
-                );
-            }
-
-            return simplify(
-                numerator,
-                denominator
+        const denominator =
+            parseInt(
+                mixedMatch[3]
             );
-        }
 
-
-        // Whole number
-        const number = Number(value);
 
         if (
-            !Number.isInteger(number)
+            denominator === 0
         ) {
 
             throw new Error(
-                "Invalid number."
+                "Denominator cannot be zero."
             );
         }
 
-        return {
-            numerator: number,
-            denominator: 1
-        };
+
+        const sign =
+            whole < 0
+                ? -1
+                : 1;
+
+
+        return simplify(
+
+            whole * denominator +
+            sign * numerator,
+
+            denominator
+        );
     }
 
 
-    function calculateFraction() {
+    /* Normal fraction: 1/2 */
 
-        const resultBox =
-            document.getElementById(
-                "fractionResult"
-            );
-
-        const errorBox =
-            document.getElementById(
-                "errorMessage"
-            );
-
-
-        resultBox.style.display = "none";
-        errorBox.style.display = "none";
-
-
-        try {
-
-            const first =
-                parseFraction(
-                    document.getElementById(
-                        "fraction1"
-                    ).value
-                );
-
-            const second =
-                parseFraction(
-                    document.getElementById(
-                        "fraction2"
-                    ).value
-                );
-
-
-            const operation =
-                document.getElementById(
-                    "operation"
-                ).value;
-
-
-            let numerator;
-            let denominator;
-
-
-            if (operation === "+") {
-
-                numerator =
-                    first.numerator *
-                    second.denominator +
-                    second.numerator *
-                    first.denominator;
-
-                denominator =
-                    first.denominator *
-                    second.denominator;
-
-            }
-
-            else if (operation === "-") {
-
-                numerator =
-                    first.numerator *
-                    second.denominator -
-                    second.numerator *
-                    first.denominator;
-
-                denominator =
-                    first.denominator *
-                    second.denominator;
-
-            }
-
-            else if (operation === "*") {
-
-                numerator =
-                    first.numerator *
-                    second.numerator;
-
-                denominator =
-                    first.denominator *
-                    second.denominator;
-
-            }
-
-            else if (operation === "/") {
-
-                if (second.numerator === 0) {
-
-                    throw new Error(
-                        "Cannot divide by zero."
-                    );
-                }
-
-                numerator =
-                    first.numerator *
-                    second.denominator;
-
-                denominator =
-                    first.denominator *
-                    second.numerator;
-            }
-
-
-            const result =
-                simplify(
-                    numerator,
-                    denominator
-                );
-
-
-            document.getElementById(
-                "resultFraction"
-            ).textContent =
-                result.numerator +
-                "/" +
-                result.denominator;
-
-
-            const decimal =
-                result.numerator /
-                result.denominator;
-
-
-            document.getElementById(
-                "decimalResult"
-            ).textContent =
-                "Decimal: " +
-                Number(decimal.toFixed(10));
-
-
-            const mixed =
-                toMixedNumber(
-                    result.numerator,
-                    result.denominator
-                );
-
-
-            document.getElementById(
-                "mixedResult"
-            ).textContent =
-                "Mixed Number: " +
-                mixed;
-
-
-            resultBox.style.display =
-                "block";
-
-        }
-
-        catch (error) {
-
-            errorBox.textContent =
-                error.message;
-
-            errorBox.style.display =
-                "block";
-        }
-    }
-
-
-    function toMixedNumber(
-        numerator,
-        denominator
+    if (
+        value.includes("/")
     ) {
 
-        if (denominator === 1) {
-            return String(numerator);
+        const parts =
+            value.split("/");
+
+
+        if (
+            parts.length !== 2
+        ) {
+
+            throw new Error(
+                "Invalid fraction format."
+            );
         }
 
 
-        const negative =
-            numerator < 0;
-
-        const absolute =
-            Math.abs(numerator);
-
-        const whole =
-            Math.floor(
-                absolute / denominator
+        const numerator =
+            Number(
+                parts[0].trim()
             );
 
-        const remainder =
-            absolute % denominator;
+        const denominator =
+            Number(
+                parts[1].trim()
+            );
 
 
-        if (whole === 0) {
+        if (
+            !Number.isInteger(numerator) ||
+            !Number.isInteger(denominator)
+        ) {
 
-            return (
-                (negative ? "-" : "") +
-                remainder +
-                "/" +
+            throw new Error(
+                "Use whole numbers in fractions."
+            );
+        }
+
+
+        return simplify(
+            numerator,
+            denominator
+        );
+    }
+
+
+    /* Whole number */
+
+    const number =
+        Number(value);
+
+
+    if (
+        !Number.isInteger(number)
+    ) {
+
+        throw new Error(
+            "Invalid number."
+        );
+    }
+
+
+    return {
+        numerator:number,
+        denominator:1
+    };
+}
+
+
+function calculateFraction() {
+
+    fractionResult.style.display =
+        "none";
+
+    errorMessage.style.display =
+        "none";
+
+
+    try {
+
+        const first =
+            parseFraction(
+                fraction1Input.value
+            );
+
+        const second =
+            parseFraction(
+                fraction2Input.value
+            );
+
+
+        const operation =
+            operationSelect.value;
+
+
+        let numerator;
+        let denominator;
+
+
+        if (
+            operation === "+"
+        ) {
+
+            numerator =
+                first.numerator *
+                second.denominator +
+                second.numerator *
+                first.denominator;
+
+
+            denominator =
+                first.denominator *
+                second.denominator;
+
+        } else if (
+            operation === "-"
+        ) {
+
+            numerator =
+                first.numerator *
+                second.denominator -
+                second.numerator *
+                first.denominator;
+
+
+            denominator =
+                first.denominator *
+                second.denominator;
+
+        } else if (
+            operation === "*"
+        ) {
+
+            numerator =
+                first.numerator *
+                second.numerator;
+
+
+            denominator =
+                first.denominator *
+                second.denominator;
+
+        } else if (
+            operation === "/"
+        ) {
+
+            if (
+                second.numerator === 0
+            ) {
+
+                throw new Error(
+                    "Cannot divide by zero."
+                );
+            }
+
+
+            numerator =
+                first.numerator *
+                second.denominator;
+
+
+            denominator =
+                first.denominator *
+                second.numerator;
+        }
+
+
+        const result =
+            simplify(
+                numerator,
                 denominator
             );
-        }
 
 
-        if (remainder === 0) {
+        resultFraction.textContent =
+            result.numerator +
+            "/" +
+            result.denominator;
 
-            return (
-                (negative ? "-" : "") +
-                whole
+
+        const decimal =
+            result.numerator /
+            result.denominator;
+
+
+        decimalResult.textContent =
+            "Decimal: " +
+            Number(
+                decimal.toFixed(10)
             );
-        }
 
+
+        const mixed =
+            toMixedNumber(
+                result.numerator,
+                result.denominator
+            );
+
+
+        mixedResult.textContent =
+            "Mixed Number: " +
+            mixed;
+
+
+        fractionResult.style.display =
+            "block";
+
+    } catch (error) {
+
+        errorMessage.textContent =
+            error.message;
+
+
+        errorMessage.style.display =
+            "block";
+    }
+}
+
+
+function toMixedNumber(
+    numerator,
+    denominator
+) {
+
+    if (
+        denominator === 1
+    ) {
+
+        return String(
+            numerator
+        );
+    }
+
+
+    const negative =
+        numerator < 0;
+
+
+    const absolute =
+        Math.abs(
+            numerator
+        );
+
+
+    const whole =
+        Math.floor(
+            absolute /
+            denominator
+        );
+
+
+    const remainder =
+        absolute %
+        denominator;
+
+
+    if (
+        whole === 0
+    ) {
 
         return (
             (negative ? "-" : "") +
-            whole +
-            " " +
             remainder +
             "/" +
             denominator
@@ -610,19 +751,175 @@
     }
 
 
-    document.addEventListener(
-        "keydown",
-        function(event) {
+    if (
+        remainder === 0
+    ) {
 
-            if (event.key === "Enter") {
+        return (
+            (negative ? "-" : "") +
+            whole
+        );
+    }
 
-                calculateFraction();
-            }
 
-        }
+    return (
+        (negative ? "-" : "") +
+        whole +
+        " " +
+        remainder +
+        "/" +
+        denominator
     );
+}
+
+
+/* =========================
+   CALCULATE
+========================= */
+
+calculateFractionBtn.addEventListener(
+    "click",
+    calculateFraction
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetFractionBtn.addEventListener(
+    "click",
+    function () {
+
+        fraction1Input.value =
+            "";
+
+        fraction2Input.value =
+            "";
+
+        operationSelect.value =
+            "+";
+
+        resultFraction.textContent =
+            "";
+
+        decimalResult.textContent =
+            "";
+
+        mixedResult.textContent =
+            "";
+
+        errorMessage.textContent =
+            "";
+
+        errorMessage.style.display =
+            "none";
+
+        fractionResult.style.display =
+            "none";
+
+        fraction1Input.focus();
+
+    }
+);
+
+
+/* ENTER KEY */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            calculateFraction();
+        }
+
+    }
+);
 
 </script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+
+        element.textContent =
+            new Date().getFullYear();
+
+    });
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

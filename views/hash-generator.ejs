@@ -3,20 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Hash Generator - FileVora</title>
+
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .hash-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .hash-action-row .convert-btn{
+            width:100% !important;
+            min-height:50px !important;
+            height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .hash-reset-btn{
+            background:#ffffff !important;
+            color:#ef1f2b !important;
+            border:1px solid #ef1f2b !important;
+            box-shadow:none !important;
+        }
+
+        .hash-reset-btn:hover{
+            background:#fff5f5 !important;
+        }
+
+        @media (max-width:600px){
+            .hash-action-row{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
+<%- include("partials/tool-header") %>
+
 <main class="converter-page">
+
     <div class="container">
+
         <div class="converter-card">
 
             <div class="converter-header">
-                <div class="tool-icon">#H</div>
+
+                <div class="tool-icon">
+                    HASH
+                </div>
+
                 <h1>Hash Generator</h1>
-                <p>Generate secure cryptographic hashes from text using popular hashing algorithms.</p>
+
+                <p>
+                    Generate secure cryptographic hashes from text using popular hashing algorithms.
+                </p>
+
             </div>
+
 
             <textarea
                 id="textInput"
@@ -36,10 +88,13 @@
                 "
             ></textarea>
 
-            <div style="
-                text-align:left;
-                margin-top:18px;
-            ">
+
+            <div
+                style="
+                    text-align:left;
+                    margin-top:18px;
+                "
+            >
 
                 <label
                     for="algorithm"
@@ -53,6 +108,7 @@
                     Hash Algorithm
                 </label>
 
+
                 <select
                     id="algorithm"
                     style="
@@ -65,23 +121,61 @@
                         box-sizing:border-box;
                     "
                 >
-                    <option value="SHA-256">SHA-256</option>
-                    <option value="SHA-384">SHA-384</option>
-                    <option value="SHA-512">SHA-512</option>
-                    <option value="SHA-1">SHA-1</option>
+
+                    <option value="SHA-256">
+                        SHA-256
+                    </option>
+
+                    <option value="SHA-384">
+                        SHA-384
+                    </option>
+
+                    <option value="SHA-512">
+                        SHA-512
+                    </option>
+
+                    <option value="SHA-1">
+                        SHA-1
+                    </option>
+
                 </select>
 
             </div>
 
-            <button class="convert-btn" id="generateBtn">
-                Generate Hash
-            </button>
 
-            <div class="result" id="result">
+            <div class="hash-action-row">
 
-                <h2>Hash Generated</h2>
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="generateBtn"
+                >
+                    Generate Hash
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn hash-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2>
+                    Hash Generated
+                </h2>
 
                 <p id="resultInfo"></p>
+
 
                 <textarea
                     id="outputText"
@@ -103,118 +197,381 @@
                     "
                 ></textarea>
 
-                <button class="download-btn" id="copyBtn">
+
+                <button
+                    type="button"
+                    class="download-btn"
+                    id="copyBtn"
+                >
                     Copy Hash
                 </button>
 
             </div>
 
         </div>
+
     </div>
+
 </main>
 
+
 <script>
-const textInput = document.getElementById("textInput");
-const algorithm = document.getElementById("algorithm");
-const generateBtn = document.getElementById("generateBtn");
 
-const result = document.getElementById("result");
-const resultInfo = document.getElementById("resultInfo");
-const outputText = document.getElementById("outputText");
-const copyBtn = document.getElementById("copyBtn");
+const textInput =
+    document.getElementById("textInput");
 
-async function generateHash(text, algorithmName) {
+const algorithm =
+    document.getElementById("algorithm");
 
-    const encoder = new TextEncoder();
-    const data = encoder.encode(text);
+const generateBtn =
+    document.getElementById("generateBtn");
 
-    const hashBuffer = await crypto.subtle.digest(
-        algorithmName,
-        data
-    );
+const resetBtn =
+    document.getElementById("resetBtn");
 
-    const hashArray = Array.from(
-        new Uint8Array(hashBuffer)
-    );
+const result =
+    document.getElementById("result");
+
+const resultInfo =
+    document.getElementById("resultInfo");
+
+const outputText =
+    document.getElementById("outputText");
+
+const copyBtn =
+    document.getElementById("copyBtn");
+
+
+/* =========================
+   GENERATE HASH
+========================= */
+
+async function generateHash(
+    text,
+    algorithmName
+) {
+
+    const encoder =
+        new TextEncoder();
+
+
+    const data =
+        encoder.encode(
+            text
+        );
+
+
+    const hashBuffer =
+        await crypto.subtle.digest(
+            algorithmName,
+            data
+        );
+
+
+    const hashArray =
+        Array.from(
+            new Uint8Array(
+                hashBuffer
+            )
+        );
+
 
     return hashArray
-        .map(byte => byte.toString(16).padStart(2, "0"))
+        .map(
+            function (byte) {
+
+                return byte
+                    .toString(16)
+                    .padStart(
+                        2,
+                        "0"
+                    );
+
+            }
+        )
         .join("");
+
 }
 
-generateBtn.addEventListener("click", async () => {
 
-    const text = textInput.value;
+/* =========================
+   GENERATE BUTTON
+========================= */
 
-    if (!text) {
-        alert("Please enter some text first.");
-        return;
+generateBtn.addEventListener(
+    "click",
+    async function () {
+
+        const text =
+            textInput.value;
+
+
+        if (!text) {
+
+            alert(
+                "Please enter some text first."
+            );
+
+            return;
+        }
+
+
+        generateBtn.disabled =
+            true;
+
+
+        generateBtn.textContent =
+            "Generating...";
+
+
+        try {
+
+            const selectedAlgorithm =
+                algorithm.value;
+
+
+            const hash =
+                await generateHash(
+                    text,
+                    selectedAlgorithm
+                );
+
+
+            outputText.value =
+                hash;
+
+
+            resultInfo.textContent =
+                selectedAlgorithm +
+                " hash generated successfully.";
+
+
+            result.style.display =
+                "block";
+
+
+            result.scrollIntoView({
+                behavior:"smooth",
+                block:"nearest"
+            });
+
+
+        } catch (error) {
+
+            alert(
+                "Unable to generate hash."
+            );
+
+
+        } finally {
+
+            generateBtn.disabled =
+                false;
+
+
+            generateBtn.textContent =
+                "Generate Hash";
+        }
+
     }
+);
 
-    generateBtn.disabled = true;
-    generateBtn.textContent = "Generating...";
 
-    try {
+/* =========================
+   COPY HASH
+========================= */
 
-        const selectedAlgorithm = algorithm.value;
+copyBtn.addEventListener(
+    "click",
+    async function () {
 
-        const hash = await generateHash(
-            text,
-            selectedAlgorithm
-        );
+        if (
+            !outputText.value
+        ) {
+            return;
+        }
 
-        outputText.value = hash;
+
+        try {
+
+            await navigator.clipboard.writeText(
+                outputText.value
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy Hash";
+
+                },
+                1500
+            );
+
+
+        } catch (error) {
+
+            outputText.select();
+
+
+            document.execCommand(
+                "copy"
+            );
+
+
+            copyBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyBtn.textContent =
+                        "Copy Hash";
+
+                },
+                1500
+            );
+        }
+
+    }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetBtn.addEventListener(
+    "click",
+    function () {
+
+        textInput.value =
+            "";
+
+
+        algorithm.value =
+            "SHA-256";
+
+
+        outputText.value =
+            "";
+
 
         resultInfo.textContent =
-            `${selectedAlgorithm} hash generated successfully.`;
+            "";
 
-        result.style.display = "block";
 
-        result.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest"
-        });
+        result.style.display =
+            "none";
 
-    } catch (error) {
 
-        alert("Unable to generate hash.");
+        copyBtn.textContent =
+            "Copy Hash";
 
-    } finally {
 
-        generateBtn.disabled = false;
-        generateBtn.textContent = "Generate Hash";
+        generateBtn.disabled =
+            false;
+
+
+        generateBtn.textContent =
+            "Generate Hash";
+
+
+        textInput.focus();
+
     }
-});
+);
 
-copyBtn.addEventListener("click", async () => {
-
-    if (!outputText.value) return;
-
-    try {
-
-        await navigator.clipboard.writeText(
-            outputText.value
-        );
-
-        copyBtn.textContent = "Copied!";
-
-        setTimeout(() => {
-            copyBtn.textContent = "Copy Hash";
-        }, 1500);
-
-    } catch (error) {
-
-        outputText.select();
-        document.execCommand("copy");
-
-        copyBtn.textContent = "Copied!";
-
-        setTimeout(() => {
-            copyBtn.textContent = "Copy Hash";
-        }, 1500);
-    }
-});
 </script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date().getFullYear();
+
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

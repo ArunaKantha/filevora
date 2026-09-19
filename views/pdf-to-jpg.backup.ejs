@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Convert PDF pages to JPG images online for free with FileVora.">
+
+    <title>PDF to JPG — FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <style>
+        .pdf-jpg-actions{
+            display:none;
+            grid-template-columns:1fr 1fr;
+            gap:12px;
+            margin-top:20px;
+        }
+
+        .pdf-jpg-actions .convert-btn,
+        .pdf-jpg-actions .pdf-reset-btn{
+            width:100% !important;
+            min-height:50px !important;
+            height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .pdf-reset-btn{
+            border:1px solid #ef1f2b !important;
+            border-radius:10px;
+            background:#ffffff !important;
+            color:#ef1f2b !important;
+            font-weight:800;
+            cursor:pointer;
+            box-shadow:none !important;
+        }
+
+        .pdf-reset-btn:hover{
+            background:#fff5f5 !important;
+        }
+
+        #downloadArea{
+            display:flex;
+            flex-wrap:wrap;
+            justify-content:center;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        #downloadArea .download-btn{
+            margin:0 !important;
+        }
+
+        @media (max-width:600px){
+            .pdf-jpg-actions{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a class="brand" href="/" aria-label="FileVora home">
+        <span class="brand-mark">F</span>
+        <span class="brand-name">File<span>Vora</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="/">Home</a>
+      <a href="/#tools">Tools</a>
+      <a href="/#categories">Categories</a>
+      <a href="/#why">Why FileVora</a>
+    </nav>
+
+    <a class="nav-contact" href="/contact">Contact</a>
+
+  </div>
+</header>
+
+
+<main class="converter-page">
+
+<div class="container">
+
+    <div class="converter-card">
+
+        <div class="converter-header">
+
+            <div class="tool-icon">
+                PDF
+            </div>
+
+            <h1>PDF to JPG</h1>
+
+            <p>
+                Convert your PDF pages into high-quality JPG images instantly.
+            </p>
+
+        </div>
+
+
+        <label class="upload-area" for="pdfInput">
+
+            <div class="upload-icon">↑</div>
+
+            <strong>
+                Choose a PDF file
+            </strong>
+
+            <span>
+                PDF files only
+            </span>
+
+        </label>
+
+
+        <input
+            id="pdfInput"
+            type="file"
+            accept="application/pdf,.pdf"
+        >
+
+
+        <div
+            class="file-info"
+            id="fileInfo"
+            style="display:none;"
+        >
+
+            <strong id="fileName"></strong>
+
+            <span id="fileSize"></span>
+
+        </div>
+
+
+        <div
+            class="pdf-jpg-actions"
+            id="pdfActions"
+        >
+
+            <button
+                type="button"
+                class="convert-btn"
+                id="convertBtn"
+                disabled
+            >
+                Convert to JPG
+            </button>
+
+
+            <button
+                type="button"
+                class="pdf-reset-btn"
+                id="pdfResetBtn"
+            >
+                Reset
+            </button>
+
+        </div>
+
+
+        <div
+            class="result"
+            id="result"
+            style="display:none;"
+        >
+
+            <h2>
+                JPG Ready
+            </h2>
+
+            <p id="resultText">
+                Your PDF pages have been converted successfully.
+            </p>
+
+            <div id="downloadArea"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</main>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (el) {
+        el.textContent =
+            new Date().getFullYear();
+    });
+
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+const pdfInput =
+    document.getElementById("pdfInput");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const pdfActions =
+    document.getElementById("pdfActions");
+
+const pdfResetBtn =
+    document.getElementById("pdfResetBtn");
+
+const result =
+    document.getElementById("result");
+
+const resultText =
+    document.getElementById("resultText");
+
+const downloadArea =
+    document.getElementById("downloadArea");
+
+
+let selectedFile =
+    null;
+
+
+/* =========================
+   FILE SELECT
+========================= */
+
+pdfInput.addEventListener(
+    "change",
+    function () {
+
+        const file =
+            pdfInput.files[0];
+
+
+        if (!file) {
+
+            selectedFile =
+                null;
+
+            convertBtn.disabled =
+                true;
+
+            fileInfo.style.display =
+                "none";
+
+            pdfActions.style.display =
+                "none";
+
+            result.style.display =
+                "none";
+
+            return;
+        }
+
+
+        if (
+            file.type !== "application/pdf" &&
+            !file.name.toLowerCase().endsWith(".pdf")
+        ) {
+
+            alert(
+                "Please choose a PDF file."
+            );
+
+
+            pdfInput.value =
+                "";
+
+
+            selectedFile =
+                null;
+
+
+            convertBtn.disabled =
+                true;
+
+
+            fileInfo.style.display =
+                "none";
+
+
+            pdfActions.style.display =
+                "none";
+
+
+            result.style.display =
+                "none";
+
+
+            return;
+        }
+
+
+        selectedFile =
+            file;
+
+
+        fileName.textContent =
+            file.name;
+
+
+        const sizeMB =
+            file.size /
+            (1024 * 1024);
+
+
+        fileSize.textContent =
+            sizeMB >= 1
+                ? sizeMB.toFixed(2) + " MB"
+                : (file.size / 1024).toFixed(2) + " KB";
+
+
+        fileInfo.style.display =
+            "block";
+
+
+        result.style.display =
+            "none";
+
+
+        downloadArea.innerHTML =
+            "";
+
+
+        convertBtn.disabled =
+            false;
+
+
+        convertBtn.textContent =
+            "Convert to JPG";
+
+
+        pdfActions.style.display =
+            "grid";
+
+    }
+);
+
+
+/* =========================
+   CONVERT PDF
+========================= */
+
+convertBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (!selectedFile) {
+            return;
+        }
+
+
+        convertBtn.disabled =
+            true;
+
+
+        pdfResetBtn.disabled =
+            true;
+
+
+        convertBtn.textContent =
+            "Converting PDF...";
+
+
+        result.style.display =
+            "none";
+
+
+        downloadArea.innerHTML =
+            "";
+
+
+        try {
+
+            const arrayBuffer =
+                await selectedFile.arrayBuffer();
+
+
+            const pdf =
+                await pdfjsLib.getDocument({
+                    data:arrayBuffer
+                }).promise;
+
+
+            const totalPages =
+                pdf.numPages;
+
+
+            for (
+                let pageNumber = 1;
+                pageNumber <= totalPages;
+                pageNumber++
+            ) {
+
+                convertBtn.textContent =
+                    `Converting page ${pageNumber} of ${totalPages}...`;
+
+
+                const page =
+                    await pdf.getPage(
+                        pageNumber
+                    );
+
+
+                const viewport =
+                    page.getViewport({
+                        scale:2
+                    });
+
+
+                const canvas =
+                    document.createElement(
+                        "canvas"
+                    );
+
+
+                const context =
+                    canvas.getContext(
+                        "2d"
+                    );
+
+
+                canvas.width =
+                    Math.ceil(
+                        viewport.width
+                    );
+
+
+                canvas.height =
+                    Math.ceil(
+                        viewport.height
+                    );
+
+
+                await page.render({
+                    canvasContext:context,
+                    viewport:viewport
+                }).promise;
+
+
+                const jpgData =
+                    canvas.toDataURL(
+                        "image/jpeg",
+                        0.92
+                    );
+
+
+                const downloadButton =
+                    document.createElement(
+                        "a"
+                    );
+
+
+                downloadButton.className =
+                    "download-btn";
+
+
+                downloadButton.href =
+                    jpgData;
+
+
+                downloadButton.download =
+                    `filevora-page-${pageNumber}.jpg`;
+
+
+                downloadButton.textContent =
+                    `Download Page ${pageNumber}`;
+
+
+                downloadArea.appendChild(
+                    downloadButton
+                );
+
+            }
+
+
+            resultText.textContent =
+                `${totalPages} page${totalPages === 1 ? "" : "s"} converted successfully.`;
+
+
+            result.style.display =
+                "block";
+
+
+            result.scrollIntoView({
+                behavior:"smooth",
+                block:"nearest"
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "Something went wrong while converting the PDF."
+            );
+
+
+            result.style.display =
+                "none";
+
+
+            downloadArea.innerHTML =
+                "";
+
+        } finally {
+
+            convertBtn.disabled =
+                false;
+
+
+            pdfResetBtn.disabled =
+                false;
+
+
+            convertBtn.textContent =
+                "Convert to JPG";
+
+        }
+
+    }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+pdfResetBtn.addEventListener(
+    "click",
+    function () {
+
+        pdfInput.value =
+            "";
+
+
+        selectedFile =
+            null;
+
+
+        fileName.textContent =
+            "";
+
+
+        fileSize.textContent =
+            "";
+
+
+        fileInfo.style.display =
+            "none";
+
+
+        result.style.display =
+            "none";
+
+
+        resultText.textContent =
+            "Your PDF pages have been converted successfully.";
+
+
+        downloadArea.innerHTML =
+            "";
+
+
+        convertBtn.disabled =
+            true;
+
+
+        convertBtn.textContent =
+            "Convert to JPG";
+
+
+        pdfResetBtn.disabled =
+            false;
+
+
+        pdfActions.style.display =
+            "none";
+
+    }
+);
+
+</script>
+
+</body>
+</html>

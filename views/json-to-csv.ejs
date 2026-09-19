@@ -8,9 +8,62 @@
     <meta name="description" content="Convert JSON data to CSV format quickly and easily with FileVora.">
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .json-csv-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .json-csv-action-row .convert-btn{
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .json-csv-reset-btn{
+            background:#ffffff !important;
+            color:#ef1f2b !important;
+            border:1px solid #ef1f2b !important;
+            box-shadow:none !important;
+        }
+
+        .json-csv-reset-btn:hover{
+            background:#fff5f5 !important;
+        }
+
+        .csv-result-actions{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:15px;
+        }
+
+        .csv-result-actions .download-btn{
+            width:100% !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+            text-align:center !important;
+        }
+
+        @media (max-width:600px){
+            .json-csv-action-row,
+            .csv-result-actions{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
+
+<%- include("partials/tool-header") %>
 
 <div class="converter-page">
 
@@ -32,12 +85,21 @@
 
             </div>
 
+
             <div style="text-align:left;">
 
-                <label for="jsonInput"
-                       style="display:block; margin-bottom:8px; font-weight:700; color:#111827;">
+                <label
+                    for="jsonInput"
+                    style="
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
                     JSON Data
                 </label>
+
 
                 <textarea
                     id="jsonInput"
@@ -63,16 +125,31 @@
 
             </div>
 
-            <button
-                class="convert-btn"
-                id="convertBtn"
-                onclick="convertJSONToCSV()"
-            >
-                Convert to CSV
-            </button>
 
-            <div id="errorMessage"
-                 style="
+            <div class="json-csv-action-row">
+
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="convertBtn"
+                >
+                    Convert to CSV
+                </button>
+
+                <button
+                    type="button"
+                    class="convert-btn json-csv-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+
+            <div
+                id="errorMessage"
+                style="
                     display:none;
                     margin-top:18px;
                     padding:14px 18px;
@@ -81,25 +158,66 @@
                     border-radius:10px;
                     color:#b91c1c;
                     text-align:left;
-                 ">
-            </div>
+                "
+            ></div>
 
-            <div class="result" id="result">
 
-                <h2>Conversion Complete</h2>
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+
+                <h2>
+                    Conversion Complete
+                </h2>
 
                 <p>
                     Your JSON data has been successfully converted to CSV.
                 </p>
 
-                <a
-                    id="downloadBtn"
-                    class="download-btn"
-                    href="#"
-                    download="filevora-data.csv"
-                >
-                    ↓ Download CSV
-                </a>
+
+                <textarea
+                    id="csvOutput"
+                    readonly
+                    style="
+                        width:100%;
+                        min-height:220px;
+                        margin-top:18px;
+                        padding:16px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        resize:vertical;
+                        font-family:monospace;
+                        font-size:14px;
+                        line-height:1.6;
+                        box-sizing:border-box;
+                        background:#ffffff;
+                    "
+                ></textarea>
+
+
+                <div class="csv-result-actions">
+
+                    <button
+                        type="button"
+                        class="download-btn"
+                        id="copyCsvBtn"
+                    >
+                        Copy CSV
+                    </button>
+
+
+                    <a
+                        id="downloadBtn"
+                        class="download-btn"
+                        href="#"
+                        download="filevora-data.csv"
+                    >
+                        Download CSV
+                    </a>
+
+                </div>
 
             </div>
 
@@ -109,108 +227,298 @@
 
 </div>
 
+
 <script>
+
+const jsonInput =
+    document.getElementById("jsonInput");
+
+const convertBtn =
+    document.getElementById("convertBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const result =
+    document.getElementById("result");
+
+const csvOutput =
+    document.getElementById("csvOutput");
+
+const copyCsvBtn =
+    document.getElementById("copyCsvBtn");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+let currentDownloadUrl =
+    null;
+
+
+/* =========================
+   CONVERT JSON TO CSV
+========================= */
 
 function convertJSONToCSV() {
 
-    const input = document.getElementById("jsonInput").value.trim();
-    const errorMessage = document.getElementById("errorMessage");
-    const result = document.getElementById("result");
-    const downloadBtn = document.getElementById("downloadBtn");
+    const input =
+        jsonInput.value.trim();
 
-    errorMessage.style.display = "none";
-    result.style.display = "none";
+
+    errorMessage.textContent =
+        "";
+
+    errorMessage.style.display =
+        "none";
+
+
+    result.style.display =
+        "none";
+
+
+    csvOutput.value =
+        "";
+
 
     if (!input) {
-        showError("Please enter JSON data.");
+
+        showError(
+            "Please enter JSON data."
+        );
+
         return;
     }
+
 
     let data;
 
+
     try {
-        data = JSON.parse(input);
+
+        data =
+            JSON.parse(input);
+
     } catch (error) {
-        showError("Invalid JSON. Please check your JSON format.");
+
+        showError(
+            "Invalid JSON. Please check your JSON format."
+        );
+
         return;
     }
 
-    if (!Array.isArray(data)) {
-        data = [data];
+
+    if (
+        !Array.isArray(data)
+    ) {
+
+        data =
+            [data];
     }
 
-    if (data.length === 0) {
-        showError("The JSON array is empty.");
+
+    if (
+        data.length === 0
+    ) {
+
+        showError(
+            "The JSON array is empty."
+        );
+
         return;
     }
 
-    if (typeof data[0] !== "object" || data[0] === null || Array.isArray(data[0])) {
-        showError("Please provide an array of JSON objects.");
+
+    if (
+        typeof data[0] !== "object" ||
+        data[0] === null ||
+        Array.isArray(data[0])
+    ) {
+
+        showError(
+            "Please provide an array of JSON objects."
+        );
+
         return;
     }
 
-    const headers = [];
 
-    data.forEach(item => {
+    const headers =
+        [];
 
-        Object.keys(item).forEach(key => {
 
-            if (!headers.includes(key)) {
-                headers.push(key);
+    data.forEach(
+        function (item) {
+
+            if (
+                typeof item !== "object" ||
+                item === null ||
+                Array.isArray(item)
+            ) {
+                return;
             }
 
-        });
 
-    });
+            Object.keys(item)
+                .forEach(
+                    function (key) {
 
-    if (headers.length === 0) {
-        showError("No data fields were found.");
-        return;
-    }
+                        if (
+                            !headers.includes(key)
+                        ) {
+                            headers.push(key);
+                        }
 
-    const csvRows = [];
+                    }
+                );
 
-    csvRows.push(
-        headers.map(value => escapeCSV(value)).join(",")
-    );
-
-    data.forEach(item => {
-
-        const row = headers.map(header => {
-
-            let value = item[header];
-
-            if (value === null || value === undefined) {
-                value = "";
-            }
-
-            if (typeof value === "object") {
-                value = JSON.stringify(value);
-            }
-
-            return escapeCSV(String(value));
-
-        });
-
-        csvRows.push(row.join(","));
-
-    });
-
-    const csvContent = csvRows.join("\r\n");
-
-    const blob = new Blob(
-        ["\uFEFF" + csvContent],
-        {
-            type: "text/csv;charset=utf-8;"
         }
     );
 
-    const url = URL.createObjectURL(blob);
 
-    downloadBtn.href = url;
+    if (
+        headers.length === 0
+    ) {
 
-    result.style.display = "block";
+        showError(
+            "No data fields were found."
+        );
+
+        return;
+    }
+
+
+    const csvRows =
+        [];
+
+
+    csvRows.push(
+        headers
+            .map(
+                function (value) {
+                    return escapeCSV(value);
+                }
+            )
+            .join(",")
+    );
+
+
+    data.forEach(
+        function (item) {
+
+            const row =
+                headers.map(
+                    function (header) {
+
+                        let value =
+                            item &&
+                            typeof item === "object"
+                                ? item[header]
+                                : "";
+
+
+                        if (
+                            value === null ||
+                            value === undefined
+                        ) {
+
+                            value =
+                                "";
+                        }
+
+
+                        if (
+                            typeof value ===
+                            "object"
+                        ) {
+
+                            value =
+                                JSON.stringify(
+                                    value
+                                );
+                        }
+
+
+                        return escapeCSV(
+                            String(value)
+                        );
+
+                    }
+                );
+
+
+            csvRows.push(
+                row.join(",")
+            );
+
+        }
+    );
+
+
+    const csvContent =
+        csvRows.join(
+            "\r\n"
+        );
+
+
+    /* Show actual CSV result */
+
+    csvOutput.value =
+        csvContent;
+
+
+    const blob =
+        new Blob(
+            [
+                "\uFEFF" +
+                csvContent
+            ],
+            {
+                type:
+                    "text/csv;charset=utf-8;"
+            }
+        );
+
+
+    if (
+        currentDownloadUrl
+    ) {
+
+        URL.revokeObjectURL(
+            currentDownloadUrl
+        );
+    }
+
+
+    currentDownloadUrl =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    downloadBtn.href =
+        currentDownloadUrl;
+
+
+    result.style.display =
+        "block";
+
+
+    result.scrollIntoView({
+        behavior:"smooth",
+        block:"nearest"
+    });
+
 }
+
+
+/* =========================
+   CSV ESCAPE
+========================= */
 
 function escapeCSV(value) {
 
@@ -221,22 +529,258 @@ function escapeCSV(value) {
         value.includes("\r")
     ) {
 
-        return '"' + value.replace(/"/g, '""') + '"';
+        return (
+            '"' +
+            value.replace(
+                /"/g,
+                '""'
+            ) +
+            '"'
+        );
 
     }
+
 
     return value;
 }
 
+
+/* =========================
+   COPY CSV
+========================= */
+
+copyCsvBtn.addEventListener(
+    "click",
+    async function () {
+
+        if (
+            !csvOutput.value
+        ) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard.writeText(
+                csvOutput.value
+            );
+
+
+            copyCsvBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyCsvBtn.textContent =
+                        "Copy CSV";
+
+                },
+                1500
+            );
+
+
+        } catch (error) {
+
+            csvOutput.select();
+
+
+            document.execCommand(
+                "copy"
+            );
+
+
+            copyCsvBtn.textContent =
+                "Copied!";
+
+
+            setTimeout(
+                function () {
+
+                    copyCsvBtn.textContent =
+                        "Copy CSV";
+
+                },
+                1500
+            );
+        }
+
+    }
+);
+
+
+/* =========================
+   ERROR
+========================= */
+
 function showError(message) {
 
-    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.textContent =
+        message;
 
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
+
+    errorMessage.style.display =
+        "block";
+
+
+    result.style.display =
+        "none";
 }
 
+
+/* =========================
+   RESET
+========================= */
+
+function resetJSONToCSV() {
+
+    jsonInput.value =
+        "";
+
+
+    csvOutput.value =
+        "";
+
+
+    errorMessage.textContent =
+        "";
+
+    errorMessage.style.display =
+        "none";
+
+
+    result.style.display =
+        "none";
+
+
+    copyCsvBtn.textContent =
+        "Copy CSV";
+
+
+    if (
+        currentDownloadUrl
+    ) {
+
+        URL.revokeObjectURL(
+            currentDownloadUrl
+        );
+
+
+        currentDownloadUrl =
+            null;
+    }
+
+
+    downloadBtn.href =
+        "#";
+
+
+    jsonInput.focus();
+
+}
+
+
+/* =========================
+   EVENTS
+========================= */
+
+convertBtn.addEventListener(
+    "click",
+    convertJSONToCSV
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    resetJSONToCSV
+);
+
 </script>
+
+
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+
+  <div class="container footer-bottom">
+
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
+
+    <span>
+        All in One Tool.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<script>
+document
+    .querySelectorAll(
+        "[data-current-year]"
+    )
+    .forEach(
+        function (element) {
+
+            element.textContent =
+                new Date()
+                    .getFullYear();
+        }
+    );
+</script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>

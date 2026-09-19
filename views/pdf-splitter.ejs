@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,32 +9,18 @@
         content="Split PDF files into separate pages online for free with FileVora."
     >
 
-    <title>PDF Splitter — FileVora</title>
+    <title>PDF Splitter â€” FileVora</title>
 
     <link rel="stylesheet" href="/css/style.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
 </head>
 
-<body>
+<body class="pdf-tool">
 
-<header class="site-header">
-    <div class="container nav">
-
-        <a class="brand" href="/">
-            <span class="brand-mark">F</span>
-            <span>File<span>Vora</span></span>
-        </a>
-
-        <nav class="nav-links">
-            <a href="/">Home</a>
-            <a href="/#tools">Tools</a>
-            <a href="/#categories">Categories</a>
-        </nav>
-
-    </div>
-</header>
-
+<%- include("partials/tool-header") %>
 
 <main class="converter-page">
 
@@ -59,7 +45,7 @@
 
             <label class="upload-area" for="pdfInput">
 
-                <div class="upload-icon">📄</div>
+                <div class="upload-icon">ðŸ“„</div>
 
                 <strong>Choose a PDF file</strong>
 
@@ -124,13 +110,34 @@
             </div>
 
 
-            <button
-                class="convert-btn"
-                id="splitBtn"
-                disabled
-            >
-                Split PDF
-            </button>
+            <div id="splitActions" style="display:none; grid-template-columns:1fr 1fr; gap:10px;">
+    <button
+    class="convert-btn"
+    id="splitBtn"
+    type="button"
+    style="
+        margin:0;
+        height:50px;
+        min-height:50px;
+        padding:0 20px;
+    "
+    disabled
+>
+    Split PDF
+<button
+    id="resetBtn"
+    class="convert-btn reset-btn"
+    type="button"
+    style="
+        margin:0;
+        height:50px;
+        min-height:50px;
+        padding:0 20px;
+    "
+>
+    Reset
+</button>
+</div>
 
 
             <div class="result" id="result">
@@ -152,25 +159,17 @@
 </main>
 
 
-<footer>
-
-    <div class="container footer-inner">
-
-        <a class="brand" href="/">
-
-            <span class="brand-mark">F</span>
-
-            <span>File<span>Vora</span></span>
-
-        </a>
-
-        <p>
-            © <span id="year"></span> FILEVORA. All rights reserved.
-        </p>
-
-    </div>
-
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>Â© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
 </footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
 
 
 <script>
@@ -195,7 +194,11 @@ const pageRange =
 
 const splitBtn =
     document.getElementById("splitBtn");
+const splitActions =
+    document.getElementById("splitActions");
 
+const resetBtn =
+    document.getElementById("resetBtn");
 const result =
     document.getElementById("result");
 
@@ -279,7 +282,7 @@ pdfInput.addEventListener("change", function () {
 
     splitBtn.disabled =
         false;
-
+splitActions.style.display = "grid";
 });
 
 
@@ -484,7 +487,7 @@ splitBtn.addEventListener("click", async function () {
 
 
             downloadButton.textContent =
-                `↓ Download Page ${pageNumber}`;
+    `Download Page ${pageNumber}`;
 
 
             downloadArea.appendChild(
@@ -525,10 +528,33 @@ splitBtn.addEventListener("click", async function () {
 });
 
 
-document.getElementById("year").textContent =
-    new Date().getFullYear();
 
+resetBtn.addEventListener("click", function () {
+    pdfInput.value = "";
+    selectedFile = null;
+
+    fileName.textContent = "";
+    fileSize.textContent = "";
+
+    fileInfo.style.display = "none";
+    pageOptions.style.display = "none";
+    result.style.display = "none";
+
+    pageRange.value = "";
+    downloadArea.innerHTML = "";
+
+    splitBtn.disabled = true;
+    splitBtn.textContent = "Split PDF";
+
+    splitActions.style.display = "none";
+});
 </script>
+
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>
+
+

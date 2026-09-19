@@ -1,0 +1,95 @@
+window.fileVoraTools = [
+    // IMAGE TOOLS
+    { name:"Image Compressor", url:"/tools/image-compressor", category:"Image Tools" },
+    { name:"Image Resizer", url:"/tools/image-resizer", category:"Image Tools" },
+    { name:"Image Cropper", url:"/tools/image-cropper", category:"Image Tools" },
+    { name:"Image Rotator", url:"/tools/image-rotator", category:"Image Tools" },
+    { name:"Image Flip", url:"/tools/image-flip", category:"Image Tools" },
+    { name:"Image Color Picker", url:"/tools/image-color-picker", category:"Image Tools" },
+    { name:"Image Metadata Remover", url:"/tools/image-metadata-remover", category:"Image Tools" },
+    { name:"Image Format Converter", url:"/tools/image-format-converter", category:"Image Tools" },
+    { name:"JPG to PNG", url:"/tools/jpg-to-png", category:"Image Tools" },
+    { name:"PNG to JPG", url:"/tools/png-to-jpg", category:"Image Tools" },
+    { name:"Image Embed Code", url:"/tools/image-embed-code", category:"Image Tools" },
+
+    // PDF TOOLS
+    { name:"JPG to PDF", url:"/tools/jpg-to-pdf", category:"PDF Tools" },
+    { name:"Image to PDF", url:"/tools/image-to-pdf", category:"PDF Tools" },
+    { name:"PDF to JPG", url:"/tools/pdf-to-jpg", category:"PDF Tools" },
+    { name:"PDF to PNG", url:"/tools/pdf-to-png", category:"PDF Tools" },
+    { name:"PDF Merger", url:"/tools/pdf-merger", category:"PDF Tools" },
+    { name:"PDF Splitter", url:"/tools/pdf-splitter", category:"PDF Tools" },
+    { name:"PDF Compressor", url:"/tools/pdf-compressor", category:"PDF Tools" },
+    { name:"PDF to Word", url:"/tools/pdf-to-word", category:"PDF Tools" },
+    { name:"PDF to Excel", url:"/tools/pdf-to-excel", category:"PDF Tools" },
+    { name:"PDF to PowerPoint", url:"/tools/pdf-to-powerpoint", category:"PDF Tools" },
+    { name:"PDF to Text", url:"/tools/pdf-to-text", category:"PDF Tools" },
+    { name:"PDF Rotate", url:"/tools/pdf-rotate", category:"PDF Tools" },
+    { name:"PDF Crop", url:"/tools/pdf-crop", category:"PDF Tools" },
+    { name:"PDF Resize", url:"/tools/pdf-resize", category:"PDF Tools" },
+    { name:"PDF Extract Pages", url:"/tools/pdf-extract-pages", category:"PDF Tools" },
+    { name:"PDF Metadata Editor", url:"/tools/pdf-metadata-editor", category:"PDF Tools" },
+    { name:"PDF Protect", url:"/tools/pdf-protect", category:"PDF Tools" },
+    { name:"PDF Unlock", url:"/tools/pdf-unlock", category:"PDF Tools" },
+    { name:"PDF Watermark", url:"/tools/pdf-watermark", category:"PDF Tools" },
+    { name:"PDF Images Extractor", url:"/tools/pdf-images-extractor", category:"PDF Tools" },
+    { name:"HTML to PDF", url:"/tools/html-to-pdf", category:"PDF Tools" },
+    { name:"Word to PDF", url:"/tools/word-to-pdf", category:"PDF Tools" },
+
+    // TEXT TOOLS
+    { name:"Word Counter", url:"/tools/word-counter", category:"Text Tools" },
+    { name:"Character Counter", url:"/tools/character-counter", category:"Text Tools" },
+    { name:"Case Converter", url:"/tools/case-converter", category:"Text Tools" },
+    { name:"Remove Duplicate Lines", url:"/tools/remove-duplicate-lines", category:"Text Tools" },
+    { name:"Text Sorter", url:"/tools/text-sorter", category:"Text Tools" },
+    { name:"Text Cleaner", url:"/tools/text-cleaner", category:"Text Tools" },
+    { name:"Lorem Ipsum Generator", url:"/tools/lorem-ipsum-generator", category:"Text Tools" },
+
+    // CALCULATORS & UTILITIES
+    { name:"Percentage Calculator", url:"/tools/percentage-calculator", category:"Calculators & Utilities" },
+    { name:"Age Calculator", url:"/tools/age-calculator", category:"Calculators & Utilities" },
+    { name:"Unit Converter", url:"/tools/unit-converter", category:"Calculators & Utilities" },
+    { name:"Date Calculator", url:"/tools/date-calculator", category:"Calculators & Utilities" },
+    { name:"Currency Converter", url:"/tools/currency-converter", category:"Calculators & Utilities" },
+    { name:"Time Zone Converter", url:"/tools/time-zone-converter", category:"Calculators & Utilities" },
+    { name:"Random Number Generator", url:"/tools/random-number-generator", category:"Calculators & Utilities" },
+    { name:"Stopwatch & Timer", url:"/tools/stopwatch-timer", category:"Calculators & Utilities" },
+    { name:"Timestamp Converter", url:"/tools/timestamp-converter", category:"Calculators & Utilities" },
+    { name:"Scientific Calculator", url:"/tools/scientific-calculator", category:"Calculators & Utilities" },
+    { name:"Fraction Calculator", url:"/tools/fraction-calculator", category:"Calculators & Utilities" },
+    { name:"Average Median Mode", url:"/tools/average-median-mode", category:"Calculators & Utilities" },
+    { name:"Tip Calculator", url:"/tools/tip-calculator", category:"Calculators & Utilities" },
+    { name:"Roman Numeral Converter", url:"/tools/roman-numeral-converter", category:"Calculators & Utilities" },
+    { name:"Number to Words", url:"/tools/number-to-words", category:"Calculators & Utilities" },
+
+    // DEVELOPER TOOLS
+    { name:"JSON Formatter", url:"/tools/json-formatter", category:"Developer Tools" },
+    { name:"JSON Validator", url:"/tools/json-validator", category:"Developer Tools" },
+    { name:"JSON Minifier", url:"/tools/json-minifier", category:"Developer Tools" },
+    { name:"JSON to CSV", url:"/tools/json-to-csv", category:"Developer Tools" },
+    { name:"CSV to JSON", url:"/tools/csv-to-json", category:"Developer Tools" },
+    { name:"CSV to Excel", url:"/tools/csv-to-excel", category:"Developer Tools" },
+    { name:"Excel to CSV", url:"/tools/excel-to-csv", category:"Developer Tools" },
+    { name:"HTML Formatter", url:"/tools/html-formatter", category:"Developer Tools" },
+    { name:"CSS Formatter", url:"/tools/css-formatter", category:"Developer Tools" },
+    { name:"JavaScript Formatter", url:"/tools/javascript-formatter", category:"Developer Tools" },
+    { name:"Markdown to HTML", url:"/tools/markdown-to-html", category:"Developer Tools" },
+    { name:"Base64 Encoder Decoder", url:"/tools/base64-encoder-decoder", category:"Developer Tools" },
+    { name:"Base64 to Image", url:"/tools/base64-to-image", category:"Developer Tools" },
+    { name:"URL Encoder Decoder", url:"/tools/url-encoder-decoder", category:"Developer Tools" },
+
+    // SECURITY & UTILITY
+    { name:"UUID Generator", url:"/tools/uuid-generator", category:"Security & Utility" },
+    { name:"Hash Generator", url:"/tools/hash-generator", category:"Security & Utility" },
+    { name:"Password Generator", url:"/tools/password-generator", category:"Security & Utility" },
+    { name:"QR Code Generator", url:"/tools/qr-code-generator", category:"Security & Utility" },
+
+    // AUDIO & VOICE
+    { name:"Text to Speech", url:"/tools/text-to-speech", category:"Audio & Voice" },
+    { name:"Speech to Text", url:"/tools/speech-to-text", category:"Audio & Voice" },
+
+    // ADDITIONAL ACTIVE TOOLS
+    { name:"PDF Page Numbers", url:"/tools/pdf-page-numbers", category:"PDF Tools" },
+    { name:"Image to Base64", url:"/tools/image-to-base64", category:"Image Tools" },
+    { name:"Color Palette Generator", url:"/tools/color-palette-generator", category:"Image Tools" }
+];

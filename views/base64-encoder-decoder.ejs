@@ -5,8 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base64 Encoder / Decoder - FileVora</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+<style>
+/* FileVora Text Tools batch standardization */
+.text-tool .converter-card textarea,
+.text-tool .converter-card input[type="text"],
+.text-tool .converter-card input[type="number"],
+.text-tool .converter-card select {
+    border-color:#cbd5e1 !important;
+}
+.text-tool .converter-card textarea:focus,
+.text-tool .converter-card input:focus,
+.text-tool .converter-card select:focus {
+    border-color:#ef1f2b !important;
+    outline:none !important;
+}
+.text-tool .text-reset-btn {
+    background:#ffffff !important;
+    color:#ef1f2b !important;
+    border:1px solid #ef1f2b !important;
+    box-shadow:none !important;
+}
+.text-tool .text-reset-btn:hover {
+    background:#fff5f5 !important;
+}
+.text-tool .text-action-row {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:18px;
+}
+.text-tool .text-action-row > .convert-btn,
+.text-tool .text-action-row > .download-btn,
+.text-tool .text-action-row > button,
+.text-tool .text-action-row > a {
+    margin-top:0 !important;
+    width:100% !important;
+    box-sizing:border-box !important;
+}
+@media (max-width:600px){
+    .text-tool .text-action-row{grid-template-columns:1fr;}
+}
+</style>
 </head>
-<body>
+<body class="text-tool">
+<%- include("partials/tool-header") %>
 
 <main class="converter-page">
     <div class="container">
@@ -59,6 +104,7 @@
                 >
                     Decode Base64
                 </button>
+<button type="button" class="convert-btn text-reset-btn" id="resetBtn" style="margin-top:0;">Reset</button>
             </div>
 
             <div class="result" id="result">
@@ -106,6 +152,7 @@ const resultTitle = document.getElementById("resultTitle");
 const resultInfo = document.getElementById("resultInfo");
 const outputText = document.getElementById("outputText");
 const copyBtn = document.getElementById("copyBtn");
+const resetBtn = document.getElementById("resetBtn");
 
 function showResult(title, info, value) {
 
@@ -233,7 +280,32 @@ copyBtn.addEventListener("click", async () => {
         }, 1500);
     }
 });
+
+resetBtn.addEventListener("click", () => {
+    textInput.value = "";
+    outputText.value = "";
+    resultTitle.textContent = "Result";
+    resultInfo.textContent = "";
+    result.style.display = "none";
+    textInput.focus();
+});
 </script>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand"><a class="brand" href="/"><span class="brand-mark">F</span><span class="brand-name">File<span>Vora</span></span></a><p>Fast, simple online tools for everyday file tasks.</p></div>
+    <div><h3>Company</h3><a href="/about">About Us</a><a href="/contact">Contact Us</a><a href="/security">Security</a></div>
+    <div><h3>Resources</h3><a href="/blog">Blog</a><a href="/#tools">Tools</a><a href="/faq">FAQ</a></div>
+    <div><h3>Legal</h3><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/disclaimer">Disclaimer</a></div>
+    <div><h3>Contact</h3><a href="/contact">Email</a><a href="/contact">Facebook</a><a href="/contact">Instagram</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© <span data-current-year></span> FileVora. All rights reserved.</span><span>All in One Tool.</span></div>
+</footer>
+<script>document.querySelectorAll('[data-current-year]').forEach(el=>el.textContent=new Date().getFullYear());</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>
+

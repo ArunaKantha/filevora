@@ -8,65 +8,107 @@
     <meta name="description" content="Calculate your exact age in years, months and days with FileVora Age Calculator.">
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+<link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <style>
+        .age-action-row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:10px;
+            margin-top:18px;
+        }
+
+        .age-action-row .convert-btn{
+            width:100% !important;
+            height:50px !important;
+            min-height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .age-reset-btn{
+            background:#ffffff !important;
+            color:#ef1f2b !important;
+            border:1px solid #ef1f2b !important;
+            box-shadow:none !important;
+        }
+
+        .age-reset-btn:hover{
+            background:#fff5f5 !important;
+        }
+
+        @media (max-width:600px){
+            .age-action-row{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <main class="converter-page">
-        <div class="container">
+<%- include("partials/tool-header") %>
 
-            <div class="converter-card">
+<main class="converter-page">
 
-                <div class="converter-header">
+    <div class="container">
 
-                    <div class="tool-icon">
-                        AGE
-                    </div>
+        <div class="converter-card">
 
-                    <h1>Age Calculator</h1>
+            <div class="converter-header">
 
-                    <p>
-                        Calculate your exact age from your date of birth.
-                    </p>
-
+                <div class="tool-icon">
+                    AGE
                 </div>
 
+                <h1>Age Calculator</h1>
 
-                <div
+                <p>
+                    Calculate your exact age from your date of birth.
+                </p>
+
+            </div>
+
+
+            <div
+                style="
+                    text-align:left;
+                    padding:20px;
+                    background:#f8fafc;
+                    border:1px solid #e2e8f0;
+                    border-radius:14px;
+                "
+            >
+
+                <label
+                    for="birthDate"
                     style="
-                        text-align:left;
-                        padding:20px;
-                        background:#f8fafc;
-                        border:1px solid #e2e8f0;
-                        border-radius:14px;
+                        display:block;
+                        margin-bottom:8px;
+                        font-weight:700;
+                        color:#111827;
+                    "
+                >
+                    Date of Birth
+                </label>
+
+                <input
+                    type="date"
+                    id="birthDate"
+                    style="
+                        width:100%;
+                        padding:13px;
+                        border:1px solid #cbd5e1;
+                        border-radius:10px;
+                        box-sizing:border-box;
+                        font-size:15px;
+                        background:#ffffff;
                     "
                 >
 
-                    <label
-                        for="birthDate"
-                        style="
-                            display:block;
-                            margin-bottom:8px;
-                            font-weight:700;
-                            color:#111827;
-                        "
-                    >
-                        Date of Birth
-                    </label>
 
-                    <input
-                        type="date"
-                        id="birthDate"
-                        style="
-                            width:100%;
-                            padding:13px;
-                            border:1px solid #cbd5e1;
-                            border-radius:10px;
-                            box-sizing:border-box;
-                            font-size:15px;
-                            background:#ffffff;
-                        "
-                    >
+                <div class="age-action-row">
 
                     <button
                         class="convert-btn"
@@ -76,241 +118,367 @@
                         Calculate Age
                     </button>
 
-                </div>
-
-
-                <div
-                    class="result"
-                    id="result"
-                    style="text-align:left;"
-                >
-
-                    <h2>Your Age</h2>
-
-                    <p
-                        id="ageResult"
-                        style="
-                            margin-top:12px;
-                            font-size:18px;
-                            font-weight:700;
-                            color:#166534;
-                        "
-                    ></p>
-
-                    <p
-                        id="nextBirthday"
-                        style="margin-top:10px;"
-                    ></p>
-
-                    <p
-                        id="birthDayInfo"
-                        style="margin-top:10px;"
-                    ></p>
+                    <button
+                        class="convert-btn age-reset-btn"
+                        id="resetBtn"
+                        type="button"
+                    >
+                        Reset
+                    </button>
 
                 </div>
 
             </div>
 
+
+            <div
+                class="result"
+                id="result"
+                style="text-align:left; display:none;"
+            >
+
+                <h2>Your Age</h2>
+
+                <p
+                    id="ageResult"
+                    style="
+                        margin-top:12px;
+                        font-size:18px;
+                        font-weight:700;
+                        color:#166534;
+                    "
+                ></p>
+
+                <p
+                    id="nextBirthday"
+                    style="margin-top:10px;"
+                ></p>
+
+                <p
+                    id="birthDayInfo"
+                    style="margin-top:10px;"
+                ></p>
+
+            </div>
+
         </div>
-    </main>
+
+    </div>
+
+</main>
 
 
-    <script>
+<script>
 
-        const birthDate =
-            document.getElementById("birthDate");
+const birthDate =
+    document.getElementById("birthDate");
 
-        const calculateBtn =
-            document.getElementById("calculateBtn");
+const calculateBtn =
+    document.getElementById("calculateBtn");
 
-        const result =
-            document.getElementById("result");
+const resetBtn =
+    document.getElementById("resetBtn");
 
-        const ageResult =
-            document.getElementById("ageResult");
+const result =
+    document.getElementById("result");
 
-        const nextBirthday =
-            document.getElementById("nextBirthday");
+const ageResult =
+    document.getElementById("ageResult");
 
-        const birthDayInfo =
-            document.getElementById("birthDayInfo");
+const nextBirthday =
+    document.getElementById("nextBirthday");
+
+const birthDayInfo =
+    document.getElementById("birthDayInfo");
 
 
-        // Prevent selecting a future date
+/* Prevent selecting a future date */
 
-        const todayForInput =
+const todayForInput =
+    new Date();
+
+const year =
+    todayForInput.getFullYear();
+
+const month =
+    String(
+        todayForInput.getMonth() + 1
+    ).padStart(2, "0");
+
+const day =
+    String(
+        todayForInput.getDate()
+    ).padStart(2, "0");
+
+birthDate.max =
+    `${year}-${month}-${day}`;
+
+
+/* =========================
+   CALCULATE AGE
+========================= */
+
+calculateBtn.addEventListener(
+    "click",
+    function () {
+
+        if (!birthDate.value) {
+
+            alert(
+                "Please select your date of birth."
+            );
+
+            return;
+        }
+
+
+        const dob =
+            new Date(
+                birthDate.value +
+                "T00:00:00"
+            );
+
+        const today =
             new Date();
 
-        const year =
-            todayForInput.getFullYear();
 
-        const month =
-            String(
-                todayForInput.getMonth() + 1
-            ).padStart(2, "0");
+        if (dob > today) {
 
-        const day =
-            String(
-                todayForInput.getDate()
-            ).padStart(2, "0");
+            alert(
+                "Date of birth cannot be in the future."
+            );
 
-        birthDate.max =
-            `${year}-${month}-${day}`;
+            return;
+        }
 
 
-        calculateBtn.addEventListener(
-            "click",
-            function () {
+        let ageYears =
+            today.getFullYear() -
+            dob.getFullYear();
 
-                if (!birthDate.value) {
+        let ageMonths =
+            today.getMonth() -
+            dob.getMonth();
 
-                    alert(
-                        "Please select your date of birth."
-                    );
+        let ageDays =
+            today.getDate() -
+            dob.getDate();
 
-                    return;
+
+        if (ageDays < 0) {
+
+            ageMonths--;
+
+            const previousMonth =
+                new Date(
+                    today.getFullYear(),
+                    today.getMonth(),
+                    0
+                );
+
+            ageDays +=
+                previousMonth.getDate();
+        }
+
+
+        if (ageMonths < 0) {
+
+            ageYears--;
+
+            ageMonths += 12;
+        }
+
+
+        ageResult.textContent =
+            ageYears +
+            " years, " +
+            ageMonths +
+            " months, " +
+            ageDays +
+            " days";
+
+
+        /* Birthday information */
+
+        let nextYear =
+            today.getFullYear();
+
+        let birthday =
+            new Date(
+                nextYear,
+                dob.getMonth(),
+                dob.getDate()
+            );
+
+
+        if (birthday < today) {
+
+            nextYear++;
+
+            birthday =
+                new Date(
+                    nextYear,
+                    dob.getMonth(),
+                    dob.getDate()
+                );
+        }
+
+
+        const daysUntil =
+            Math.ceil(
+                (
+                    birthday - today
+                ) /
+                (1000 * 60 * 60 * 24)
+            );
+
+
+        if (daysUntil === 0) {
+
+            nextBirthday.textContent =
+                "🎉 Happy Birthday!";
+
+        } else {
+
+            nextBirthday.textContent =
+                "Next birthday: " +
+                daysUntil +
+                " day(s) from now.";
+        }
+
+
+        /* Day of birth */
+
+        const birthDayName =
+            dob.toLocaleDateString(
+                "en-US",
+                {
+                    weekday:"long"
                 }
+            );
 
 
-                const dob =
-                    new Date(
-                        birthDate.value +
-                        "T00:00:00"
-                    );
-
-                const today =
-                    new Date();
+        birthDayInfo.textContent =
+            "You were born on a " +
+            birthDayName +
+            ".";
 
 
-                if (dob > today) {
+        result.style.display =
+            "block";
 
-                    alert(
-                        "Date of birth cannot be in the future."
-                    );
-
-                    return;
-                }
+    }
+);
 
 
-                let ageYears =
-                    today.getFullYear() -
-                    dob.getFullYear();
+/* =========================
+   RESET
+========================= */
 
-                let ageMonths =
-                    today.getMonth() -
-                    dob.getMonth();
+resetBtn.addEventListener(
+    "click",
+    function () {
 
-                let ageDays =
-                    today.getDate() -
-                    dob.getDate();
+        birthDate.value =
+            "";
 
+        ageResult.textContent =
+            "";
 
-                if (ageDays < 0) {
+        nextBirthday.textContent =
+            "";
 
-                    ageMonths--;
+        birthDayInfo.textContent =
+            "";
 
-                    const previousMonth =
-                        new Date(
-                            today.getFullYear(),
-                            today.getMonth(),
-                            0
-                        );
+        result.style.display =
+            "none";
 
-                    ageDays +=
-                        previousMonth.getDate();
-                }
+        birthDate.focus();
 
+    }
+);
 
-                if (ageMonths < 0) {
-
-                    ageYears--;
-
-                    ageMonths += 12;
-                }
+</script>
 
 
-                ageResult.textContent =
-                    ageYears +
-                    " years, " +
-                    ageMonths +
-                    " months, " +
-                    ageDays +
-                    " days";
+<footer class="site-footer">
+
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
 
 
-                // Birthday information
+  <div class="container footer-bottom">
 
-                let nextYear =
-                    today.getFullYear();
+    <span>
+        © <span data-current-year></span> FileVora. All rights reserved.
+    </span>
 
-                let birthday =
-                    new Date(
-                        nextYear,
-                        dob.getMonth(),
-                        dob.getDate()
-                    );
+    <span>
+        All in One Tool.
+    </span>
 
+  </div>
 
-                if (birthday < today) {
-
-                    nextYear++;
-
-                    birthday =
-                        new Date(
-                            nextYear,
-                            dob.getMonth(),
-                            dob.getDate()
-                        );
-                }
+</footer>
 
 
-                const daysUntil =
-                    Math.ceil(
-                        (
-                            birthday - today
-                        ) /
-                        (1000 * 60 * 60 * 24)
-                    );
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function (element) {
+
+        element.textContent =
+            new Date().getFullYear();
+
+    });
+</script>
 
 
-                if (daysUntil === 0) {
-
-                    nextBirthday.textContent =
-                        "🎉 Happy Birthday!";
-
-                } else {
-
-                    nextBirthday.textContent =
-                        "Next birthday: " +
-                        daysUntil +
-                        " day(s) from now.";
-                }
-
-
-                // Day of birth
-
-                const birthDayName =
-                    dob.toLocaleDateString(
-                        "en-US",
-                        {
-                            weekday: "long"
-                        }
-                    );
-
-
-                birthDayInfo.textContent =
-                    "You were born on a " +
-                    birthDayName +
-                    ".";
-
-
-                result.style.display =
-                    "block";
-
-            }
-        );
-
-    </script>
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
 
 </body>
 </html>
