@@ -1,4 +1,22 @@
 (function () {
+        // =========================
+    // FILEVORA FAVICON
+    // =========================
+
+    if (!document.querySelector('link[rel="icon"]')) {
+        const faviconIco = document.createElement("link");
+        faviconIco.rel = "icon";
+        faviconIco.href = "/favicon.ico";
+        faviconIco.type = "image/x-icon";
+        document.head.appendChild(faviconIco);
+
+        const faviconPng = document.createElement("link");
+        faviconPng.rel = "icon";
+        faviconPng.type = "image/png";
+        faviconPng.sizes = "32x32";
+        faviconPng.href = "/filevora-favicon-32x32.png";
+        document.head.appendChild(faviconPng);
+    }
     const tools = window.fileVoraTools || [];
 
     const toolsBtn = document.getElementById("globalToolsBtn");
