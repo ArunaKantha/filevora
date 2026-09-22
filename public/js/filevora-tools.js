@@ -35,7 +35,7 @@ window.fileVoraTools = [
     { name:"PDF Images Extractor", url:"/tools/pdf-images-extractor", category:"PDF Tools" },
     { name:"HTML to PDF", url:"/tools/html-to-pdf", category:"PDF Tools" },
     { name:"Word to PDF", url:"/tools/word-to-pdf", category:"PDF Tools" },
-
+    { name:"PDF Watermark Remover", url:"/tools/pdf-watermark-remover", category:"PDF Tools" },
     // TEXT TOOLS
     { name:"Word Counter", url:"/tools/word-counter", category:"Text Tools" },
     { name:"Character Counter", url:"/tools/character-counter", category:"Text Tools" },

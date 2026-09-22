@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Remove supported PDF watermark and stamp annotations and separate watermark layers online with FileVora."
+    >
+
+    <title>PDF Watermark Remover — FileVora</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tool-unified.css">
+    <link rel="stylesheet" href="/css/filevora-header-tools.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <style>
+        .watermark-options {
+            display:none;
+            margin-top:18px;
+            padding:16px;
+            border:1px solid #e5e7eb;
+            border-radius:12px;
+            background:#fafafa;
+        }
+
+        .watermark-options.show {
+            display:block;
+        }
+
+        .watermark-option {
+            display:flex;
+            align-items:flex-start;
+            gap:10px;
+            margin-bottom:14px;
+            color:#334155;
+            font-size:14px;
+            line-height:1.5;
+        }
+
+        .watermark-option:last-child {
+            margin-bottom:0;
+        }
+
+        .watermark-option input[type="checkbox"] {
+            margin-top:4px;
+        }
+
+        .watermark-option strong {
+            display:block;
+        }
+
+        .watermark-option small {
+            display:block;
+            margin-top:3px;
+            color:#64748b;
+        }
+
+        .watermark-text-box {
+            display:none;
+            margin-top:12px;
+            margin-bottom:14px;
+        }
+
+        .watermark-text-box.show {
+            display:block;
+        }
+
+        .watermark-text-box label {
+            display:block;
+            margin-bottom:7px;
+            color:#334155;
+            font-size:14px;
+            font-weight:700;
+        }
+
+        .watermark-text-box input {
+            width:100%;
+            box-sizing:border-box;
+            min-height:48px;
+            padding:12px 14px;
+            border:1px solid #cbd5e1;
+            border-radius:10px;
+            outline:none;
+            font:inherit;
+        }
+
+        .watermark-text-box input:focus {
+            border-color:#00bd8b;
+            box-shadow:0 0 0 3px rgba(0,189,139,.08);
+        }
+
+        .pdf-watermark-actions {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:12px;
+            margin-top:20px;
+        }
+
+        .pdf-watermark-actions[hidden] {
+            display:none !important;
+        }
+
+        .pdf-watermark-actions .convert-btn,
+        .pdf-watermark-reset-btn {
+            width:100% !important;
+            min-height:50px !important;
+            height:50px !important;
+            margin:0 !important;
+            box-sizing:border-box !important;
+        }
+
+        .pdf-watermark-reset-btn {
+            border:1px solid #00bd8b !important;
+            border-radius:10px;
+            background:#ffffff !important;
+            color:#00a97b !important;
+            font-weight:800;
+            cursor:pointer;
+            box-shadow:none !important;
+        }
+
+        .pdf-watermark-reset-btn:hover {
+            background:#ecfdf8 !important;
+        }
+
+        .watermark-status {
+            display:none;
+            margin-top:16px;
+            padding:13px 15px;
+            border:1px solid #dbe3ea;
+            border-radius:10px;
+            background:#f8fafc;
+            color:#475569;
+            font-size:14px;
+            line-height:1.5;
+        }
+
+        .watermark-note {
+            margin-top:18px;
+            padding:14px 16px;
+            border:1px solid #e5e7eb;
+            border-radius:10px;
+            background:#fafafa;
+            color:#64748b;
+            font-size:13px;
+            line-height:1.6;
+        }
+
+        #downloadBtn[hidden] {
+            display:none !important;
+        }
+
+        @media(max-width:600px) {
+            .pdf-watermark-actions {
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<%- include("partials/tool-header") %>
+
+<main class="converter-page">
+    <div class="container">
+        <div class="converter-card">
+
+            <div class="converter-header">
+                <div class="tool-icon">WM</div>
+
+                <h1>PDF Watermark Remover</h1>
+
+                <p>
+                    Remove supported watermark/stamp annotations and
+                    separate watermark layers safely.
+                </p>
+            </div>
+
+            <label class="upload-area" for="pdfInput">
+                <div class="upload-icon">↑</div>
+                <strong>Choose a PDF file</strong>
+                <span>PDF files only</span>
+            </label>
+
+            <input
+                id="pdfInput"
+                type="file"
+                accept=".pdf,application/pdf"
+            >
+
+            <div
+                class="file-info"
+                id="fileInfo"
+                style="display:none;"
+            >
+                <strong id="fileName"></strong>
+                <span id="fileSize"></span>
+            </div>
+
+            <div
+                class="watermark-options"
+                id="watermarkOptions"
+            >
+
+                <label class="watermark-option">
+                    <input
+                        type="checkbox"
+                        id="annotationMode"
+                        checked
+                    >
+
+                    <span>
+                        <strong>
+                            Remove Watermark / Stamp Annotations
+                        </strong>
+
+                        <small>
+                            Safest method. Removes standard PDF
+                            Watermark and Stamp annotations.
+                        </small>
+                    </span>
+                </label>
+
+                <label class="watermark-option">
+                    <input
+                        type="checkbox"
+                        id="textMode"
+                    >
+
+                    <span>
+                        <strong>
+                            Detect Watermark Text
+                        </strong>
+
+                        <small>
+                            Detect selectable text such as CONFIDENTIAL,
+                            DRAFT or SAMPLE. This safe version does not
+                            overwrite page content with white rectangles.
+                        </small>
+                    </span>
+                </label>
+
+                <div
+                    class="watermark-text-box"
+                    id="watermarkTextBox"
+                >
+                    <label for="watermarkText">
+                        Watermark text
+                    </label>
+
+                    <input
+                        id="watermarkText"
+                        type="text"
+                        placeholder="Example: CONFIDENTIAL"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <label class="watermark-option">
+                    <input
+                        type="checkbox"
+                        id="aggressiveMode"
+                    >
+
+                    <span>
+                        <strong>
+                            Try Aggressive Layer Removal
+                        </strong>
+
+                        <small>
+                            Removes the last-added content stream from
+                            pages that contain more than one stream.
+                            Use only when normal removal fails.
+                        </small>
+                    </span>
+                </label>
+
+            </div>
+
+            <div
+                class="pdf-watermark-actions"
+                id="pdfWatermarkActions"
+                hidden
+            >
+                <button
+                    type="button"
+                    class="convert-btn"
+                    id="removeBtn"
+                >
+                    Remove Watermark
+                </button>
+
+                <button
+                    type="button"
+                    class="pdf-watermark-reset-btn"
+                    id="resetBtn"
+                >
+                    Reset
+                </button>
+            </div>
+
+            <div
+                class="watermark-status"
+                id="statusBox"
+            ></div>
+
+            <div
+                class="result"
+                id="result"
+                style="display:none;"
+            >
+                <h2 id="resultTitle">
+                    Watermark Removal Complete
+                </h2>
+
+                <p id="resultText"></p>
+
+                <a
+                    id="downloadBtn"
+                    class="download-btn"
+                    download="filevora-watermark-removed.pdf"
+                    hidden
+                >
+                    Download PDF
+                </a>
+            </div>
+
+            <div class="watermark-note">
+                This safe version only changes PDF structure when a standard
+                watermark/stamp annotation is removed or when Aggressive Layer
+                Removal deletes a separate last-added content stream. Text mode
+                only detects matching selectable text. Encoded, vector, image,
+                scanned or permanently flattened watermarks may not be safely
+                removable in the browser.
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+
+    <div class="footer-brand">
+        <a class="brand" href="/">
+            <span class="brand-mark">F</span>
+            <span class="brand-name">File<span>Vora</span></span>
+        </a>
+
+        <p>
+            Fast, simple online tools for everyday file tasks.
+        </p>
+    </div>
+
+    <div>
+        <h3>Company</h3>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/security">Security</a>
+    </div>
+
+    <div>
+        <h3>Resources</h3>
+        <a href="/blog">Blog</a>
+        <a href="/#tools">Tools</a>
+        <a href="/faq">FAQ</a>
+    </div>
+
+    <div>
+        <h3>Legal</h3>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </div>
+
+    <div>
+        <h3>Contact</h3>
+        <a href="/contact">Email</a>
+        <a href="/contact">Facebook</a>
+        <a href="/contact">Instagram</a>
+    </div>
+
+  </div>
+
+  <div class="container footer-bottom">
+      <span>
+          © <span data-current-year></span>
+          FileVora. All rights reserved.
+      </span>
+
+      <span>All in One Tool.</span>
+  </div>
+</footer>
+
+<script>
+document
+    .querySelectorAll("[data-current-year]")
+    .forEach(function(el) {
+        el.textContent =
+            new Date().getFullYear();
+    });
+</script>
+
+<script src="/js/filevora-tools.js"></script>
+<script src="/js/filevora-header-tools.js"></script>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+const {
+    PDFDocument,
+    PDFName,
+    PDFArray,
+    PDFDict
+} = PDFLib;
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const pdfInput =
+    document.getElementById("pdfInput");
+
+const fileInfo =
+    document.getElementById("fileInfo");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileSize =
+    document.getElementById("fileSize");
+
+const watermarkOptions =
+    document.getElementById("watermarkOptions");
+
+const annotationMode =
+    document.getElementById("annotationMode");
+
+const textMode =
+    document.getElementById("textMode");
+
+const aggressiveMode =
+    document.getElementById("aggressiveMode");
+
+const watermarkTextBox =
+    document.getElementById("watermarkTextBox");
+
+const watermarkText =
+    document.getElementById("watermarkText");
+
+const pdfWatermarkActions =
+    document.getElementById("pdfWatermarkActions");
+
+const removeBtn =
+    document.getElementById("removeBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const statusBox =
+    document.getElementById("statusBox");
+
+const result =
+    document.getElementById("result");
+
+const resultTitle =
+    document.getElementById("resultTitle");
+
+const resultText =
+    document.getElementById("resultText");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+let selectedFile =
+    null;
+
+let downloadUrl =
+    "";
+
+
+/* =========================
+   TEXT OPTION
+========================= */
+
+textMode.addEventListener(
+    "change",
+    function() {
+
+        watermarkTextBox.classList.toggle(
+            "show",
+            textMode.checked
+        );
+
+        if (
+            textMode.checked
+        ) {
+            watermarkText.focus();
+        }
+    }
+);
+
+
+/* =========================
+   FILE SELECT
+========================= */
+
+pdfInput.addEventListener(
+    "change",
+    function() {
+
+        const file =
+            this.files &&
+            this.files[0];
+
+        if (!file) {
+            resetTool();
+            return;
+        }
+
+        const isPdf =
+            file.type === "application/pdf" ||
+            file.name
+                .toLowerCase()
+                .endsWith(".pdf");
+
+        if (!isPdf) {
+            alert(
+                "Please choose a PDF file."
+            );
+
+            this.value = "";
+            resetTool();
+            return;
+        }
+
+        selectedFile =
+            file;
+
+        fileName.textContent =
+            file.name;
+
+        const sizeMB =
+            file.size /
+            (1024 * 1024);
+
+        fileSize.textContent =
+            sizeMB >= 1
+                ? sizeMB.toFixed(2) + " MB"
+                : (file.size / 1024).toFixed(2) + " KB";
+
+        fileInfo.style.display =
+            "block";
+
+        watermarkOptions.classList.add(
+            "show"
+        );
+
+        pdfWatermarkActions.hidden =
+            false;
+
+        statusBox.style.display =
+            "none";
+
+        statusBox.textContent =
+            "";
+
+        result.style.display =
+            "none";
+
+        downloadBtn.hidden =
+            true;
+
+        clearOldDownload();
+    }
+);
+
+
+/* =========================
+   REMOVE ANNOTATIONS
+========================= */
+
+function removeAnnotations(
+    pdfDoc
+) {
+    let removed =
+        0;
+
+    pdfDoc
+        .getPages()
+        .forEach(function(page) {
+
+            let annots =
+                null;
+
+            try {
+                annots =
+                    page.node.lookupMaybe(
+                        PDFName.of("Annots"),
+                        PDFArray
+                    );
+            } catch (error) {
+                annots =
+                    null;
+            }
+
+            if (!annots) {
+                return;
+            }
+
+            for (
+                let i = annots.size() - 1;
+                i >= 0;
+                i--
+            ) {
+                try {
+
+                    const reference =
+                        annots.get(i);
+
+                    const annotation =
+                        pdfDoc.context.lookup(
+                            reference
+                        );
+
+                    if (
+                        !(annotation instanceof PDFDict)
+                    ) {
+                        continue;
+                    }
+
+                    const subtype =
+                        annotation.get(
+                            PDFName.of("Subtype")
+                        );
+
+                    const type =
+                        subtype
+                            ? subtype.toString()
+                            : "";
+
+                    if (
+                        type === "/Watermark" ||
+                        type === "/Stamp"
+                    ) {
+                        annots.remove(i);
+                        removed++;
+                    }
+
+                } catch (error) {
+                    console.warn(
+                        "Annotation check failed:",
+                        error
+                    );
+                }
+            }
+        });
+
+    return removed;
+}
+
+
+/* =========================
+   TEXT DETECTION ONLY
+========================= */
+
+async function detectWatermarkText(
+    sourceBytes,
+    searchText
+) {
+    const wanted =
+        searchText
+            .trim()
+            .toLowerCase();
+
+    if (!wanted) {
+        return 0;
+    }
+
+    const loadingTask =
+        pdfjsLib.getDocument({
+            data:sourceBytes.slice()
+        });
+
+    const pdfJsDoc =
+        await loadingTask.promise;
+
+    let matches =
+        0;
+
+    for (
+        let pageNumber = 1;
+        pageNumber <= pdfJsDoc.numPages;
+        pageNumber++
+    ) {
+        const page =
+            await pdfJsDoc.getPage(
+                pageNumber
+            );
+
+        const textContent =
+            await page.getTextContent();
+
+        for (
+            const item of textContent.items
+        ) {
+            if (
+                item.str &&
+                item.str
+                    .toLowerCase()
+                    .includes(wanted)
+            ) {
+                matches++;
+            }
+        }
+    }
+
+    try {
+        await loadingTask.destroy();
+    } catch (error) {
+        // Nothing required.
+    }
+
+    return matches;
+}
+
+
+/* =========================
+   AGGRESSIVE LAST STREAM
+========================= */
+
+function removeLastStreams(
+    pdfDoc
+) {
+    let pagesChanged =
+        0;
+
+    pdfDoc
+        .getPages()
+        .forEach(function(page) {
+
+            const contents =
+                page.node.get(
+                    PDFName.of("Contents")
+                );
+
+            if (
+                contents instanceof PDFArray &&
+                contents.size() > 1
+            ) {
+                contents.remove(
+                    contents.size() - 1
+                );
+
+                pagesChanged++;
+            }
+        });
+
+    return pagesChanged;
+}
+
+
+/* =========================
+   VALIDATE OUTPUT PDF
+========================= */
+
+async function validateOutputPdf(
+    outputBytes,
+    expectedPages
+) {
+    try {
+        const checkDoc =
+            await PDFDocument.load(
+                outputBytes,
+                {
+                    ignoreEncryption:false
+                }
+            );
+
+        return (
+            checkDoc.getPageCount() ===
+            expectedPages
+        );
+    } catch (error) {
+        console.error(
+            "Output PDF validation failed:",
+            error
+        );
+
+        return false;
+    }
+}
+
+
+/* =========================
+   REMOVE WATERMARK
+========================= */
+
+removeBtn.addEventListener(
+    "click",
+    async function() {
+
+        if (!selectedFile) {
+            return;
+        }
+
+        if (
+            !annotationMode.checked &&
+            !textMode.checked &&
+            !aggressiveMode.checked
+        ) {
+            alert(
+                "Please select at least one removal method."
+            );
+
+            return;
+        }
+
+        if (
+            textMode.checked &&
+            !watermarkText.value.trim()
+        ) {
+            alert(
+                "Enter the watermark text you want to detect."
+            );
+
+            watermarkText.focus();
+
+            return;
+        }
+
+        removeBtn.disabled =
+            true;
+
+        resetBtn.disabled =
+            true;
+
+        removeBtn.textContent =
+            "Processing...";
+
+        statusBox.style.display =
+            "block";
+
+        statusBox.textContent =
+            "Scanning PDF...";
+
+        result.style.display =
+            "none";
+
+        downloadBtn.hidden =
+            true;
+
+        clearOldDownload();
+
+        try {
+
+            const originalBuffer =
+                await selectedFile.arrayBuffer();
+
+            const sourceBytes =
+                new Uint8Array(
+                    originalBuffer
+                );
+
+            const pdfDoc =
+                await PDFDocument.load(
+                    sourceBytes.slice(),
+                    {
+                        ignoreEncryption:false
+                    }
+                );
+
+            const originalPageCount =
+                pdfDoc.getPageCount();
+
+            let annotationCount =
+                0;
+
+            let textMatches =
+                0;
+
+            let aggressivePages =
+                0;
+
+            if (
+                annotationMode.checked
+            ) {
+                statusBox.textContent =
+                    "Checking watermark and stamp annotations...";
+
+                annotationCount =
+                    removeAnnotations(
+                        pdfDoc
+                    );
+            }
+
+            if (
+                textMode.checked
+            ) {
+                statusBox.textContent =
+                    "Detecting matching watermark text...";
+
+                textMatches =
+                    await detectWatermarkText(
+                        sourceBytes,
+                        watermarkText.value
+                    );
+            }
+
+            if (
+                aggressiveMode.checked
+            ) {
+                statusBox.textContent =
+                    "Trying aggressive layer removal...";
+
+                aggressivePages =
+                    removeLastStreams(
+                        pdfDoc
+                    );
+            }
+
+            const actualChanges =
+                annotationCount +
+                aggressivePages;
+
+            if (
+                actualChanges === 0
+            ) {
+
+                downloadBtn.hidden =
+                    true;
+
+                downloadBtn.removeAttribute(
+                    "href"
+                );
+
+                if (
+                    textMode.checked &&
+                    textMatches > 0
+                ) {
+                    resultTitle.textContent =
+                        "Watermark Text Detected";
+
+                    resultText.textContent =
+                        textMatches +
+                        " matching text item" +
+                        (textMatches === 1 ? "" : "s") +
+                        " detected. This safe version did not modify the PDF because direct text-stream removal can corrupt some files.";
+
+                    statusBox.textContent =
+                        "Try Aggressive Layer Removal only if the watermark was added as a separate PDF content layer.";
+                } else {
+                    resultTitle.textContent =
+                        "No Removable Watermark Found";
+
+                    resultText.textContent =
+                        "The selected methods did not find a safely removable watermark.";
+
+                    statusBox.textContent =
+                        "The watermark may be encoded, vector-based, image-based, scanned, or flattened into the original page content.";
+                }
+
+                result.style.display =
+                    "block";
+
+                return;
+            }
+
+            statusBox.textContent =
+                "Saving and validating PDF...";
+
+            const outputBytes =
+                await pdfDoc.save();
+
+            const isValid =
+                await validateOutputPdf(
+                    outputBytes,
+                    originalPageCount
+                );
+
+            if (!isValid) {
+                throw new Error(
+                    "Generated PDF failed validation."
+                );
+            }
+
+            const blob =
+                new Blob(
+                    [outputBytes],
+                    {
+                        type:"application/pdf"
+                    }
+                );
+
+            downloadUrl =
+                URL.createObjectURL(
+                    blob
+                );
+
+            downloadBtn.href =
+                downloadUrl;
+
+            downloadBtn.download =
+                "filevora-watermark-removed.pdf";
+
+            downloadBtn.hidden =
+                false;
+
+            const parts =
+                [];
+
+            if (
+                annotationCount > 0
+            ) {
+                parts.push(
+                    annotationCount +
+                    " watermark/stamp annotation" +
+                    (annotationCount === 1 ? "" : "s") +
+                    " removed"
+                );
+            }
+
+            if (
+                aggressivePages > 0
+            ) {
+                parts.push(
+                    "extra content layer removed from " +
+                    aggressivePages +
+                    " page" +
+                    (aggressivePages === 1 ? "" : "s")
+                );
+            }
+
+            if (
+                textMode.checked &&
+                textMatches > 0
+            ) {
+                parts.push(
+                    textMatches +
+                    " matching text item" +
+                    (textMatches === 1 ? "" : "s") +
+                    " detected"
+                );
+            }
+
+            resultTitle.textContent =
+                "Watermark Removal Complete";
+
+            resultText.textContent =
+                parts.join(". ") + ".";
+
+            statusBox.textContent =
+                "PDF was saved and validated successfully. Download and inspect the result.";
+
+            result.style.display =
+                "block";
+
+            result.scrollIntoView({
+                behavior:"smooth",
+                block:"nearest"
+            });
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+            downloadBtn.hidden =
+                true;
+
+            downloadBtn.removeAttribute(
+                "href"
+            );
+
+            result.style.display =
+                "none";
+
+            const message =
+                String(
+                    error &&
+                    (error.message || error)
+                )
+                .toLowerCase();
+
+            if (
+                message.includes("password") ||
+                message.includes("encrypted")
+            ) {
+                alert(
+                    "This PDF is password protected. Unlock it first."
+                );
+            } else {
+                alert(
+                    "The PDF could not be processed safely. No download file was created."
+                );
+            }
+
+            statusBox.textContent =
+                "Processing stopped to prevent creating a damaged PDF.";
+
+        } finally {
+
+            removeBtn.disabled =
+                false;
+
+            resetBtn.disabled =
+                false;
+
+            removeBtn.textContent =
+                "Remove Watermark";
+        }
+    }
+);
+
+
+/* =========================
+   DOWNLOAD CLEANUP
+========================= */
+
+function clearOldDownload() {
+
+    downloadBtn.removeAttribute(
+        "href"
+    );
+
+    if (
+        downloadUrl
+    ) {
+        URL.revokeObjectURL(
+            downloadUrl
+        );
+
+        downloadUrl =
+            "";
+    }
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+function resetTool() {
+
+    pdfInput.value =
+        "";
+
+    selectedFile =
+        null;
+
+    fileName.textContent =
+        "";
+
+    fileSize.textContent =
+        "";
+
+    fileInfo.style.display =
+        "none";
+
+    watermarkOptions.classList.remove(
+        "show"
+    );
+
+    annotationMode.checked =
+        true;
+
+    textMode.checked =
+        false;
+
+    aggressiveMode.checked =
+        false;
+
+    watermarkText.value =
+        "";
+
+    watermarkTextBox.classList.remove(
+        "show"
+    );
+
+    pdfWatermarkActions.hidden =
+        true;
+
+    statusBox.style.display =
+        "none";
+
+    statusBox.textContent =
+        "";
+
+    result.style.display =
+        "none";
+
+    resultTitle.textContent =
+        "Watermark Removal Complete";
+
+    resultText.textContent =
+        "";
+
+    downloadBtn.hidden =
+        true;
+
+    clearOldDownload();
+}
+
+resetBtn.addEventListener(
+    "click",
+    resetTool
+);
+</script>
+
+</body>
+</html>

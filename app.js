@@ -318,6 +318,9 @@ app.get("/tools/javascript-formatter", (req, res) => {
 app.get("/tools/json-minifier", (req, res) => {
     res.render("json-minifier");
 });
+app.get("/tools/pdf-watermark-remover", (req, res) => {
+    res.render("pdf-watermark-remover");
+});
 
 
 // FileVora information pages
